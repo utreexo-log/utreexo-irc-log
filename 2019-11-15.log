@@ -1,0 +1,11 @@
+[01:11:52] *** Quits: valwal (sid334773@gateway/web/irccloud.com/x-qoqfqninktjguijz) (Ping timeout: 252 seconds)
+[01:13:36] *** Joins: valwal (sid334773@gateway/web/irccloud.com/x-hiwhrfjswuycqzhi)
+[06:34:58] *** Joins: instagibbs_ (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net)
+[06:37:31] *** Quits: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net) (*.net *.split)
+[08:45:21] <kcalvinalvin> Just finished https://github.com/mit-dci/utreexo/pull/25
+[08:45:29] <kcalvinalvin> Ready to be merged
+[08:45:54] <kcalvinalvin> Basically ended up refactoring the whole blockparser.go file
+[16:15:33] <adiabat> kcalvinalvin: cool will take a look, probably this weekend
+[17:55:28] <kcalvinalvin> I guess I'll clean up rest of the code for the December release DG wants to do
+[17:55:36] <kcalvinalvin> cmd/ code at least
+[17:56:01] <kcalvinalvin> then I guess it's mempool and transaction verification 

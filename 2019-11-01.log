@@ -1,0 +1,12 @@
+[02:34:02] *** Quits: instagibbs (~instagibb@pool-100-15-121-126.washdc.fios.verizon.net) (Ping timeout: 268 seconds)
+[05:20:31] *** Joins: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net)
+[08:49:52] <kcalvinalvin> Would it be better to just read straight from leveldb?
+[08:50:22] <kcalvinalvin> Everything in cmd/ just feels so... hacky...
+[13:13:27] *** Quits: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net) (Quit: ZNC 1.6.6+deb1ubuntu0.2 - http://znc.in)
+[13:13:43] *** Joins: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net)
+[22:35:44] <adiabat> kcalvinalvin: *everything* ?? :)
+[22:36:13] <adiabat> reading from bitcoind's leveldb would be better; I just thought it might be complex and avoided it
+[22:36:26] <adiabat> but maybe the ways around that are more trouble
+[22:36:53] <adiabat> if the bitcoind has txindex on, then yeah we could do the whole thing in 1-pass which would be nice
+[22:37:29] <adiabat> (whole thing as in build the ttl txos file; building proofs would be another pass)
+[22:41:20] <adiabat> if bitcoind doesn't have txindex, there's not going to be much savings.  I don't think there's anyting in the other leveldbs that would help

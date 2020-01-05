@@ -1,0 +1,11 @@
+[02:12:25] <kcalvinalvnn> https://bitcoin.stackexchange.com/questions/92128/is-the-ordering-of-blocks-in-the-rev-dat-files-same-as-the-blk-dat-files
+[07:49:55] <kcalvinalvnn> ok so log is still gigabytes...
+[07:50:08] <kcalvinalvnn> it seems to be faster though...?
+[15:05:16] <adiabat> kcalvinalvnn: yup forgot 2 prinfs in a different file argh
+[15:05:23] <adiabat> will push the version that works
+[15:10:31] <adiabat> ok pushed, yeah now it gets to block 200K in about a minute
+[15:12:29] <adiabat> and the log file is like a megabyte.
+[15:12:52] <adiabat> There are definitely speedups / improvements left, but not 1000X ones like removing printfs :)
+[17:03:39] <adiabat> yeah I got just under an hour for all of testnet buildproof (to block 1513500)
+[17:04:01] <adiabat> proofdb folder for testnet is 5.4GB
+[17:05:38] <adiabat> so a bunch less than the block data wich is 21GB.  I thought it was worse than that, not sure if that's just a testnet thing

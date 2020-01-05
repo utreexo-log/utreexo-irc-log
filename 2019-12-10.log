@@ -1,0 +1,9 @@
+[13:42:05] <adiabat> hey call might be a a couple minutes after 9EST
+[14:01:32] <kcalvinalvnn> are we good?
+[14:04:14] <adiabat> 1 sec
+[14:06:04] <adiabat> ok i'm at meet.jit.si/utreexo
+[15:14:24] <kcalvinalvnn> https://github.com/kcalvinalvin/utreexo/tree/remove-ttl-file-1
+[15:33:54] *** Quits: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net) (Ping timeout: 265 seconds)
+[15:39:40] *** Joins: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net)
+[21:09:08] <adiabat> kcalvinalvnn: fixed comment in forest.go (it was wrong! should be 2**h, not 2**n)
+[21:09:40] <adiabat> didn't see other obvious places to clarify comments, let me know if there's other things to grep for

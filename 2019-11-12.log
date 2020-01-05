@@ -1,0 +1,10 @@
+[03:24:01] <kcalvinalvin> yeah... oops. See you in about 10 hours and a half
+[13:46:22] <kcalvinalvin> hi are we good?
+[14:01:27] <adiabat> Hi - meet.jit.si/utreexo 
+[14:01:31] <adiabat> i'm on there
+[14:24:51] <adiabat> https://github.com/mit-dci/utreexo/blob/master/cmd/blockparser/blockparser.go #65
+[14:24:53] <adiabat> to 
+[14:25:08] <adiabat> https://github.com/kcalvinalvin/utreexo/blob/add-resume-for-parseblock/cmd/blockparser/blockparser.go#L251
+[14:25:15] <adiabat> something like that
+[17:10:08] <kcalvinalvin> Things to do for December beta release thingy. 1) Update Readme. 2) Have flag -testnet or -mainnet to read from either. 3) Finish continue functionality. 4) Better comments/documentation overall.
+[17:10:23] <kcalvinalvin> I may be missing some things

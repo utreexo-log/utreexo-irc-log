@@ -1,0 +1,40 @@
+[08:44:19] <kcalvinalvin> ok so clair works with the main branch now but is about as fast as how we're already doing it?
+[16:23:56] <adiabat> kcalvinalvin: hey will take a look
+[16:24:14] <adiabat> clair wouldn't speed anything up though?  At least not as set up now
+[16:24:50] <kcalvinalvin> Yeah it's the same. Likely that I screwed something up
+[16:24:55] <adiabat> clair was an extra pass to get better data than just the ttl lookahead data.  So it was only for lowering network traffic not speed
+[16:25:40] <adiabat> yeah when I tried it it didn't really lower network traffic so I didn't use it.  It seems weird though because it feels like it *should* help
+[16:25:58] <adiabat> and it's quite possible that something is wrong in it, and that a correct version would help
+[16:26:30] <kcalvinalvin> could you check issue #41?
+[16:26:49] <kcalvinalvin> Well at least it's been updated for master so there is that
+[16:32:57] <kcalvinalvin> Oh and also, are you free enough today for a call?
+[16:33:13] <kcalvinalvin> adiabat
+[16:53:31] <adiabat> hey - yeah could do a call in the afternoon
+[16:54:28] <adiabat> re #41 - positionMap is the biggest not-yet-addressed thing in the library I think
+[16:54:49] <adiabat> dirtyMap is... no longer used? Or I got rid of it on the undo branch and will merge that shortly
+[16:55:12] <adiabat> but positionMap is... yeah.  It would have to be replaced by levelDB
+[16:55:45] <adiabat> OR a custom prefix tree thing.  Which would be faster / smaller but a bit of work
+[16:56:38] <adiabat> although, if we're just serializing to disk on startup/shutdown, you don't actually need to write the positionMap to disk
+[16:56:58] <adiabat> you can regenerate the whole thing at any time from f.forest itself
+[16:59:27] <adiabat> might take a minute to restart that way but that's should be fine.  Just read through every leaf in the forest and add it to the map
+[17:00:29] <adiabat> for i:=0;i<f.numLeaves;i++{ f.positionMap[f.forest[i].Mini()]=i }
+[17:01:19] <adiabat> that would do it.  might only take 10 seconds in testnet?
+[17:13:26] <adiabat> hm actually yeah... there's really no need to put the positionMap on disk
+[17:13:53] <adiabat> it's only there for speedup; you *could* run a bridge node without it there at all.  It would just be too slow
+[17:14:12] <adiabat> (although that's a guess; maybe I should try without it and actually see how much it slows down...)
+[17:20:47] <kcalvinalvin> Ok cool
+[17:21:00] <kcalvinalvin> what time are you good?
+[17:27:00] <adiabat> could do a quick call now but only for like 10 min
+[17:27:08] <adiabat> or more like in 2 hours
+[18:01:16] <kcalvinalvin> ok just ping me when you're good
+[19:16:27] <kcalvinalvin> Just curious but...
+[19:16:54] <kcalvinalvin> mitbitcoinclub spells utreexo as UTreeXO. What's the preferred way
+[19:57:37] <adiabat> huh weird.  I just say utreexo but I guess they think it's easier to read that way?
+[19:57:54] <adiabat> back & can do a call now
+[20:03:53] <kcalvinalvin> oh cool
+[20:04:01] <kcalvinalvin> adiabat I'm here
+[20:05:03] <adiabat> ok jitsi
+[20:05:08] <adiabat> or can use signal
+[20:05:31] <kcalvinalvin> eh either works
+[20:06:03] <adiabat> ok i'm on jitsi
+[20:06:11] <adiabat> meet.jit.si/utreexo

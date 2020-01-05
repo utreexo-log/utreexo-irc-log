@@ -1,0 +1,5 @@
+[05:56:49] <kcalvinalvin> is there a reason we're skipping the genesis block?
+[14:48:33] <adiabat> genesis block: yeah, it's skipped in bitcoin core as well
+[14:50:15] <adiabat> the "4a5e1e...3b:0" txout from block 0 isn't in the bitcoin utxo set
+[14:51:27] <adiabat> related, there are a bunch of bugs in the utreexo library if you remove everything from the accumulator & it has 0 leaves
+[14:52:05] <adiabat> which can never happen in bitcoin, but I guess at some point I should still fix it so it supports that

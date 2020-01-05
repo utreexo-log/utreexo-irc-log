@@ -1,0 +1,69 @@
+[17:16:45] <adiabat> OK so ideas for the TTLdb not using an actual DB
+[17:17:09] <adiabat> (because part of why bitcoin core people like utreexo is that it doesn't need leveldb, so if we're using a lot of levelDB that's not great)
+[17:17:29] <adiabat> we have rev___.blk data, but that doesn't quite have what we want
+[17:17:44] <adiabat> say we're looking at block 17
+[17:17:53] <adiabat> the blk___.dat tells us the whole block
+[17:18:19] <adiabat> the rev___.dat for block 17 tells us about all the utxos destroyed
+[17:18:29] <adiabat> including how old those UTXOs were
+[17:18:47] <adiabat> which is *close* to what we want for TTL values
+[17:19:16] <adiabat> what we want is somewhere, for every UTXO created, we want to know how long it lives
+[17:19:47] <adiabat> that's the rev data but not in the right place; it tells the TTL data but when the utxo dies; we want to know it when it's born
+[17:20:12] <kcalvinalvnn> TTL= Time To Live. Basically how long a tx lasts until it's spent
+[17:20:14] <adiabat> the rev data doesn't tell us *where* in the block a utxo came from, it just tells us which block
+[17:20:36] <adiabat> yeah... so the simple way to do it is make a key:value store like leveldb
+[17:20:51] <adiabat> and the key is the 36 byte outpoint (txid:index)
+[17:20:56] <adiabat> and value is TTL
+[17:21:05] <adiabat> and we can make those just from the rev data 
+[17:21:10] <adiabat> but... then we're using levelDB
+[17:21:47] <adiabat> if we want to use a flat file though, we can; we know how many utxos are created in a block as soon as we see the block
+[17:22:22] <adiabat> we can then assign a ... 40 byte slot for every utxo created 
+[17:23:02] <adiabat> and when we get to rev data deleting a utxo, seek to that block and write the outpoint and TTL data in the first empty 40 byte slot
+[17:23:14] <adiabat> kindof wastes a lot of space, and then it's out of order
+[17:23:32] <adiabat> but only out of order within a block, whcih is pretty small, like a few thousand entries
+[17:24:10] <adiabat> then once we're done we could take a pass through and sort them.
+[17:25:18] <adiabat> or leave it unsorted, when you want to serve TTL values just load em all into a hashmap and then it gets auto-sorted
+[17:26:23] <adiabat> it's pretty small, less than 100KB, and we might end up using doing sorting and stuff anyway to the TTL data (like sort by TTL to give all the short-lived utxos)
+[17:27:11] <adiabat> it's a bunch more space on disk though; instead of 4 bytes for every output in a block, it's more like 40 (though could probably have truncated txids)
+[17:28:24] <kcalvinalvnn> I can see how the implementation would work. Buuuut seems a lot more messy?
+[17:28:50] <adiabat> yeahhhh levelDB is easier
+[17:28:55] <adiabat> also we have the code to do it already
+[17:30:28] <adiabat> another option is just skip all the TTL stuff for now and run without it.. it's an optimization (a pretty big one but there are other ways to do it)
+[17:32:34] <kcalvinalvnn> I guess we could cache like Bitcoin Core?
+[17:32:54] <adiabat> you can do look-behind instead of look-ahead
+[17:33:06] <kcalvinalvnn> How did the Core people feel about the caching system? Because technically it *is* an attack vector
+[17:33:10] <adiabat> which means you just keep all the leaves from the last, say, 20 blocks
+[17:33:26] <adiabat> look-ahead is much nicer though
+[17:33:33] <adiabat> you never have to eject 
+[17:33:45] <adiabat> and you don't have to keep track of how long something's been there
+[17:34:21] <adiabat> oh, TTL based caching..?  Yeah I mean the attack is to keep a lot of utxos around a long time, which is already a decent attack on the utxo set...
+[17:35:25] <kcalvinalvnn> At the same time it *is* a lame attack too
+[17:36:04] <adiabat> Yeah I'm not worried that people will like, change a large portion of all transactions just to make utreexo a bit slower
+[17:37:04] <kcalvinalvnn> Did you get the chance to test the txottlgen for the full blockchain?
+[17:37:41] <kcalvinalvnn> I can ditch the pipedream for now and just change the txottlgen to bytes from string which would help a lot
+[17:37:57] <adiabat> mainnet?
+[17:38:08] <kcalvinalvnn> well both I guess
+[17:38:12] <adiabat> or testnet?  I can try that today
+[17:38:45] <adiabat> wait what would change to bytes?
+[17:39:10] <kcalvinalvnn> I never touched ttl stuff after the resume thingy
+[17:39:31] <kcalvinalvnn> so it's still making a ttl.*.txos file that's in ascii
+[17:40:17] <adiabat> hm yeah we should just get rid of that entirely
+[17:40:25] <adiabat> runIBD can just read from the ttldb
+[17:40:44] <adiabat> maybe slightly slower than having a flat file for it i guess
+[17:40:44] <kcalvinalvnn> Ok just do math on the fly then?
+[17:41:10] <adiabat> yeah that's probably not a big bottlneck... well, maybe it is?  I'm not sure
+[17:41:22] <adiabat> the math part is quick, it's the lookups that might be slow
+[17:41:44] <adiabat> gotta look up a couple thousand entries in the ttldb each block
+[17:42:18] <kcalvinalvnn> reading ttl data should be fine I think. It was choking on deserializing blocks last time
+[17:42:30] <adiabat> i'd say leave the DB for now and have runIBD read the db directly, and if that seems slow we can have another pass
+[17:42:55] <adiabat> a whole pass just to make a flat txottl file seems like a bit of a waste
+[17:42:55] <kcalvinalvnn> ok cool. Lots of code gone
+[17:43:54] <adiabat> it's probably be really quick though...?  except not really, we'd still have to read / deserialize the whole block...
+[17:44:35] <kcalvinalvnn> Less deserialization the better. Reading from ascii files was faster
+[17:44:50] <adiabat> but yeah I think to start just have runIBD do it, way less code and hopefully not much slower
+[17:46:22] <kcalvinalvnn> Ok so: 1) get rid of txottl 2) have ibdsim read directly from leveldb?
+[17:47:53] <kcalvinalvnn> gah also, if leveldb is still present, is it a no go?
+[17:48:13] <kcalvinalvnn> I think there is value even without the removal of leveldb
+[17:55:22] <kcalvinalvnn> Well, I'll work on those two things for now
+[18:18:47] <adiabat> yeah I mean it's fine to still have levelDB for now
+[18:19:03] <adiabat> that's more of a long-term goal, for bitcoind as well
+[18:19:19] <adiabat> like even if you get rid of the utxo set there's still serveral uses of leveldb

@@ -1,0 +1,18 @@
+[16:37:27] <adiabat> yeah I'm editing your add-resume-for-parseblock branch now
+[16:37:53] <adiabat> kindof changing a lot, hope you don't mind :)  but hopefully will get it to work.  then can update roadmap stuff
+[21:54:22] <adiabat> kcalvinalvin: I don't think I have write access to your github branches (or I set it up wrong and that's the error it gave me)
+[21:54:43] <adiabat> I pushed my changes to https://github.com/mit-dci/utreexo/tree/add-resume-for-parseblock
+[21:57:53] <adiabat> it seems to work and is fairly quick / efficient.  It still has a problem on one of my blocks folders though
+[22:01:26] <adiabat> it hits a dead end sometimes
+[22:02:01] <adiabat> I think the reason is that if you break where it's still got blocks from the previous file in ram (nextMap) those get lost and won't be read back
+[22:03:06] <adiabat> hm.  I think I know a quick / ugly way to fix that.  Only write to disk when nextMap is empty...
+[22:05:12] <adiabat> for example. there are two files.  file1: [1, 2, 6, 3] file2: [4, 5, 7, 8]
+[22:05:45] <adiabat> it gets to file2, and writes block 4, the the user exits
+[22:06:14] <adiabat> it loads back up to block2, writes 5, but then gets stuck on 7 because 6 wasn't read on the next execution
+[22:06:50] <adiabat> question is does nextMap *ever* get empty; if not that idea won't work.  will try
+[22:09:20] <adiabat> yeah ok the map is never empty so that idea's not going to work.  bleh.
+[22:18:15] <adiabat> also I think it doesn't wait for the waitGroups when it gets the sig; it just does os.Exit(1) which doesn't wait?
+[22:18:34] <adiabat> so maybe the DB is all messed up, haven't checked
+[22:57:13] <adiabat> man... why do they write the blocks folder in randomized order, serrrrriously.... 
+[22:57:56] <adiabat> anyway I have some ideas on how to fix this but none are super quick.  also we need to be able to catch the ctrl-c and clean up a bit before exiting
+[22:58:29] <adiabat> then can flush progress to disk only when quitting.  then could flush a lot more, like all the hashes of what's in the nextMap

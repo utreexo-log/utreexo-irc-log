@@ -1,0 +1,6 @@
+[06:25:55] <kcalvinalvin> oh geez I think I know why the new way of doing genproofs is similar to the old reading from the files method
+[08:39:16] <kcalvinalvin> ok I thought the caching wasn't working on master but it is
+[08:43:35] <kcalvinalvin> I'm currently looking at making clair work again and I think there's an incompatibility with syndtr/leveldb
+[08:46:42] <kcalvinalvin> Anyways, I benchmarked ibdsim from 0c40149 (ibdsim reverted to non-clair) vs a85743 (ibdsim with clair)
+[08:48:10] <kcalvinalvin> Unless I'm disillusioned by sleep-deprevation, I think clair is worth looking at again?
+[08:50:10] <kcalvinalvin> Oh the ibdsim with clair (a85743) was around 40% faster consistently

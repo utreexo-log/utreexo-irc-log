@@ -1,0 +1,8 @@
+[01:41:08] *** Joins: kallewoof (~quassel@240d:1a:759:6000:a7b1:451a:8874:e1ac)
+[07:58:27] *** Joins: tnaka (~quassel@240d:1a:759:6000:a7b1:451a:8874:e1ac)
+[16:33:57] <kcalvinalvin> What's some things to talk about in the tomorrow's call?
+[22:26:13] <adiabat> kcalvinalvin: can talk about the stop / resume, which works & is great, thanks
+[22:26:24] <adiabat> can apply the same ideas to other parts of simcmd
+[22:26:47] <adiabat> I also set up a "projects" tab on github.  so can mention that a bit...
+[22:31:11] <adiabat> I actually don't like it because it has some weird character limit so you can't actually write much
+[22:31:37] <adiabat> maybe just use a bunch of issues and put tags on them or something

@@ -1,0 +1,8 @@
+[05:03:28] <kcalvinalvin> Ah ok I see. One more step 
+[05:04:25] <kcalvinalvin> I feel like implementing core to write the files in order wouldn't be hard
+[05:05:03] <kcalvinalvin> Ah nvm getting the consensus for that is probably not so easy?
+[05:07:46] <kcalvinalvin> I'll give it a go while you're sleeping :)
+[12:04:47] <kcalvinalvin> I think I almost have it now
+[15:47:19] <adiabat> kcalvinalvin: did you put it on github?  I can't find anything new
+[15:47:50] <adiabat> I'll hold off on the add-resume-for-parseblock for now if you're working on it
+[15:53:58] <kcalvinalvin> Didn't push it yet. I'll have it tomorrow

@@ -1,0 +1,35 @@
+[09:10:52] *** Quits: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net) (*.net *.split)
+[09:11:20] *** Joins: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net)
+[12:06:57] <kcalvinalvin> Heya. I push the new stuff on github
+[12:07:05] <kcalvinalvin> But... it's around 20~25 percent slower...
+[12:07:17] <kcalvinalvin> GetRawBlockFromFile() is sloooooooow
+[13:51:58] <adiabat> kcalvinalvin: cool will check it out
+[13:52:09] <adiabat> also utreexo call in 10 min at meet.jit.si/utreexo
+[14:01:11] <adiabat> (on jitsi now)
+[14:58:48] <adiabat> paste of tree example:
+[14:58:50] <adiabat> 14:b67d                                                         
+[14:58:57] <adiabat> |-------------------------------\                               
+[14:59:01] <adiabat> 12:1276                         13:728b                         
+[14:59:04] <adiabat> |---------------\               |---------------\               
+[14:59:07] <adiabat> 08:ca37         09:e7bf         10:6acc         11:d3a0         
+[14:59:11] <adiabat> |-------\       |-------\       |-------\       |-------\       
+[14:59:14] <adiabat>         01:0600                 04:0200 05:0700 06:0800 07:0900 
+[15:01:14] <adiabat> better example
+[15:02:01] <adiabat> better example:
+[15:02:03] <adiabat> 14:b67d                                                         
+[15:02:04] <adiabat> |-------------------------------\                               
+[15:02:11] <adiabat> 12:1276                         13:728b                         
+[15:02:13] <adiabat> |---------------\               |---------------\               
+[15:02:15] <adiabat> 08:ca37         09:e7bf         10:6acc               
+[15:02:17] <adiabat> |-------\       |-------\       |-------\       |-------\       
+[15:02:19] <adiabat> 00:0200 01:0600                                 06:0800 07:0900 
+[16:04:41] <adiabat> cpp version: https://github.com/theuni/libutreexo
+[16:04:55] <adiabat> (theuni == cfields_)
+[16:21:31] <instagibbs> is ibdsim just running through "IBD" of the proofs against block data, in other words just testing it utxos exist for claimed inputs
+[19:16:54] <adiabat> instagibbs: yes; right now it doesn't do any signature / script checking
+[19:18:18] <adiabat> the idea (which isn't implemented yet but in works) is to have the utreexo library:
+[19:18:29] <adiabat> 1) return a bool about if the block is OK proof-wise
+[19:18:50] <adiabat> 2) return a serialized utxo for all inputs in the block
+[19:19:37] <adiabat> 3) wait while script-checking / consensus happens and then only modify if that returns OK and block is accepted
+[19:20:02] <adiabat> IBD sim only does 1 so far
+[19:21:00] <instagibbs> makes the most sense was just checking :)

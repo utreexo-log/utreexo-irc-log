@@ -1,0 +1,44 @@
+[04:41:59] <kcalvinalvnn> adiabat How long does buildproofs take for you?
+[04:43:46] <kcalvinalvnn> A bit confused to if it's working right since it's taking around 1~2 hours to build proofs until block height 86587
+[04:45:21] <kcalvinalvnn> For a computer with Ryzen 3600, 16gb 2666MHZ memory, and Samsung 860 evo ssd
+[04:45:53] <kcalvinalvnn> on testnet btw
+[08:14:26] *** Joins: Kiok46 (6ee3c77c@110.227.199.124)
+[08:22:24] <Kiok46> Hello everyone! Is this channel logged somewhere?
+[08:45:25] *** Quits: Kiok46 (6ee3c77c@110.227.199.124) (Remote host closed the connection)
+[08:50:56] <kcalvinalvnn> github.com/kcalvinalvin/utreexo-irc-logs
+[08:51:08] <kcalvinalvnn> I'll make a better one later but I guess this will do for now
+[08:51:41] <kcalvinalvnn> Also, things are changing a lot nowadays and the docs on github aren't updated as frequently.
+[08:52:11] <kcalvinalvnn> Best way to ask a question would be through the github issues
+[08:52:16] <kcalvinalvnn> but he quit. oh well
+[09:54:56] *** Quits: ysangkok (janus@anubis.0x90.dk) (*.net *.split)
+[09:55:07] *** Quits: kanzure (~kanzure@unaffiliated/kanzure) (*.net *.split)
+[09:55:08] *** Quits: RubenSomsen (sid301948@gateway/web/irccloud.com/x-ljnsyxugfwixcbdn) (*.net *.split)
+[09:55:08] *** Quits: jamesob (sid180710@gateway/web/irccloud.com/x-gkpqiwovjrzcvjaq) (*.net *.split)
+[09:55:08] *** Quits: stevenroose (~steven@vps.weuste.club) (*.net *.split)
+[09:55:23] *** Quits: jamesl22 (~james@185.58.225.100) (*.net *.split)
+[09:55:25] *** Quits: kallewoof_ (~quassel@240d:1a:759:6000:a7b1:451a:8874:e1ac) (*.net *.split)
+[09:55:25] *** Quits: tnaka_ (~quassel@240d:1a:759:6000:a7b1:451a:8874:e1ac) (*.net *.split)
+[09:55:28] *** Quits: cfields_ (~cfields@unaffiliated/cfields) (*.net *.split)
+[09:55:34] *** Quits: adiabat (~adiabat@63.209.32.102) (*.net *.split)
+[09:55:34] *** Quits: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net) (*.net *.split)
+[09:55:41] *** Quits: pigeons (~pigeons@androzani.sysevolve.com) (*.net *.split)
+[09:55:46] *** Quits: valwal (sid334773@gateway/web/irccloud.com/x-hiwhrfjswuycqzhi) (*.net *.split)
+[09:55:47] *** Quits: fjahr (sid374480@gateway/web/irccloud.com/x-xxqryhzcklprwjpv) (*.net *.split)
+[09:55:47] *** Quits: Varunram (sid210151@gateway/web/irccloud.com/x-pnmuzxbazujjagtm) (*.net *.split)
+[09:55:47] *** Quits: digi_james (sid281632@gateway/web/irccloud.com/x-hcjqmmywqumzjqio) (*.net *.split)
+[10:04:38] *** Joins: ysangkok (janus@anubis.0x90.dk)
+[10:04:38] *** Joins: stevenroose (~steven@vps.weuste.club)
+[10:04:38] *** Joins: jamesob (sid180710@gateway/web/irccloud.com/x-gkpqiwovjrzcvjaq)
+[10:04:38] *** Joins: RubenSomsen (sid301948@gateway/web/irccloud.com/x-ljnsyxugfwixcbdn)
+[10:04:38] *** Joins: kanzure (~kanzure@unaffiliated/kanzure)
+[10:04:38] *** Joins: kallewoof_ (~quassel@240d:1a:759:6000:a7b1:451a:8874:e1ac)
+[10:04:38] *** Joins: tnaka_ (~quassel@240d:1a:759:6000:a7b1:451a:8874:e1ac)
+[10:04:38] *** Joins: adiabat (~adiabat@63.209.32.102)
+[10:04:38] *** Joins: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net)
+[10:04:38] *** Joins: cfields_ (~cfields@unaffiliated/cfields)
+[10:04:38] *** Joins: valwal (sid334773@gateway/web/irccloud.com/x-hiwhrfjswuycqzhi)
+[10:04:38] *** Joins: jamesl22 (~james@185.58.225.100)
+[10:04:38] *** Joins: pigeons (~pigeons@androzani.sysevolve.com)
+[10:04:38] *** Joins: digi_james (sid281632@gateway/web/irccloud.com/x-hcjqmmywqumzjqio)
+[10:04:38] *** Joins: Varunram (sid210151@gateway/web/irccloud.com/x-pnmuzxbazujjagtm)
+[10:04:38] *** Joins: fjahr (sid374480@gateway/web/irccloud.com/x-xxqryhzcklprwjpv)

@@ -1,0 +1,26 @@
+[12:53:40] <adiabat> OK I can do 9AM KST, that's 8PM for me today.  I should be home by then, will do a jitsi call then
+[16:23:16] *** Joins: Jmabsd (~jmabsd@unaffiliated/jmabsd)
+[16:23:19] <Jmabsd> jitsi call = ? 
+[16:23:19] <kcalvinalvin> sure. See you soon!
+[16:23:31] <Jmabsd> what's the utreexo work about again, i remember Tadge said something
+[16:23:39] <kcalvinalvin> Also, I am logging this channel. I should fine somewhere to host that as well
+[16:24:29] <kcalvinalvin> utreexo is a hash-based accumulator for the merkle trees
+[16:24:40] <Jmabsd> ah right.
+[16:24:52] <Jmabsd> is this useful for Bitcoin?
+[16:25:03] <Jmabsd> i recall he suggested it can be used as replacement for.. the utxo, but why
+[16:25:11] <kanzure> no, UTXOs aren't useful for bitcoin
+[16:26:03] <kcalvinalvin> I think it'll benefit Bitcoin greatly. Besides reducing the storage for pruned nodes, you'll be able to suggest a hash for a particular block height
+[16:26:25] <kanzure> https://diyhpl.us/wiki/transcripts/mit-bitcoin-expo-2019/utreexo/
+[16:26:32] <kanzure> https://diyhpl.us/wiki/transcripts/bitcoin-core-dev-tech/2018-10-08-utxo-accumulators-and-utreexo/
+[17:34:00] <instagibbs> Jmabsd, read up on the links given, but personally it means I can worry about other scaling limits instead of UTXO set size
+[17:34:19] <Jmabsd> ok
+[17:41:17] <adiabat> hey - jitsi call at 8PM EDT / 9AM KST
+[17:41:23] <adiabat> so in like 6h20m, right?
+[17:42:04] <adiabat> there are a lot of fun benefits to having utreexo or something like it; one that we've been talking about is that you can make block validation more isolated
+[17:42:51] <adiabat> right now when you want to validate a block, you have to give a validation function the block... and all other state, which means handing over your whole database
+[17:43:19] <adiabat> with utreexo, it seems like you can hand over the whole state of the node as a function argument, since it's only a few hundred bytes
+[17:43:56] <adiabat> this lets blocks be validated in more isolation, potentially with more parallelism.  So that's another fun benefit
+[17:48:39] *** Joins: cfields (~cfields@unaffiliated/cfields)
+[17:49:51] <kcalvinalvin> I've been thinking about that a bit... Was looking into maybe implementing OpenCL for libsecp256k1 but this seems much more doable
+[19:01:26] *** Parts: Jmabsd (~jmabsd@unaffiliated/jmabsd) ("Leaving")
+[20:42:02] *** Joins: valwal (sid334773@gateway/web/irccloud.com/x-qoqfqninktjguijz)

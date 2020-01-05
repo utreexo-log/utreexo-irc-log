@@ -1,0 +1,5 @@
+[05:49:44] <kcalvinalvin> huh ok I'll check out the cpp lib
+[07:55:31] <kcalvinalvin> I've merged blockparser and genproofs on the PR
+[07:55:41] <kcalvinalvin> Performance is around the same
+[23:13:03] <adiabat> kcalvinalvin: performance is the same? huh weird, it's like removing a whole pass through the blocks though
+[23:13:20] <adiabat> will look at tonight after I'm done with these paper reviews

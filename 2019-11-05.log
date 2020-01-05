@@ -1,0 +1,28 @@
+[04:38:42] <adiabat> OK so toomorrow (Tuesday) 9 am EST call?  Or 10 am EST?  (I can only do 30min long call if at 10 am)
+[04:39:19] <adiabat> I'll be online at 9am ( in 9h21m ) for the call, but if that's an hour too early will do it in 10h21m
+[05:50:26] <kcalvinalvin> 9am EST is infe
+[05:57:48] <kcalvinalvin> Yea... the branch doesn't really work at the moment. Thought it did :/
+[06:37:38] *** Quits: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net) (Ping timeout: 276 seconds)
+[06:49:41] *** Joins: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net)
+[11:15:38] <kcalvinalvin> Ok so I have some things that I've been working on locally on branch add-resume-for-parseblock. Hopefully I can push them before the meeting.
+[13:00:38] <stevenroose> So it's in an hour right? If my timezone calculation was correct?
+[13:00:59] <stevenroose> Right at lunch time for me tbh.. Will try to make it. I'm very curious of the state of affairs :)
+[13:12:27] <kcalvinalvin> Yes it's in 48 minutes 
+[13:45:58] <adiabat> yup... maybe a couple minutes after 9 as I've got to set up the computer at work & linux audio always works the first time :)
+[14:01:19] <kcalvinalvin> Hello. Tell me when you're good to go
+[14:05:44] <adiabat> hey i'm on meet.jit.si/utreexo
+[16:20:28] <jamesob> ah dammit, missed it again. so we're doing these every tues at 9AM EST?
+[18:29:27] <adiabat> jamesob: yeah 9AM EST seems ok for people (& I have more reliable internet at work :)
+[18:38:07] <jamesob> cool, will throw it on the calendar
+[20:54:42] <adiabat> kcalvinalvin: about the add-resume branch & what we were talking about
+[20:55:01] <adiabat> talking to cory / fanquake found a maybe simpler way to do it
+[20:55:12] <adiabat> also a little ugly, but ... ok:
+[20:55:45] <adiabat> first pass parse through all the blocks files, but only read the first 80 bytes of each block -- just get the headers
+[20:56:14] <adiabat> then, in-ram, do the whole nextMap thing, piece everything together, and write the following to a file
+[20:56:53] <adiabat> just a bunch of 8 bytes for each block: [b1 fnum][b1 offset][b2 fnum][b2 offset][b3...]
+[20:57:05] <adiabat> where fnum is the file number, offset is byte offset in block
+[20:57:35] <adiabat> should take only... 30 seconds? to build that file.  Depends how fast your disks are but it's quick.
+[20:57:54] <adiabat> then once it builds that file, it can just go through linearly and it's super easy to build the db/ txos file
+[20:58:25] <adiabat> you wouldn't even need a progress file at all; just look at the last line of the testnet.txos text fiile and see what block you're on
+[20:58:48] <adiabat> then seek to 8*blockheight in the offset file, and read where to look next
+[20:59:27] <adiabat> anyway, I think that's probably fastest / easiest; I can implement that like... tomorrow ish.  or you can try if you like, let me know
