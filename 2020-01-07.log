@@ -1,0 +1,12 @@
+[06:17:25] <adiabat> Not sure I'll make it to call at 9am tomorrow as I'm still up trying to get all the bugs out of the undo branch... so close...
+[06:17:45] <adiabat> (and so many TODOs added in the code...)
+[07:48:33] <kcalvinalvin> I am available later in the day... if you have time (I'm assuming you don't)
+[09:06:51] <kcalvinalvin> Also, did you know what Gert-Jaap was doing for the disk based forest?
+[09:07:12] <kcalvinalvin> I'm doing that atm but it's not trivial...
+[09:07:17] <kcalvinalvin> lots of things to change
+[14:05:01] <adiabat> hey online now
+[14:05:19] <adiabat> can do meet.jit.si/utreexo
+[21:53:01] <adiabat> kcalvinalvin: hey are you awake / working on stuff?
+[21:53:11] <adiabat> I pushed making forest data an interface
+[21:59:18] <adiabat> I know you were working on it, but seems like I could make the disk part pretty quick at this point so might do that, or at least start
+[23:07:26] <adiabat> kcalvinalvin: OK I did the disk based & pushed to master.  Hopefully that doesn't overlap much with stuff you wrote
