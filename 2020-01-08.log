@@ -1,0 +1,44 @@
+[05:10:54] <kcalvinalvin> adiabat haha I was dead asleep. I'll take a looksie today
+[09:32:12] <kcalvinalvin> I tried benchmarking up to the blk00002.dat file. The disk based version is 4% slower
+[09:32:20] <kcalvinalvin> pretty good
+[09:41:48] <kcalvinalvin> oh wait nvm I was looking at the wrong thing. It's 74% slower
+[09:41:50] <kcalvinalvin> not so good
+[09:42:32] <kcalvinalvin> I'm testing with an external ssd through usb 3.1
+[09:43:21] <kcalvinalvin> I guess it'll be real bad once you get to those heavy shuffles
+[17:05:55] <adiabat> kcalvinalvin: yeah there are definitely ways to make it faster.  Right now it uses "floor transform" which is...
+[17:06:41] <adiabat> simpler I guess for the forest remove method, but much slower because each individual 32 byte piece is swapped separately
+[17:07:03] <adiabat> and since it's a swap, it's like, read position a, read position b, write position b, write position a
+[17:07:18] <adiabat> for a big shuffle those are far away, and it does them all individually
+[17:08:01] <adiabat> the right way to do it, which might not be too hard, would be to move the whole chunk at once.  can take a lot of ram thogh
+[17:08:53] <adiabat> move at least up to a few megabytes at once; read positions a ... a+4096, then read b ... b+4096, then write b, then write a
+[17:10:33] <adiabat> hm.  I'm also thinking this is a bit of a mess for crashes / poweroff consistency... but can deal with that way later
+[17:32:06] <kcalvinalvin> I'm thinking maybe it'll be easier if genproofs flushes to disk once it fills up a certain amount of bytes
+[17:32:30] <kcalvinalvin> maybe have it like 128MB threshold and flush once it reaches
+[17:32:59] <kcalvinalvin> adiabat also, are you free sometime today?
+[17:53:54] <kcalvinalvin> Ok I guess I'll write it down here in case I forget.
+[17:54:57] <kcalvinalvin> I'm was pondering about merging to core today (again) and I think putting in the caching part is the logical step in doing so.
+[17:55:29] <kcalvinalvin> I really don't see any reason why Core would deny it since it doesn't assume any more security assumptions
+[17:55:58] <kcalvinalvin> It doesn't seem *that* hard to get it working on Core code too
+[17:57:06] <kcalvinalvin> I guess the question is if Core would accept clairvoyent version of the caching since it's uglier to get it working
+[17:57:59] <kcalvinalvin> Second was the PKscript thingy. I'm trying to figure out what isn't a "weird" tx. I came up with:
+[17:59:41] <kcalvinalvin> P2PK, P2PKH, P2SH, P2WPKH, P2WSH, and non-P2SH multisig
+[18:01:23] <kcalvinalvin> I guess it's easier to pick out what *is* a "weird" transaction and am a little tripped up about that
+[19:55:25] <adiabat> what do you mean about merging caching in to core?
+[19:55:45] <adiabat> like... including all caching with utreexo vs merging in a version that doesn't have any caching?
+[19:56:04] <adiabat> as for weirdness, I'd say non-P2SH multisig is weird
+[19:56:16] <adiabat> or at least, definitely non-recoverable
+[19:56:37] <adiabat> Maybe p2pk also counts... it's weird now, and I think unrecoverable
+[19:56:56] <adiabat> p2pkh, p2sh, p2wpkh and p2wsh are all OK
+[19:57:13] <adiabat> also op-return is "OK" in that it doesn't count as a utxo 
+[19:57:33] <adiabat> I think other than that, it'd have to be all the data stored
+[19:57:46] <adiabat> p2pk might not...?  not sure about that one
+[20:01:07] <kcalvinalvin> adiabat so don't include p2pk and non-p2sh multisig?
+[20:32:03] <adiabat> don't include them in the normal list I guess yeah
+[20:32:20] <adiabat> I'm really not sure about p2pk, maybe keep a separate count of those
+[20:32:27] <adiabat> guessing they're all in 2009/2010
+[20:33:18] <kcalvinalvin> ok sounds good. 
+[20:33:39] <kcalvinalvin> btw what are you working on currently?
+[20:34:28] <kcalvinalvin> I'm making some changes to forest stuff (and trying to fix hdmi on my chrombook gahhh)
+[21:51:05] <adiabat> right now still bug fixing undo branch.  should be almost done
+[21:51:22] <adiabat> then I guess will do network messages...
+[23:31:22] <adiabat> ok couple 100K runs & not finding any bugs, so maybe undo branch is good to go
