@@ -1,0 +1,12 @@
+[04:36:37] *** Quits: cfields_ (~cfields@unaffiliated/cfields) (Remote host closed the connection)
+[04:37:46] *** Joins: cfields (~cfields@unaffiliated/cfields)
+[04:38:13] *** Quits: kanzure (~kanzure@unaffiliated/kanzure) (Ping timeout: 245 seconds)
+[04:39:25] *** Joins: kanzure (~kanzure@unaffiliated/kanzure)
+[06:57:31] <kcalvinalvin> Hmmm yeah the new undo stuff is def slower... Seems 3 times slower for me
+[06:57:47] <kcalvinalvin> I thought it was me and was wondering what I screwed up haha
+[07:11:04] <kcalvinalvin> ok it's varing a lot between tests. I'm using memory based forest and sometimes it takes ~3min and sometimes it takes ~10min
+[07:41:46] <kcalvinalvin> Should mention all the times are based off runing simcmd against blk00000.dat and blk00001.dat
+[19:44:16] <adiabat> kcalvinalvin: weird, 
+[19:44:30] <adiabat> variance with ... just running it? doing stuff in the background?
+[19:45:27] <adiabat> with ram-based, it shoudn't be much slower, so I'll have to look at that.  
+[19:46:30] <adiabat> like 50% slower would make sense.  but not 3X.  I got rid of all the printfs anyway.  Also there's a pretty big cleanup / optimization left (get rid of floor transform)
