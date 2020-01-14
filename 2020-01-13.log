@@ -1,0 +1,225 @@
+[05:42:33] <kcalvinalvin> adiabat just running it. Though there is a chance that it's just me 
+[05:42:47] <kcalvinalvin> But yea it's definitely 3x slower though
+[05:43:46] <kcalvinalvin> cpu usage also seems to be a lot lower
+[07:17:38] <kcalvinalvin> So Forest resume mostly works. Sometimes getting error "hash not found" from ProveBlock()
+[07:18:08] <kcalvinalvin> Not sure what's wrong since positionMap generation from that function you wrote above seems to work
+[07:18:45] <kcalvinalvin> I should correct to "absolutely works". Tested it and it's the same
+[10:01:20] <kcalvinalvin> ah ok ProveBlock is working fine. One off bug by me
+[15:13:16] <adiabat> cool!  works is good.  Slow is not but slow & works is much better than fast & doesn't work
+[15:13:39] <adiabat> I'm going to start on network stuff for ibdsim
+[15:43:08] <kcalvinalvin> Are you ripping stuff from btcd?
+[15:43:26] <kcalvinalvin> I've been thinking that it might be better to just put in utreexo into btcd
+[16:05:24] <adiabat> what do you mean ripping stuff?
+[16:06:32] <kcalvinalvin> Like are you taking the libraries from btcd? (ex: signature verification lib)
+[16:09:06] <adiabat> right now no, not doing that
+[16:09:18] <adiabat> ah shoot I merged #49 but it doesn't compile
+[16:09:28] <adiabat> ./genproofs.go:56:43: not enough arguments in call to buildOffsetFile
+[16:09:29] <adiabat>  have (simutil.Hash, int, map[[32]byte]simutil.RawHeaderData, string, chan bool)
+[16:09:31] <adiabat>  want (simutil.Hash, int, map[[32]byte]simutil.RawHeaderData, string, string, chan bool)
+[16:10:25] <adiabat> where does currentOffsetHeightFilePath come from...
+[16:10:48] <adiabat> seems like it comes later at 84
+[16:10:56] <kcalvinalvin> oh that's the offsetfile stuff
+[16:11:15] <adiabat> is there a quick fix?
+[16:11:21] <kcalvinalvin> ah the extra string is based off the new path thingy
+[16:11:57] <adiabat> simutil.HeightFilePath?
+[16:12:08] <kcalvinalvin> basically it does filepath.Join() inside the function
+[16:12:40] <adiabat> I mean to fix it, if I put simutil.HeightFilePath in the call to buildOffsetFile is that right?
+[16:12:55] <adiabat> like that makes it compile
+[16:13:10] <kcalvinalvin> one sec
+[16:14:20] <kcalvinalvin> currentOffsetHeight, _ = buildOffsetFile(tip, height, nextMap, simutil.OffsetFilePath, simutil.CurrentOffsetFilePath, offsetfinished)
+[16:14:25] <kcalvinalvin> that's how I have it
+[16:14:36] <adiabat> hm
+[16:14:45] <adiabat> should I revert the PR merge?
+[16:15:15] <kcalvinalvin> I could rebase it myself if that's easier
+[16:15:18] <adiabat> probably a bunch of differences then
+[16:15:43] <kcalvinalvin> I didn't change *that* much
+[16:15:56] <kcalvinalvin> but there are few minor differences here and there
+[16:15:56] <adiabat> no I mean the difference between PR and
+[16:16:01] <kcalvinalvin> yes
+[16:16:16] <adiabat> like I reverted the commit I made
+[16:16:32] <adiabat> so it was back to 6faa939
+[16:17:15] <kcalvinalvin> Are you mentioning the commit on master or the commit on my PR?
+[16:18:01] <kcalvinalvin> ah wait yeah I see
+[16:18:16] <kcalvinalvin> I think it's fine. I can rebase onto that commit
+[16:18:41] <adiabat> I hate git
+[16:18:46] <kcalvinalvin> Why is github telling me about the force-push on master like it's on the PR? odd...
+[16:18:56] <kcalvinalvin> I like git. Github is meh haha
+[16:19:21] <adiabat> ok I think it's back to the way it was 24 hours ago
+[16:19:34] <adiabat> except it's not... ug
+[16:20:18] <kcalvinalvin> haha I have a fork of how it was 24 hours ago. Should I push it?
+[16:20:44] <adiabat> ok it's on 6faa939b7a60291c2e00abdc58ef961e11fb2272
+[16:20:54] <adiabat> githubs UI for PRs is all messed up but whatever
+[16:21:24] <kcalvinalvin> Cool. Is there something I need to do?
+[16:21:41] <adiabat> how do I delete a PR...?
+[16:22:07] <adiabat> the "Add paths for the files" PR didn't work
+[16:22:15] <adiabat> when applied to 6faa939b
+[16:22:20] <kcalvinalvin> git reset HEAD^
+[16:22:30] <adiabat> yeah master is back to working
+[16:22:36] <kcalvinalvin> git rebase -i "commit hash"
+[16:22:43] <kcalvinalvin> and drop from there
+[16:22:46] <adiabat> yeah the "git" ness is OK
+[16:22:52] <adiabat> the "github" ness is not
+[16:22:55] <kcalvinalvin> lol
+[16:23:02] <adiabat> like how do I delete a PR from the web ui
+[16:23:24] <kcalvinalvin> like close my PR?
+[16:23:36] <adiabat> no resurrect it
+[16:23:48] <adiabat> like I tried to revert it
+[16:23:52] <kcalvinalvin> I don't think you can
+[16:24:05] <kcalvinalvin> here I'll push again
+[16:24:09] <adiabat> see this is why I have to delete everything and start over all the time with git
+[16:24:13] <adiabat> no don't push anything
+[16:24:17] <adiabat> that just makes it worse
+[16:24:21] <kcalvinalvin> I meant make a PR
+[16:24:26] <kcalvinalvin> should I not do that...?
+[16:24:28] <adiabat> I just want github to go back to how it was an hour ago
+[16:24:54] <kcalvinalvin> Oh like put the networking stuff back in?
+[16:25:08] <adiabat> no
+[16:25:20] <adiabat> everything back to the way it was 1 hour ago
+[16:25:27] <adiabat> master on 6faa939b
+[16:25:41] <adiabat> PR #49 open, unmerged
+[16:25:56] <adiabat> PR #51 doesn't exist
+[16:25:57] <kcalvinalvin> so I think I'll have to push PR #49 again
+[16:26:27] <kcalvinalvin> oh ok
+[16:26:32] <kcalvinalvin> check out my master
+[16:26:36] <kcalvinalvin> it's how you want it
+[16:27:13] <kcalvinalvin> github.com/kcalvinalvin/utreexo
+[16:27:22] <adiabat> no, that's not what I mean
+[16:27:35] <adiabat> the "git" ness is OK
+[16:27:39] <kcalvinalvin> ok I'm on jitsi
+[16:27:49] <adiabat> but now github has stupid PRs that are broken
+[16:27:59] <adiabat> and apparently they won't fix that
+[16:28:04] <adiabat> so you have to make a whole new repo
+[16:28:15] <kcalvinalvin> ohhhhhhhhh I see
+[16:28:23] <kcalvinalvin> Isn't that just a bug
+[16:28:48] <kcalvinalvin> I don't think the code has changed?
+[16:28:56] <adiabat> https://github.com/mit-dci/utreexo/pull/51
+[16:29:07] <adiabat> yeah it's just stupid that there are "PRs"
+[16:29:11] <adiabat> and they say "merged"
+[16:29:13] <adiabat> but they're not
+[16:29:28] <kcalvinalvin> yea I think that's just a Github bug
+[16:29:49] <kcalvinalvin> I don't think you can have the merged sign turn into a close sign
+[16:30:01] <adiabat> I don't want either
+[16:30:04] <adiabat> I want it gone
+[16:30:16] <adiabat> like it never existed
+[16:30:18] <adiabat> like an hour ago
+[16:31:04] <kcalvinalvin> https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/reverting-a-pull-request
+[16:31:09] <kcalvinalvin> idk if this solves it
+[16:31:13] <adiabat> not revert, delete
+[16:31:26] <adiabat> so that there is no PR #51
+[16:31:39] <adiabat> anyway, you can open PR #52
+[16:31:53] <adiabat> which would just be #49
+[16:32:02] <kcalvinalvin> Yeah I don't think github supports that
+[16:32:42] <adiabat> that's so dumb, what if someone spams you with thousands of PRs... you have to close them all, but they just stay there?
+[16:32:49] <adiabat> you can't delete anything?
+[16:32:56] <kcalvinalvin> I... think so?
+[16:32:56] <adiabat> anyway whatever
+[16:33:27] <kcalvinalvin> there's always gitlab...
+[16:35:12] <adiabat> ok anyway so whatever the PR is
+[16:35:22] <adiabat> kcalvinalvin/add-paths doesn't compile
+[16:35:29] <adiabat> ff8a83c5b419f17f3397c3dd80c0645f45fe9da5
+[16:37:04] <kcalvinalvin> based off of 6faa939b7a60291c2e00abdc58ef961e11fb2272 right?
+[16:37:23] <kcalvinalvin> huh it's building on my end
+[16:37:38] <kcalvinalvin> adiabat: what's the error message?
+[16:37:52] <adiabat> ./genproofs.go:56:43: not enough arguments in call to buildOffsetFile
+[16:40:08] <adiabat> on mine that's
+[16:40:10] <adiabat> currentOffsetHeight, _ = buildOffsetFile(tip, height, nextMap, offsetfile, offsetfinished)
+[16:40:14] <adiabat> which, yeah, not enough args
+[16:40:24] <kcalvinalvin> hmm ok could you just try PR #50
+[16:40:32] <kcalvinalvin> it has all the changes #49 has anyways
+[16:41:50] <adiabat> that one compiles
+[16:42:07] <adiabat> ok I'll just merge that one then shuffle around the files to work on network
+[16:42:17] <kcalvinalvin> hrm weird #49 doesn't have a change on github that *is* on my local branch
+[16:42:25] <kcalvinalvin> odd
+[16:42:31] <adiabat> and if it doesn't compile or work, whatever, I'm not dealing with git / github...
+[16:45:09] <kcalvinalvin> adiabat does that one work?
+[16:48:21] <adiabat> I mean it compiles so good enough :)
+[16:50:28] <adiabat> ok so moved file names and stuff, basically for client / server I'll have a server thread running to serve the IBD client thread
+[16:50:56] <adiabat> so first they run on the same computer, and it's channels with messages going back and forth
+[16:51:17] <adiabat> then when that works, make serialization for those messages and go over TCP
+[16:51:56] <kcalvinalvin> ok cool
+[16:52:15] <kcalvinalvin> Does this mean that the utreexo lib is stable for now?
+[16:52:34] <adiabat> heh, I mean, probably not working on it the next few days stable
+[16:52:46] <kcalvinalvin> haha ok
+[16:52:58] <adiabat> the *interface* to it should be stable... ish
+[16:53:00] <kcalvinalvin> Am eager to port it over to Rust or cpp
+[16:53:07] <adiabat> though I'm wondering about positionMap
+[16:53:08] <kcalvinalvin> cpp not so much but eh
+[16:53:35] <adiabat> there are still lots of TODOs in it.
+[16:53:37] <adiabat> hm
+[16:53:50] <adiabat> if you're going to translate though, I should fix one part
+[16:54:07] <adiabat> the "floorTransform" ... need to get rid of that, which shouldn't be too bad
+[16:54:20] <kcalvinalvin> Isn't the positionMap thing also really implementation dependent?
+[16:54:24] <adiabat> then it's like, stable enough to leave for a while
+[16:54:35] <adiabat> yeah the positionMap is also like... should that even be in there...?
+[16:55:03] <adiabat> maybe that's an external library's problem?
+[16:55:13] <kcalvinalvin> imo that's the case
+[16:55:36] <adiabat> but it's actually tricky for an external library
+[16:55:46] <adiabat> like, how is it supposed to know where things moved
+[16:56:37] <adiabat> interface-wise, maybe you DO need it, because like
+[16:56:44] <adiabat> "position" is a totally internal thing
+[16:57:04] <adiabat> from the point of view of the program using utreexo, it throws things in
+[16:57:14] <adiabat> and then gets proofs, and deletes, etc
+[16:57:39] <adiabat> but if it's like "hey give me a proof for ffaab1b1", and utreexo "is like, sure, where is it?"
+[16:58:03] <adiabat> and upstream is like "I dunno, I put it in yesterday...?"
+[16:58:37] <kcalvinalvin> I guess the question is how much should Utreexo handle?
+[16:59:05] <kcalvinalvin> I guess the Core people want to treat it like leveldb?
+[16:59:28] <adiabat> levelDB definitely gives you a value if you give it a key
+[16:59:42] <adiabat> you don't have to give it a disk offset for the internal db
+[17:00:02] <adiabat> because that's like... not your problem, that's levelDBs problem which files it uses and where
+[17:00:24] <kcalvinalvin> I guess they won't accept something that's gonna break all the RPC calls
+[17:00:39] <adiabat> I'm not even thinking core, like
+[17:00:51] <adiabat> even if you moved positionMap
+[17:01:13] <adiabat> how would you update it?  what would Modify() return that let you update it...?
+[17:01:23] <adiabat> it's pretty tied in there
+[17:01:25] <kcalvinalvin> what do you mean by moved
+[17:01:38] <adiabat> I mean if you get rid of positionMap
+[17:02:05] <adiabat> then the calls to Prove/ ProveBlock change
+[17:02:22] <adiabat> right now it's func (f *Forest) Prove(wanted Hash) (Proof, error) 
+[17:02:29] <kcalvinalvin> Yeah I guess then it breaks
+[17:02:38] <adiabat> but without positionMap, you can't do that, you have to ask for a position, not a hash
+[17:03:04] <adiabat> so the code asking for the proof needs to know the position
+[17:03:16] <adiabat> so you need a positionMap somewhere
+[17:03:26] <adiabat> it'd just be in ibdsim somewhere
+[17:03:33] <adiabat> but... if it's somewhere else
+[17:03:37] <kcalvinalvin> leveldb seems perfect haha
+[17:03:52] <adiabat> there's a lot of calls to it
+[17:03:57] <adiabat> perfect for what?
+[17:04:16] <kcalvinalvin> replacement for positionMap
+[17:04:21] <adiabat> no...
+[17:04:25] <adiabat> we don't need to replace it
+[17:04:54] <adiabat> we don't need to put it on disk; it can be generated
+[17:05:10] <kcalvinalvin> but what about the rev stuff?
+[17:05:32] <adiabat> probably need levelDB for that
+[17:05:58] <adiabat> but maybe only for weird outputs
+[17:06:29] <kcalvinalvin> I did mean to ask again. Why only for weird outputs?
+[17:06:53] <adiabat> normal ones you only need a tiny amount of data
+[17:07:01] <adiabat> probably fits in 8 bytes
+[17:07:23] <adiabat> so can put it along side the forest probably
+[17:07:29] <kcalvinalvin> You don't mean normal == standard tx
+[17:07:35] <adiabat> yeha
+[17:07:37] <adiabat> well
+[17:07:48] <adiabat> not standardness but
+[17:07:55] <adiabat> "output standardness"
+[17:08:10] <adiabat> being p2pkh, p2sh, or segwit
+[17:08:47] <adiabat> if any of those, all the extra data needed fits in less than 16 bytes
+[17:09:02] <adiabat> so could just have another on disk data store, like for the leaves
+[17:09:24] <adiabat> or make the base of the forest 48 bytes instead of 32 bytes or whatever
+[17:09:36] <kcalvinalvin> so output > 16 bytes; mark as weird?
+[17:09:42] <adiabat> ?
+[17:09:58] <adiabat> what's weird?
+[17:09:59] <kcalvinalvin> like "weird" as in bigger than your normal tx right
+[17:10:02] <adiabat> no
+[17:10:29] <adiabat> a "weird" output is just one that's not p2pkh, p2sh, segwit
+[17:10:44] <adiabat> and so you need to keep more data about it, in some db or whatever
+[17:11:11] <adiabat> regular outputs though, you need very little extra data
+[17:11:18] <adiabat> you need *some*, but mostly the amount
+[17:11:26] <adiabat> which is 8 bytes max
+[17:11:52] <adiabat> so can store that in a similar structure as the forest as it's fixed length and small
+[17:12:04] <adiabat> anyway got to go... meetings n stuff
+[17:12:29] <kcalvinalvin> wouldn't you be able to make big multisig stuff with p2sh?
+[17:23:47] <kcalvinalvin> ah ok we only care about outputs
+[17:45:29] <adiabat> well, care about both but with p2sh you get the preimage when spending
+[17:45:50] <adiabat> so you can just hash that, see if it fits with the leaf given, and if it does, you're good
+[17:46:02] <adiabat> even though you "forgot" what the output's address actually was
+[18:33:05] <kcalvinalvin> ok so I'll make that script and then work on pollard resume
+[23:13:23] <adiabat> ok for pollard resume for now, I'd say only use tree tops, don't bother writing the whole pollard state to disk
