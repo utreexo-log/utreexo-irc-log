@@ -1,0 +1,40 @@
+[00:18:30] *** Quits: valwal (sid334773@gateway/web/irccloud.com/x-rozjndwzsggarebm) (Read error: Connection reset by peer)
+[00:18:43] *** Quits: Varunram (sid210151@gateway/web/irccloud.com/x-dyswkyqxdueenodj) (Read error: Connection reset by peer)
+[00:19:32] *** Joins: Varunram (sid210151@gateway/web/irccloud.com/x-bjifolujkgfehfab)
+[00:22:08] *** Joins: valwal (sid334773@gateway/web/irccloud.com/x-grolvsrvivcwhdug)
+[00:43:12] *** Quits: jamesob (sid180710@gateway/web/irccloud.com/x-gkpqiwovjrzcvjaq) (Ping timeout: 246 seconds)
+[00:43:27] *** Quits: Varunram (sid210151@gateway/web/irccloud.com/x-bjifolujkgfehfab) (Ping timeout: 272 seconds)
+[00:44:05] *** Quits: digi_james (sid281632@gateway/web/irccloud.com/x-etbhgsojdikkrkqs) (Ping timeout: 272 seconds)
+[00:47:02] *** Quits: valwal (sid334773@gateway/web/irccloud.com/x-grolvsrvivcwhdug) (Ping timeout: 260 seconds)
+[00:53:21] *** Quits: RubenSomsen (sid301948@gateway/web/irccloud.com/x-ljnsyxugfwixcbdn) (Ping timeout: 246 seconds)
+[01:09:29] *** Joins: RubenSomsen (sid301948@gateway/web/irccloud.com/x-dlowkpemhdlkzhfb)
+[01:09:37] *** Quits: RubenSomsen (sid301948@gateway/web/irccloud.com/x-dlowkpemhdlkzhfb) (Excess Flood)
+[05:56:48] *** Joins: kiok46 (b646607c@182.70.96.124)
+[05:59:50] <kiok46> kcalvinalvin I heard you
+[05:59:53] <kiok46> https://github.com/utreexo-log/utreexo-irc-log/blob/master/2019-12-05.log#L12
+[06:01:51] <kiok46> The idea of utreexo fascinates me, you are going to see me here more often.
+[06:10:46] <kiok46> You ever considered discord? Most of the orgs which I am part of or was part of shifted to discord.
+[06:34:50] *** Quits: kiok46 (b646607c@182.70.96.124) (Remote host closed the connection)
+[06:43:15] *** Joins: kiok46 (b646607c@182.70.96.124)
+[06:51:05] *** Joins: Varunram (sid210151@gateway/web/irccloud.com/x-qgqnvejjqzihjcdc)
+[06:53:24] *** Joins: RubenSomsen (sid301948@gateway/web/irccloud.com/x-ychgpeigdrmerrwf)
+[06:53:30] *** Joins: digi_james (sid281632@gateway/web/irccloud.com/x-ujprzhctynzlzsgm)
+[06:57:25] *** Joins: jamesob (sid180710@gateway/web/irccloud.com/x-aggzqrsxjxduhabj)
+[07:11:33] *** Joins: fjahr (sid374480@gateway/web/irccloud.com/x-ycxxkxjyiukxhegd)
+[07:13:02] *** Joins: valwal (sid334773@gateway/web/irccloud.com/x-nnsqaccaqczgtvlv)
+[07:21:08] *** Quits: kiok46 (b646607c@182.70.96.124) (Remote host closed the connection)
+[08:14:17] *** Quits: cfields (~cfields@unaffiliated/cfields) (Remote host closed the connection)
+[08:15:56] *** Joins: cfields (~cfields@unaffiliated/cfields)
+[08:30:36] *** Joins: kiok46 (6ad1b0e5@106.209.176.229)
+[08:37:03] *** Quits: kiok46 (6ad1b0e5@106.209.176.229) (Remote host closed the connection)
+[09:01:28] <kcalvinalvin> We've talked about moving to a different thing (maybe mattermost?)
+[09:03:23] <kcalvinalvin> Discord doesn't really seem to fit the spirit of Bitcoin imo
+[09:20:58] *** Joins: kiok46 (b646607c@182.70.96.124)
+[10:02:14] *** Quits: kiok46 (b646607c@182.70.96.124) (Remote host closed the connection)
+[11:12:46] *** Joins: kiok46 (728f800a@114.143.128.10)
+[11:58:26] *** Quits: kiok46 (728f800a@114.143.128.10) (Remote host closed the connection)
+[17:38:51] <ysangkok> kcalvinalvin: what's wrong with irc? it is historically used in bitcoin. i have been following your discussion without issues all this time.
+[17:40:04] <ysangkok> i know the UX argument, but this is a super technical channel. what are odds that somebody is smart enough to develop utreexo but not smart enough to use irc?
+[17:44:10] <ysangkok> you could also argue your values are reflected in your choice of slack/discord/irc. but i find it astounding that we are in a community where it is commonly agreed that you need to store a 200 GB blockchain to be safe, but apparently there is no problem giving up your infrastructure to some arbitrary third party because they have better UX.
+[22:04:00] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Quit: jb55)
+[22:55:38] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
