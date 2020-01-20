@@ -1,0 +1,5 @@
+[09:39:15] <kcalvinalvin> Would it make sense to have a "Full pollard" and "Sparse pollard"?
+[09:40:14] <kcalvinalvin> And give the user to switch back and forth
+[09:40:26] <kcalvinalvin> *the ability to switch back and forth
+[09:41:11] <kcalvinalvin> I guess it might be somewhat compareable to an "archival node" and a "pruned node" today
+[09:45:19] <kcalvinalvin> Do correct me but the difference between a forest and pollard is: 1- If everything is full. 2- map instead of pointers. Right?
