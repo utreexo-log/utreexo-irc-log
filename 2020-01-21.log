@@ -1,0 +1,13 @@
+[13:56:45] <kcalvinalvin> Hi I'm here
+[14:01:56] <adiabat> hey
+[14:02:01] <adiabat> 1 sec finding headphones
+[14:02:20] <kcalvinalvin> hi
+[14:04:05] <adiabat> ok on jitsi now
+[20:23:09] <adiabat> aha... right, like I thought, all that code didn't actually work.  I just wasn't using it.
+[20:23:17] <adiabat> shoot.  well now I need to make it actually work
+[20:43:32] <adiabat> also it's not any faster because it wasn't actually calling the new stuff.  Which doesn't work.  
+[20:43:48] <adiabat> but the bugs look manageable / normal so getting those now
+[20:54:27] <adiabat> by which I mean great stuff like
+[20:54:36] <adiabat> a = up1(b, f.height)
+[20:54:38] <adiabat> instead of
+[20:54:41] <adiabat> a = up1(a, f.height)
