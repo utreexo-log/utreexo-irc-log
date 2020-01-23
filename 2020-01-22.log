@@ -1,0 +1,16 @@
+[02:56:04] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Ping timeout: 240 seconds)
+[03:15:30] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[05:44:16] <kcalvinalvin> adiabat I've tried the new code but it still seems to be around the same time wise?
+[05:44:44] <kcalvinalvin> Also, tried out the rev-reader and it seems to work well. I'll look at the code tests
+[05:45:20] <kcalvinalvin> **BUT** (and a big but) the hash in rev*.dat doesn't match the actual hash in the blk*.dat files
+[07:21:32] <kcalvinalvin> ok so git work-tree is weird in that when I build it only builds the original worktree?
+[07:21:50] <kcalvinalvin> anyways, the new code you pushed (the latest master) is a *lot* slower
+[07:49:48] <kcalvinalvin> https://github.com/mit-dci/utreexo/issues/65
+[07:50:15] <kcalvinalvin> removev4() is looping forever on block 16348
+[14:13:11] <adiabat> shoot
+[14:13:24] <adiabat> weird, OK I need to run more tests on it
+[15:04:13] <adiabat> ok fixed the hang, it was dumb
+[15:04:28] <adiabat> if it's still slow though that's not good; it shouldn't be...
+[15:05:38] <adiabat> the bug that was causing the hang also was preventing any parallel hashing... but that seems unlikely to be the slowdown, it's always i/o based...
+[16:47:30] <kcalvinalvin> adiabat How would you store the polNode nieces?
+[16:57:20] <kcalvinalvin> ok just store 0 for nil nicese
