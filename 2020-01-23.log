@@ -1,0 +1,14 @@
+[00:24:13] <adiabat> kcalvinalvin: not sure what you mean
+[00:24:33] <adiabat> every polNode is someone's niece
+[00:24:52] <adiabat> (except the top ones.  But that's almost none of them)
+[00:25:40] <adiabat> if you're serializing / putting a pollard partial tree on disk... yeah it's tricky.  I don't have a great way to do it
+[00:26:48] <adiabat> I have *a* way to do it, which is used for the proofBlocks
+[00:27:26] <adiabat> (f *Forest) ProveBlock() and (bp *BlockProof) Reconstruct()
+[00:28:06] <adiabat> they serialize and deserialize sparse forests.  But there's probably a better way to do it.
+[00:28:45] <adiabat> and also it seems OK for flush to disk and then restore to ram, but it's not something where you can keep it on disk and seek around and modify things.  That would be better.
+[00:29:07] <adiabat> I'm sure there's a way to do it.  Would just have to play around with it for a while... hm..
+[07:58:33] *** Quits: stevenroose (~steven@vps.weuste.club) (*.net *.split)
+[08:45:41] *** Joins: stevenroose (~steven@vps.weuste.club)
+[21:06:04] *** Quits: pigeons (~pigeons@androzani.sysevolve.com) (Ping timeout: 264 seconds)
+[21:25:40] *** Joins: pigeons (~pigeons@androzani.sysevolve.com)
+[21:26:02] *** pigeons is now known as Guest92238
