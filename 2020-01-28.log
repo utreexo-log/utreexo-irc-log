@@ -1,0 +1,13 @@
+[07:04:48] <kcalvinalvin> adiabat It might be worth looking at github.com/btcsuite/btcd/server.go
+[07:05:20] <kcalvinalvin> I've been skimming over the btcd code and it *might* not be so hard to shove utreexo in there
+[07:12:58] <kcalvinalvin> Oh and have you looked over the PR that nakagawa made
+[12:36:11] *** Quits: jamesob (sid180710@gateway/web/irccloud.com/x-aggzqrsxjxduhabj) ()
+[12:36:27] *** Joins: jamesob (sid180710@gateway/web/irccloud.com/x-nezxkhuukhlgorqy)
+[13:59:11] <kcalvinalvin> Hi I'm here
+[14:01:13] <adiabat> hey
+[14:01:15] <adiabat> 1 sec
+[14:01:19] <adiabat> getting headphones
+[14:03:39] <adiabat> ok on https://meet.jit.si/utreexo
+[14:31:53] <kcalvinalvin> https://github.com/bitcoin/bitcoin/pull/16442
+[16:53:58] *** Quits: RubenSomsen (sid301948@gateway/web/irccloud.com/x-ychgpeigdrmerrwf) ()
+[16:54:26] *** Joins: RubenSomsen (sid301948@gateway/web/irccloud.com/x-bwhyuyenhxtslndx)
