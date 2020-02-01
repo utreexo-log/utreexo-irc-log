@@ -1,0 +1,6 @@
+[08:58:45] <kcalvinalvin> adiabat Would you replace the nieces with children with fullPollard?
+[16:23:59] <adiabat> hmmm... I mean you *could* but I doubt it's worth it
+[16:24:19] <adiabat> if you make a pollard like that, pretty much everything in pollard would have to change
+[16:25:41] <adiabat> "children" and the non-zigzag lines are simpler to think about & understand for *humans*, but there's not any performance / storage advantage. 
+[16:26:34] <adiabat> also if it stays neice-based, then you can take a full pollard and easily make it non-full, or get a non-full one to full without reconfiguring anything
+[16:27:23] <adiabat> on the other hand, it's totally possible to make pollard always have children pointers instead of nieces.  There's a storage penalty to that of ... like 25% or something.  But then maybe simpler to work with
