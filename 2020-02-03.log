@@ -1,0 +1,20 @@
+[16:38:13] <adiabat> about leaf nodes pointing to themselves:
+[16:38:27] <adiabat> a hack / Feature™
+[16:38:45] <adiabat> it's like, I want to have a flag bit for "memorable" so really polNode could have a "memorable bool"
+[16:39:06] <adiabat> but that one bool actually makes the node like 8 bytes bigger, which is signifcant
+[16:39:27] <adiabat> also, the big problem is all the leaves, which is 50% of the nodes, have two pointers which do nothing
+[16:39:36] <adiabat> (since they have no children / nieces)
+[16:40:03] <adiabat> I tried making polNode an interface, and then there could be 2 types: leafNodes and intermediateNodes
+[16:40:26] <adiabat> but the way (in go at least) interfaces work is that there's a pointer to the struct, and then a pointer to the interface
+[16:40:42] <adiabat> so you save 2 pointers on the leaves, but add 1 pointer to every node
+[16:41:05] <adiabat> - 16 bytes on 50% of nodes, and +8 bytes on 100% of nodes, so that gets no savings
+[16:41:29] <adiabat> (and also makes the code a bit more complex than having dead end / nil pointers at the bottom)
+[16:42:05] <adiabat> so another idea was, hey there's all this empty pointer data on the leaves, 16 bytes, each, why not put hash data in there
+[16:42:49] <adiabat> which is all like, unsafe package / pointer arithmetic, a field that's a "pointer" but half the time it's actually not
+[16:43:23] <adiabat> so... I haven't done that.  But... yeah it's defintely an inefficiency in pollard / polNode
+[16:44:40] <adiabat> so right now 1/6th of the space in the pollard forest structure is nil pointers
+[16:44:52] <adiabat> but haven't found a nice clean way to avoid that
+[20:46:59] *** Joins: nick_freeman (~nick_free@2001:16b8:30b5:5100:7c87:f218:df6:4d21)
+[22:17:43] *** Quits: nick_freeman (~nick_free@2001:16b8:30b5:5100:7c87:f218:df6:4d21) (Remote host closed the connection)
+[22:19:10] *** Joins: nick_freeman (~nick_free@2001:16b8:30b5:5100:c08e:d0d:be77:da4)
+[22:27:33] *** Quits: nick_freeman (~nick_free@2001:16b8:30b5:5100:c08e:d0d:be77:da4) (Remote host closed the connection)
