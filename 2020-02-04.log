@@ -1,0 +1,50 @@
+[07:13:44] *** Joins: nick_freeman (~nick_free@92.116.144.46)
+[07:31:17] <kcalvinalvin> So... about FullPollard... You'd want to stop and resume this
+[07:32:03] <kcalvinalvin> Not much clean ways to do this without leveldb I think
+[07:32:17] <kcalvinalvin> I guess Pollard in general unless you don't want to cache
+[08:24:43] *** Quits: nick_freeman (~nick_free@92.116.144.46) (Remote host closed the connection)
+[08:30:11] *** Joins: nick_freeman (~nick_free@2001:16b8:30f8:7c00:99bb:16a2:6cfd:b191)
+[11:14:10] *** Quits: nick_freeman (~nick_free@2001:16b8:30f8:7c00:99bb:16a2:6cfd:b191) (*.net *.split)
+[11:14:11] *** Quits: digi_james (sid281632@gateway/web/irccloud.com/x-kydbfjozsjpxfupn) (*.net *.split)
+[11:14:17] *** Quits: fjahr (sid374480@gateway/web/irccloud.com/x-efkrfktxtctjelbc) (*.net *.split)
+[11:14:20] *** Quits: cfields (~cfields@unaffiliated/cfields) (*.net *.split)
+[11:18:00] *** Quits: kcalvinalvin (~kcalvinal@ec2-52-79-199-97.ap-northeast-2.compute.amazonaws.com) (ZNC 1.7.4 - https://znc.in)
+[11:28:38] *** Joins: kcalvinalvin (~kcalvinal@ec2-52-79-199-97.ap-northeast-2.compute.amazonaws.com)
+[11:28:59] *** Server sets mode: +ns 
+[13:44:43] <adiabat> yeah for full pollard realistically you'll need to flush to disk / restore from disk
+[13:44:57] <adiabat> though can test it out without that & see if it's slower or faster
+[13:45:15] <adiabat> also it'd be really cool to have full pollard *on* disk, the way we can with forest
+[13:46:02] <adiabat> but... I don't know a good way to do that.  There's gotta be one, seems like a general CS-y problem people have probably figured out cool algorithms for
+[13:46:28] <adiabat> also - can't do a 9am call, more like 9:30, is that OK?
+[13:55:40] <adiabat> alternatively, could do tomorrow at 9am if that's better for you
+[14:00:52] <kcalvinalvin> sure
+[14:11:54] <adiabat> which is better?
+[14:19:20] <kcalvinalvin> the call time? Either is fine
+[14:20:31] <adiabat> ok let's do tomorrow at 9, should have more time then
+[14:21:03] <kcalvinalvin> oh I missed one of the messages :/
+[14:21:18] <kcalvinalvin> Is a quick call in 9 mins good?
+[14:21:41] <kcalvinalvin> some things I want to talk about for a general direction for full pollard 
+[14:33:34] <adiabat> oh
+[14:33:43] <adiabat> ok how about quick call in like... 15 min?
+[14:34:02] <adiabat> will message in a bit when I get set up
+[14:34:32] <kcalvinalvin> cool. Just like ~15 minutes fine for you?
+[14:53:14] <adiabat> hey I'm online now
+[14:53:19] <adiabat> meet.jit.si/utreexo
+[15:31:13] <kcalvinalvin> ok cool so I'll let you test out the FullPollard thing since I think it'll take me at least a few days to gronk the code
+[15:32:16] <kcalvinalvin> If you push the uint to int stuff with genproofs.go, I'll take those and resume work with trying to get a driver working on btcd
+[16:17:26] *** Joins: nick_fre_ (~nick_free@2001:16b8:3019:b200:419d:8996:2811:8963)
+[16:19:31] *** Quits: nick_freeman (~nick_free@2001:16b8:30f8:7c00:99bb:16a2:6cfd:b191) (Ping timeout: 265 seconds)
+[16:54:02] *** Joins: nick_freeman (~nick_free@2001:16b8:301a:4400:a962:f974:32d:81e5)
+[16:56:15] *** Quits: nick_fre_ (~nick_free@2001:16b8:3019:b200:419d:8996:2811:8963) (Ping timeout: 265 seconds)
+[16:57:50] *** Joins: nick_fre_ (~nick_free@92.116.179.81)
+[16:59:38] *** Quits: nick_freeman (~nick_free@2001:16b8:301a:4400:a962:f974:32d:81e5) (Ping timeout: 265 seconds)
+[17:01:35] *** Joins: nick_freeman (~nick_free@2001:16b8:301a:6300:9934:a318:78e:4829)
+[17:03:14] *** Quits: nick_fre_ (~nick_free@92.116.179.81) (Ping timeout: 240 seconds)
+[17:05:48] *** Joins: nick_fre_ (~nick_free@92.116.177.224)
+[17:06:53] *** Joins: nick_fr__ (~nick_free@92.116.177.224)
+[17:06:53] *** Quits: nick_fre_ (~nick_free@92.116.177.224) (Read error: Connection reset by peer)
+[17:08:17] *** Quits: nick_freeman (~nick_free@2001:16b8:301a:6300:9934:a318:78e:4829) (Ping timeout: 272 seconds)
+[18:33:23] *** Quits: nick_fr__ (~nick_free@92.116.177.224) (Remote host closed the connection)
+[19:03:51] *** Joins: nick_freeman (~nick_free@2001:16b8:301a:7a00:f418:c93:2cc7:ab71)
+[19:48:35] *** Quits: nick_freeman (~nick_free@2001:16b8:301a:7a00:f418:c93:2cc7:ab71) (Remote host closed the connection)
+[19:48:41] *** Joins: nick_freeman (~nick_free@2001:16b8:301a:7a00:f418:c93:2cc7:ab71)
