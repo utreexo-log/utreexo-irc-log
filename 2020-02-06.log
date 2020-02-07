@@ -1,0 +1,87 @@
+[00:18:06] *** Joins: cfields_ (~cfields@unaffiliated/cfields)
+[00:21:30] *** Quits: cfields (~cfields@unaffiliated/cfields) (Remote host closed the connection)
+[00:25:17] *** Quits: fjahr (sid374480@gateway/web/irccloud.com/x-efkrfktxtctjelbc) (Read error: Connection reset by peer)
+[00:25:32] *** Joins: fjahr (sid374480@gateway/web/irccloud.com/x-zxgqlsemucmslilt)
+[01:14:11] <adiabat> kcalvinalvin: OK got the full pollard code working / pushed / merged.  
+[01:15:43] <adiabat> took, like, yeah an "afternoon" since 8pm is after noon
+[01:16:04] <adiabat> also might have bugs, doesn't seem to but I didn't test that much, just the standard test that's there now
+[01:16:48] <adiabat> so... yeah try it out, see if it's any faster / slower for you
+[03:32:16] <kcalvinalvin> cool I'll test it out today
+[08:03:26] *** Joins: nick_freeman (~nick_free@92.116.142.143)
+[08:06:58] *** Quits: nick_freeman (~nick_free@92.116.142.143) (Remote host closed the connection)
+[08:10:52] *** Joins: nick_freeman (~nick_free@2001:16b8:307e:c600:dd40:69a2:a5e6:733a)
+[08:12:31] *** Joins: nick_fre_ (~nick_free@2001:16b8:307e:c600:dc78:d903:4115:d27c)
+[08:15:37] *** Quits: nick_freeman (~nick_free@2001:16b8:307e:c600:dd40:69a2:a5e6:733a) (Ping timeout: 260 seconds)
+[08:17:21] *** Quits: nick_fre_ (~nick_free@2001:16b8:307e:c600:dc78:d903:4115:d27c) (Remote host closed the connection)
+[08:17:43] *** Joins: nick_freeman (~nick_free@2001:16b8:307e:c600:dc78:d903:4115:d27c)
+[08:24:05] *** Quits: nick_freeman (~nick_free@2001:16b8:307e:c600:dc78:d903:4115:d27c) (Remote host closed the connection)
+[08:24:19] *** Joins: nick_freeman (~nick_free@2001:16b8:307e:c600:dc78:d903:4115:d27c)
+[08:31:59] *** Quits: nick_freeman (~nick_free@2001:16b8:307e:c600:dc78:d903:4115:d27c) (Remote host closed the connection)
+[09:02:28] *** Joins: nick_freeman (~nick_free@2001:16b8:307e:c600:dc78:d903:4115:d27c)
+[09:11:33] *** Quits: nick_freeman (~nick_free@2001:16b8:307e:c600:dc78:d903:4115:d27c) (Remote host closed the connection)
+[09:11:59] *** Joins: nick_freeman (~nick_free@2001:16b8:307e:c600:dc78:d903:4115:d27c)
+[09:14:54] *** Quits: nick_freeman (~nick_free@2001:16b8:307e:c600:dc78:d903:4115:d27c) (Remote host closed the connection)
+[09:15:02] *** Joins: nick_freeman (~nick_free@2001:16b8:307e:c600:dc78:d903:4115:d27c)
+[09:21:15] <kcalvinalvin> So tested it out. FullPollard isn't any faster than forest
+[09:21:44] *** Quits: nick_freeman (~nick_free@2001:16b8:307e:c600:dc78:d903:4115:d27c) (Remote host closed the connection)
+[09:21:57] <kcalvinalvin> ./simcmd genproofs -testnet=1 > log  69.47s user 27.26s system 199% cpu 48.365 total (FullPollard)
+[09:22:08] <kcalvinalvin> ./simcmd genproofs -testnet=1 63.42s user 27.76s system 199% cpu 45.647 total (Forest on ram)
+[09:22:11] *** Joins: nick_freeman (~nick_free@2001:16b8:307e:c600:dc78:d903:4115:d27c)
+[09:22:30] *** Quits: nick_freeman (~nick_free@2001:16b8:307e:c600:dc78:d903:4115:d27c) (Remote host closed the connection)
+[09:22:37] *** Joins: nick_freeman (~nick_free@2001:16b8:307e:c600:dc78:d903:4115:d27c)
+[09:22:52] <kcalvinalvin> I guess we need both forest and pollard
+[09:28:31] *** Quits: nick_freeman (~nick_free@2001:16b8:307e:c600:dc78:d903:4115:d27c) (Remote host closed the connection)
+[09:33:38] <kcalvinalvin> Oh, another goal for May before the Utreexo workshop should be to make godoc nice and pretty so people can just look at that
+[09:34:48] *** Joins: nick_freeman (~nick_free@92.116.142.143)
+[10:53:09] *** Quits: nick_freeman (~nick_free@92.116.142.143) (Read error: Connection reset by peer)
+[15:05:31] <adiabat> hm... but not really any slower though.  Like pretty much the same speed
+[16:16:06] *** Joins: rafalcpp (~racalcppp@ip-178-211.ists.pl)
+[16:57:43] *** Quits: rafalcpp (~racalcppp@ip-178-211.ists.pl) (Ping timeout: 265 seconds)
+[17:09:30] <kcalvinalvin> adiabat Do you think worth persuing?
+[17:33:57] *** Quits: kcalvinalvin (~kcalvinal@ec2-52-79-199-97.ap-northeast-2.compute.amazonaws.com) (ZNC 1.7.4 - https://znc.in)
+[17:35:36] *** Joins: kcalvinalvin (~kcalvinal@ec2-52-79-199-97.ap-northeast-2.compute.amazonaws.com)
+[17:35:52] *** Server sets mode: +ns 
+[17:36:09] *** Server sets mode: +ns 
+[17:43:59] <adiabat> persuing as in... what exactly?
+[17:44:06] <adiabat> like it works, so... could use it
+[17:44:26] <adiabat> I guess the only difference would be deleting all the forest code.  That's probably not great
+[17:44:41] <kcalvinalvin> I guess. But forest is easy to get it on disk
+[17:45:19] <adiabat> right, for on disk, forest is great
+[17:45:41] <adiabat> I'm a little surprised full pollard isn't faster for huge numbers of nodes with large swaps
+[17:45:58] <kcalvinalvin> btw, I decided to just rip off stuff from btcd and make a separate node. I like writing code more than reading code too much :)
+[17:46:01] <adiabat> because all pollard needs to do for a 12-high swap is change 4 pointers
+[17:46:12] <adiabat> but forest has to change, like, 8000 things
+[17:46:29] <adiabat> heh, cool... I think the function that would be cool to have
+[17:46:32] <adiabat> would be like :
+[17:46:43] <kcalvinalvin> I only tested it on blk0000{0..1}.dat files on testnet3
+[17:47:07] <kcalvinalvin> so I could run a longer test to see if full pollard is faster
+[17:47:10] <adiabat> func CheckBlock(utxos []txo, block *wire.MsgBlock) bool {}
+[17:47:23] <adiabat> well probably (bool, error)
+[17:47:35] <adiabat> or could just return false if there's any error 
+[17:47:45] <adiabat> but probably want to show errors while getting the code to work
+[17:48:27] <adiabat> if we have an isolated function like that to do all the block checks, that would be easy to plug in to the current IBDsim
+[17:48:37] <adiabat> and then it's not really "sim" anymore, then it's legit IBD
+[17:50:14] <kcalvinalvin> could you clarify what you mean by "block check"
+[17:50:21] <kcalvinalvin> The signatures?
+[17:50:35] <adiabat> everything
+[17:50:39] <adiabat> like, blocck size
+[17:50:46] <adiabat> header is OK
+[17:50:50] <adiabat> proof of work
+[17:51:00] <adiabat> all signatures, everything
+[17:51:11] <adiabat> amounts aren't too high
+[17:51:18] <adiabat> fees add up in coinbase
+[17:51:45] <adiabat> basically every consensus rule bitcoin enforces SHOULD be decidable from those function arguments
+[17:53:23] <kcalvinalvin> ah ok
+[17:53:31] <kcalvinalvin> sounds fun
+[18:00:33] <adiabat> yeah... cfields_ did mention writing something like this in c++ from bitcoin core code
+[18:00:46] <adiabat> but if we get a btcd golang version first, can test with that
+[18:01:00] <adiabat> then it's a super easy drop-in replacement to call the c++ version
+[18:03:23] <kcalvinalvin> I looked at some c++ project that I did a while ago today
+[18:03:32] <kcalvinalvin> I remembered why I don't like c++
+[18:03:32] <kcalvinalvin> heh
+[18:08:59] <adiabat> yeah I'm not really looking forward to porting everything to c++
+[18:09:12] <adiabat> most of it should be not that bad though
+[20:12:00] <adiabat> .. oh wait it still has a printf in there!
+[20:12:10] <adiabat> line 97 of pollard.go
+[20:13:27] <adiabat> I'll take that out.  maybe it actually is faster, and printfing a zillion times was slowing it down
+[20:14:51] <adiabat> yeah maybe try it again?  It's was printing a line every utxo added.  Which is kindof a lot.  But maybe not enough to really slow it down that much
