@@ -1,0 +1,12 @@
+[03:22:18] <kcalvinalvin> adiabat I commented on the commit that you did but yeah I did have the printf commented out already :)
+[03:22:32] <kcalvinalvin> It's even slower with the printf
+[06:40:43] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Ping timeout: 240 seconds)
+[06:54:16] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[14:35:35] *** Joins: rafalcpp (~racalcppp@ip-178-211.ists.pl)
+[17:15:50] *** Quits: rafalcpp (~racalcppp@ip-178-211.ists.pl) (Read error: Connection reset by peer)
+[18:51:46] <adiabat> oh you already got rid of it heh.  OK wellll... hm.  Not faster at all then.
+[18:52:18] <adiabat> probably not worth doing pprofs ... but I have a decent idea that the positionMap swapping is slowing it down
+[18:52:46] <adiabat> it's got a good amount of redundancy and could be improved, maybe using some of the undo code...
+[18:53:27] <adiabat> but really, I think everything's fast enough for now; you can always try to make things faster / more efficient but it's pretty good, can work on getting it plugged in and usable
+[23:06:03] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Ping timeout: 240 seconds)
+[23:09:39] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
