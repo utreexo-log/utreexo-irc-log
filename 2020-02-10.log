@@ -1,0 +1,39 @@
+[00:09:48] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[08:33:46] <kcalvinalvin> So I think I'm doing the right thing by writing new code for Utreexo then fitting it in btcd since a lot of libraries rely on the db
+[08:34:18] <kcalvinalvin> Is Core about the same? Seems like a *lot* of code tweaking for Utreexo
+[10:11:54] <kcalvinalvin> adiabat I made a list of goals that we should get/should be able to get before the Workshop in May. https://github.com/mit-dci/utreexo/issues/79 
+[10:12:36] <kcalvinalvin> Might have left some things out
+[10:13:06] <kcalvinalvin> As in, I should have put it in the list but forgot to
+[10:13:35] <kcalvinalvin> Also, the list isn't in any particular order
+[13:25:14] *** Joins: rafalcpp (~racalcppp@ip-178-211.ists.pl)
+[14:56:13] <adiabat> kcalvinalvin: yeah I think core is similar in that the database is everywhere...
+[14:56:43] <adiabat> so it's a pretty big code reshuffle to get it out of the way
+[14:57:04] <adiabat> but doing that in btcd first should at least give us an idea of how to do it
+[15:02:22] <kcalvinalvin> adiabat so on issue #79, I just said it'd be better if we start off with just ripping code off btcd
+[15:02:27] <kcalvinalvin> which is what I'm doing atm
+[15:02:55] <kcalvinalvin> but yea, should be easier with btcd. Though it still is a **huge** change
+[15:03:30] <adiabat> yeah I think a general sequence for this is:
+[15:04:07] <adiabat> 1: build a ValidateBlock() function call from patching together parts of existing code
+[15:04:20] <adiabat> that part might not be *that* bad.
+[15:04:57] <adiabat> just a big list of function calls and if any of them returns fasle, return false.  modeled on the one already there, but without database and with the utxos already on-hand
+[15:05:45] <adiabat> 2) re-org code internally to use that ValidateBlock() function, while still keeping everything in place (levelDB utxo set)
+[15:06:12] <adiabat> at that point, everything should still work.  Maybe part 2 seems useless, but I think it's helpful to have
+[15:06:41] <adiabat> then 3) pull out the levelDB parts to gather utxo arguments for the ValidateBlock() function and replace with utreexo
+[15:09:00] <adiabat> in terms of the github issue, I think #1 bridge node is the easiest / closest to done
+[15:09:29] <adiabat> we already pretty much have it, if you don't need to serve "classic" (maybe not the best term :) nodes
+[15:09:56] <adiabat> I think it's fine to only have the brige node talk to compact state nodes (CSN)s
+[15:10:24] <adiabat> beacuse if there's a handshake in the beginning, can just switch which binary you had that connection off to, run 2 alongside
+[15:10:50] <adiabat> but yeah eventually integrate them, but that can be done whenever later
+[15:11:49] <kcalvinalvin> Could you say this again on Github since I don't think most will see this
+[15:11:58] <adiabat> sure
+[15:12:12] <kcalvinalvin> And searching through irc is a pain...
+[15:15:04] <kcalvinalvin> Ah the term "classic" may not go well yeah haha.
+[15:19:37] <adiabat> I mean we can just start calling current bitcoin nodes bitcoin classic...
+[15:19:40] <adiabat> but could be confusing
+[15:19:49] <adiabat> a word I quite like is "legacy"
+[15:19:57] <adiabat> it's ultra presumptive
+[15:20:10] <adiabat> "legacy bitcoin nodes store the utxo set in leveldb"
+[15:40:24] <kcalvinalvin> "outdated"
+[15:40:35] <kcalvinalvin> "outdated bitcoin nodes store the utxo set in leveldb"
+[17:31:04] <kanzure> re: searching through IRC being a pain, i could publish irc logs for this channel if there's interest.
+[17:31:26] <kanzure> would be hosted on http://gnusha.org/ next to the other logs
