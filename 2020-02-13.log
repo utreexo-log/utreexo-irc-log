@@ -1,0 +1,10 @@
+[09:33:13] <kcalvinalvin> Quick question that never came across my mind until now
+[09:33:23] <kcalvinalvin> Would the witness also have a utreexo tree?
+[09:33:34] <kcalvinalvin> I guess it would..?
+[09:58:39] *** Quits: rafalcpp_ (~racalcppp@ip-178-211.ists.pl) (Ping timeout: 260 seconds)
+[09:59:41] *** Joins: rafalcpp_ (~racalcppp@ip-178-211.ists.pl)
+[12:23:18] <adiabat> what's the witness?
+[12:23:56] <adiabat> the signatures? like in segwit? no, only need to store utxos, the witnesses work the same as now
+[15:59:24] <kcalvinalvin> ok cool
+[16:57:07] *** rafalcpp_ is now known as rafalcpp
+[19:47:56] *** Joins: nick_freeman (~nick_free@2001:16b8:3094:300:8868:3a5f:28c6:c0e8)
