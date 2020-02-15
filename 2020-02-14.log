@@ -1,0 +1,25 @@
+[01:04:30] *** Joins: fanquake (sid369002@gateway/web/irccloud.com/x-kjjicniivqzkqzxu)
+[01:10:13] <fanquake> adiabat: did you have a C utreexo implementation floating around somewhere?
+[02:36:21] *** Joins: nick_fre_ (~nick_free@2001:16b8:30d4:be00:e5b7:dec0:2593:638)
+[02:39:03] *** Quits: nick_freeman (~nick_free@2001:16b8:3094:300:8868:3a5f:28c6:c0e8) (Ping timeout: 245 seconds)
+[02:58:55] <kcalvinalvin> fanquake Only go for the moment
+[03:00:21] <kcalvinalvin> There *are* other implementations but those are all outdated
+[03:00:37] <kcalvinalvin> And I non are in C
+[03:29:17] *** Quits: rafalcpp (~racalcppp@ip-178-211.ists.pl) (Read error: Connection reset by peer)
+[03:30:01] *** Joins: rafalcpp (~racalcppp@ip-178-211.ists.pl)
+[06:59:00] <kcalvinalvin> adiabat remember when you said writing the validate block is exactly like libconsensus
+[06:59:10] <kcalvinalvin> It's feeling like that heh...
+[13:23:38] <adiabat> fanquake: cfields_ made a c++ framework for it, at some point I should start porting things over, as most of the accumulator library is pretty stable now
+[13:26:43] <fanquake> adiabat: ok. I think the c++ lib is mostly stubbed out at the moment. Will just look at the go
+[14:16:59] <adiabat> fanquake: yeah if you have parts there that don't make sense (probably plenty) let me know a function or line number & I'll add comments
+[19:45:23] *** Quits: nick_fre_ (~nick_free@2001:16b8:30d4:be00:e5b7:dec0:2593:638) (Remote host closed the connection)
+[19:45:49] *** Joins: nick_freeman (~nick_free@2001:16b8:30d4:be00:e5b7:dec0:2593:638)
+[19:50:18] *** Quits: nick_freeman (~nick_free@2001:16b8:30d4:be00:e5b7:dec0:2593:638) (Ping timeout: 245 seconds)
+[19:57:44] *** Joins: nick_freeman (~nick_free@2001:16b8:30d4:be00:b83f:5841:521e:b1e0)
+[20:01:34] *** Quits: nick_freeman (~nick_free@2001:16b8:30d4:be00:b83f:5841:521e:b1e0) (Remote host closed the connection)
+[20:01:40] *** Joins: nick_fre_ (~nick_free@2001:16b8:30d4:be00:b83f:5841:521e:b1e0)
+[20:24:15] *** Quits: nick_fre_ (~nick_free@2001:16b8:30d4:be00:b83f:5841:521e:b1e0) (Remote host closed the connection)
+[20:26:00] *** Joins: nick_freeman (~nick_free@2001:16b8:30d4:be00:b83f:5841:521e:b1e0)
+[20:28:35] *** Quits: nick_freeman (~nick_free@2001:16b8:30d4:be00:b83f:5841:521e:b1e0) (Remote host closed the connection)
+[20:28:42] *** Joins: nick_freeman (~nick_free@2001:16b8:30d4:be00:b83f:5841:521e:b1e0)
+[22:55:43] <fanquake> adiabat: cheers
