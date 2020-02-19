@@ -1,0 +1,17 @@
+[01:09:30] *** Quits: nick_freeman (~nick_free@2001:16b8:3097:f800:29f3:56ea:fa9:9e5b) (Remote host closed the connection)
+[01:21:54] *** Joins: nick_freeman (~nick_free@2001:16b8:3097:f800:29f3:56ea:fa9:9e5b)
+[01:22:38] *** Joins: nick_fre_ (~nick_free@2001:16b8:3097:f800:2ca3:b0bd:e707:6810)
+[01:26:07] *** Quits: nick_freeman (~nick_free@2001:16b8:3097:f800:29f3:56ea:fa9:9e5b) (Ping timeout: 240 seconds)
+[01:45:03] *** Quits: nick_fre_ (~nick_free@2001:16b8:3097:f800:2ca3:b0bd:e707:6810) (Remote host closed the connection)
+[09:58:11] *** Joins: nick_freeman (~nick_free@92.116.139.13)
+[10:07:26] *** Quits: nick_freeman (~nick_free@92.116.139.13) (Remote host closed the connection)
+[10:08:55] *** Joins: nick_freeman (~nick_free@92.116.139.13)
+[13:05:02] *** Joins: rafalcpp (~racalcppp@ip-178-211.ists.pl)
+[13:59:50] <kcalvinalvin> hey are we good?
+[15:04:56] <kcalvinalvin> So https://github.com/mit-dci/utreexo/pull/80 is *somewhat* getting closer to getting https://github.com/mit-dci/utreexo/issues/79
+[15:07:38] <kcalvinalvin> From what I see from the btcd code, making a separate database is gonna take longer than just replacing their 'Blockchain' struct to not use the db
+[15:07:54] <kcalvinalvin> So I'm working on that at the moment
+[16:08:36] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Quit: jb55)
+[17:52:21] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[20:58:23] *** Quits: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net) (Ping timeout: 260 seconds)
+[21:05:42] *** Joins: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net)
