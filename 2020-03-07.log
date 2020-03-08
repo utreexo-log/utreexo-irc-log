@@ -1,0 +1,39 @@
+[00:45:33] *** Quits: nick_freeman (~nick_free@2001:16b8:3018:3d00:55f7:250f:eed4:73ac) (Remote host closed the connection)
+[00:46:34] *** Joins: nick_freeman (~nick_free@2001:16b8:3018:3d00:55f7:250f:eed4:73ac)
+[02:01:11] *** Quits: nick_freeman (~nick_free@2001:16b8:3018:3d00:55f7:250f:eed4:73ac) (Remote host closed the connection)
+[02:01:24] *** Joins: nick_freeman (~nick_free@2001:16b8:3018:3d00:55f7:250f:eed4:73ac)
+[02:43:32] *** Joins: nick_fre_ (~nick_free@2001:16b8:3058:ab00:3d2b:f6e2:1d5d:6feb)
+[02:46:26] *** Quits: nick_freeman (~nick_free@2001:16b8:3018:3d00:55f7:250f:eed4:73ac) (Ping timeout: 240 seconds)
+[03:45:23] *** Quits: nick_fre_ (~nick_free@2001:16b8:3058:ab00:3d2b:f6e2:1d5d:6feb) (Remote host closed the connection)
+[04:05:25] <ysangkok> kcalvinalvin: hey, are you there?
+[04:33:01] <kcalvinalvin> ysangkok Hey
+[04:38:04] <ysangkok> kcalvinalvin: i am toying with forest. and i wrote this program, https://gist.github.com/ysangkok/b0a23aebacfb932b1541c020f1c57e8a
+[04:38:37] <ysangkok> kcalvinalvin: what i don't understand, is how the proof validates if i have withExtra=true, but not if i don't
+[04:38:45] <ysangkok> kcalvinalvin: can you see something wrong with my test?
+[04:39:53] <kcalvinalvin> I'll look
+[04:41:21] <ysangkok> maybe i have misunderstood the argument to ProveBlock, and it is not actually the hash you want a proof for? hmm
+[05:27:42] <kcalvinalvin> ysangkok Ok so I think my suspicion is that it's because we don't remap the forest on a height decrease
+[05:37:59] <kcalvinalvin> In forest, right now it doesn't delete the old hashes nor does it change the forest height. So I think it's just grabbing the old forest hashes
+[05:38:49] <kcalvinalvin> 8 leaves to 7 leaves is a height decrease so everything will be the same (since forest height always goes up as new UTXOs are created). So there 
+[05:39:16] <kcalvinalvin> 's no code to change the forest based on the assumption that it'll go up and everything will be overwritten anyways
+[05:39:52] <kcalvinalvin> adiabat Do correct me if I'm off here
+[05:40:41] <kcalvinalvin> So I think your test is correct in the sense that that's how forest *should* work.
+[05:44:13] <kcalvinalvin> When withExtra=false, you only have 7 leaves. The 7th leaf is its own tree so during a delete, that gets removed and another gets added. This is a really simple change so the code is correct in that it grabs the newly added leaf
+[08:26:11] <kcalvinalvin> Looks like adiabat is speaking about Utreexo this Sunday at the MIT expo
+[08:26:16] <kcalvinalvin> http://web.mit.edu/webcast/mitbitcoinexpo/s20/
+[08:54:23] <kcalvinalvin> ysangkok I've been digging at VerifyBlockProof since you asked and I think you caught a bug
+[08:55:14] <kcalvinalvin> I need someone to sanity check me but the computed root of the blockproof never gets compared to the actual root that we stored in this particular case
+[08:56:46] <kcalvinalvin> https://github.com/mit-dci/utreexo/blob/83e7e98d3fcd4679bd8e7e5a28614ef3542194e8/utreexo/blockproof.go#L166 Is case is never true and the computed top never gets compared to the actual top
+[09:49:19] <kcalvinalvin> https://github.com/mit-dci/utreexo/pull/94 fixed the bug
+[09:50:39] <kcalvinalvin> So yeah.. we should add more tests heh
+[10:51:22] *** Joins: nick_freeman (~nick_free@2001:16b8:3058:ab00:e090:3722:9c34:3542)
+[10:55:29] *** Quits: nick_freeman (~nick_free@2001:16b8:3058:ab00:e090:3722:9c34:3542) (Remote host closed the connection)
+[10:55:56] *** Joins: nick_freeman (~nick_free@2001:16b8:3058:ab00:e090:3722:9c34:3542)
+[10:56:57] *** Quits: nick_freeman (~nick_free@2001:16b8:3058:ab00:e090:3722:9c34:3542) (Remote host closed the connection)
+[10:57:13] *** Joins: nick_freeman (~nick_free@2001:16b8:3058:ab00:e090:3722:9c34:3542)
+[11:04:41] *** Quits: nick_freeman (~nick_free@2001:16b8:3058:ab00:e090:3722:9c34:3542) (Remote host closed the connection)
+[12:37:07] *** Joins: nick_freeman (~nick_free@2001:16b8:3058:ab00:a87e:5795:b503:1124)
+[12:41:42] *** Quits: nick_freeman (~nick_free@2001:16b8:3058:ab00:a87e:5795:b503:1124) (Ping timeout: 256 seconds)
+[12:54:24] *** Joins: nick_freeman (~nick_free@92.116.130.125)
+[18:26:46] <ysangkok> kcalvinalvin: awesome that you figured it out!
+[21:18:17] <ysangkok> kcalvinalvin: what about this one? https://gist.github.com/ysangkok/415d59f1ff788475a8b2cfec4afe7cb8
