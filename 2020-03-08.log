@@ -1,0 +1,56 @@
+[02:10:59] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[02:11:50] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[02:43:07] *** Joins: nick_fre_ (~nick_free@2001:16b8:3098:eb00:7121:5b00:3a18:ebaf)
+[02:45:38] *** Quits: nick_freeman (~nick_free@92.116.130.125) (Ping timeout: 240 seconds)
+[02:56:14] <kcalvinalvin> ysangkok I tested it out and it works now on the newest master :)
+[02:56:37] <kcalvinalvin> Works as in that the proof fails after deletion as it should
+[03:27:28] <ysangkok> kcalvinalvin: why should that proof fail? the proof is not for the one being deleted
+[04:38:28] *** Quits: nick_fre_ (~nick_free@2001:16b8:3098:eb00:7121:5b00:3a18:ebaf) (Remote host closed the connection)
+[06:27:09] <kcalvinalvin> ysangkok In the test that you wrote, we have a forest with two leaves and then delete one
+[06:27:31] <kcalvinalvin> 02:ff55
+[06:27:36] <kcalvinalvin> |-------\
+[06:27:42] <kcalvinalvin> 00:0100 01:0200
+[06:27:50] <kcalvinalvin> So this would be the original tree
+[06:28:50] <kcalvinalvin> the proof for leaf 00 is itself and 01. We hash this and get ff55... which we then test against the 02 leaf
+[06:28:58] <kcalvinalvin> They match so it verifies
+[06:30:07] <kcalvinalvin> but if we delete leaf 0, the forest is now a single leaf, with it being the top and the sole tree in the whole forest
+[06:30:32] <kcalvinalvin> the hash of this top is 0100 but the proof hash gives ff55
+[06:30:35] <kcalvinalvin> they don't match so it fails
+[06:38:14] <kcalvinalvin> hmmm I haven't thought about the wallet implications before for things like this. adiabat could chime in later I guess
+[06:39:25] <kcalvinalvin> But could you add your test to blockproof_test.go
+[06:39:37] <kcalvinalvin> I think it'd be good to have
+[06:42:38] <kcalvinalvin> oh wait no haha if you prove something, you can delete it since the only time you prove in Bitcoin is when you spend
+[06:43:01] <kcalvinalvin> The only time you would delete is after you prove. No wallet implications here
+[06:54:19] <kcalvinalvin> hmmm on the other hand, this is an edge case that would never happen but technically that proof should work
+[08:15:45] <kcalvinalvin> I guess with forest, a user can just make a new blockproof before submitting the proof. Doesn't take long and the proof is pretty small
+[08:15:57] <kcalvinalvin> Not sure about pollard
+[08:24:15] <kcalvinalvin> I think what pollard have to do is to manage the proof for your particular tx as new blocks (and their blockproofs) come in
+[08:24:34] <kcalvinalvin> There's no code for that yet..
+[11:36:29] *** Joins: nick_freeman (~nick_free@92.116.186.211)
+[11:41:00] *** Quits: nick_freeman (~nick_free@92.116.186.211) (Remote host closed the connection)
+[11:46:51] *** Joins: nick_freeman (~nick_free@2001:16b8:3098:eb00:a845:c160:f356:5842)
+[12:05:41] *** Quits: nick_freeman (~nick_free@2001:16b8:3098:eb00:a845:c160:f356:5842) (Remote host closed the connection)
+[12:14:17] *** Joins: nick_freeman (~nick_free@92.116.186.211)
+[13:04:03] *** Quits: nick_freeman (~nick_free@92.116.186.211) (Remote host closed the connection)
+[13:04:25] *** Joins: nick_freeman (~nick_free@2001:16b8:3098:eb00:a845:c160:f356:5842)
+[13:37:24] *** Quits: nick_freeman (~nick_free@2001:16b8:3098:eb00:a845:c160:f356:5842) (Remote host closed the connection)
+[14:58:06] *** Joins: achow101 (~achow101@unaffiliated/achow101)
+[15:44:02] *** Joins: nick_freeman (~nick_free@2001:16b8:3098:eb00:a845:c160:f356:5842)
+[15:44:42] *** Joins: nick_fre_ (~nick_free@2001:16b8:3098:eb00:b436:7a9a:d83:587a)
+[15:48:45] *** Quits: nick_freeman (~nick_free@2001:16b8:3098:eb00:a845:c160:f356:5842) (Ping timeout: 272 seconds)
+[16:11:35] *** Quits: nick_fre_ (~nick_free@2001:16b8:3098:eb00:b436:7a9a:d83:587a) (Remote host closed the connection)
+[16:12:12] *** Joins: nick_freeman (~nick_free@2001:16b8:3098:eb00:b436:7a9a:d83:587a)
+[16:16:29] *** Quits: nick_freeman (~nick_free@2001:16b8:3098:eb00:b436:7a9a:d83:587a) (Remote host closed the connection)
+[16:16:35] *** Joins: nick_freeman (~nick_free@92.116.186.211)
+[16:24:29] *** Quits: nick_freeman (~nick_free@92.116.186.211) (Remote host closed the connection)
+[16:27:04] *** Joins: nick_freeman (~nick_free@2001:16b8:3098:eb00:b436:7a9a:d83:587a)
+[16:53:34] *** Quits: nick_freeman (~nick_free@2001:16b8:3098:eb00:b436:7a9a:d83:587a) (Remote host closed the connection)
+[18:15:32] *** Joins: nick_freeman (~nick_free@92.116.186.211)
+[18:34:51] *** Quits: nick_freeman (~nick_free@92.116.186.211) (Remote host closed the connection)
+[18:39:20] *** Joins: nick_freeman (~nick_free@2001:16b8:3098:eb00:59f:9ecf:2a28:dca8)
+[18:44:13] *** Quits: nick_freeman (~nick_free@2001:16b8:3098:eb00:59f:9ecf:2a28:dca8) (Remote host closed the connection)
+[18:47:01] *** Joins: nick_freeman (~nick_free@2001:16b8:3098:eb00:59f:9ecf:2a28:dca8)
+[18:56:56] *** Quits: nick_freeman (~nick_free@2001:16b8:3098:eb00:59f:9ecf:2a28:dca8) (Remote host closed the connection)
+[19:02:14] *** Joins: nick_freeman (~nick_free@2001:16b8:3098:eb00:59f:9ecf:2a28:dca8)
+[19:05:15] *** Quits: nick_freeman (~nick_free@2001:16b8:3098:eb00:59f:9ecf:2a28:dca8) (Remote host closed the connection)
+[19:06:09] *** Joins: nick_freeman (~nick_free@2001:16b8:3098:eb00:59f:9ecf:2a28:dca8)
