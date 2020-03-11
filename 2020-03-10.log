@@ -1,0 +1,36 @@
+[02:09:03] *** Quits: nick_fre_ (~nick_free@2001:16b8:30d9:6900:a0e9:9bbc:d728:e776) (Remote host closed the connection)
+[02:09:23] *** Joins: nick_freeman (~nick_free@2001:16b8:30d9:6900:a0e9:9bbc:d728:e776)
+[02:09:43] *** Quits: nick_freeman (~nick_free@2001:16b8:30d9:6900:a0e9:9bbc:d728:e776) (Remote host closed the connection)
+[03:06:19] *** Quits: achow101 (~achow101@unaffiliated/achow101) (Ping timeout: 260 seconds)
+[03:09:48] *** Joins: achow101 (~achow101@unaffiliated/achow101)
+[03:45:00] *** Quits: achow101 (~achow101@unaffiliated/achow101) (Ping timeout: 256 seconds)
+[03:48:47] *** Joins: achow101 (~achow101@unaffiliated/achow101)
+[04:16:50] *** Quits: achow101 (~achow101@unaffiliated/achow101) (Ping timeout: 265 seconds)
+[04:23:27] *** Joins: achow101 (~achow101@unaffiliated/achow101)
+[06:31:09] *** Quits: achow101 (~achow101@unaffiliated/achow101) (Ping timeout: 258 seconds)
+[08:50:31] *** Joins: achow101 (~achow101@unaffiliated/achow101)
+[09:08:57] *** Joins: nick_freeman (~nick_free@2001:16b8:3036:c800:e008:417c:d021:b560)
+[09:12:01] *** Quits: nick_freeman (~nick_free@2001:16b8:3036:c800:e008:417c:d021:b560) (Remote host closed the connection)
+[09:16:38] *** Joins: nick_freeman (~nick_free@2001:16b8:3036:c800:e008:417c:d021:b560)
+[09:17:12] *** Joins: nick_fre_ (~nick_free@2001:16b8:3036:c800:d0a2:cf3d:1f45:97f1)
+[09:21:22] *** Quits: nick_freeman (~nick_free@2001:16b8:3036:c800:e008:417c:d021:b560) (Ping timeout: 256 seconds)
+[09:27:12] *** Quits: nick_fre_ (~nick_free@2001:16b8:3036:c800:d0a2:cf3d:1f45:97f1) (Remote host closed the connection)
+[09:42:00] *** Quits: achow101 (~achow101@unaffiliated/achow101) (Ping timeout: 256 seconds)
+[09:45:17] *** Joins: achow101 (~achow101@unaffiliated/achow101)
+[11:27:52] *** Joins: nick_freeman (~nick_free@92.116.187.90)
+[11:32:30] *** Quits: nick_freeman (~nick_free@92.116.187.90) (Ping timeout: 256 seconds)
+[12:35:55] *** Joins: nick_freeman (~nick_free@2001:16b8:3036:c800:d0a2:cf3d:1f45:97f1)
+[12:40:36] *** Quits: nick_freeman (~nick_free@2001:16b8:3036:c800:d0a2:cf3d:1f45:97f1) (Remote host closed the connection)
+[12:46:04] *** Joins: nick_freeman (~nick_free@2001:16b8:3036:c800:d0a2:cf3d:1f45:97f1)
+[12:52:26] <adiabat> Hi - The time changed here so it's almost 9 now -- I can do a jitsi call at like 9:30 so in 40 min
+[13:10:15] <kcalvinalvin> urm sure
+[13:11:21] <kcalvinalvin> Daylight savings ended right?
+[13:11:30] <kcalvinalvin> Or did it start..?
+[13:14:56] <adiabat> it started, so now it's EDT here instead of EST
+[13:15:07] <adiabat> the "S" being weird since it's like 30% of the year...
+[13:16:41] <kcalvinalvin> Damn Benjamin Franklin
+[13:19:43] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Ping timeout: 240 seconds)
+[13:28:37] <adiabat> hm ok another 10 min or so
+[13:30:13] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[13:32:04] <kcalvinalvin> I wanna talk about CSN tx validation. Forest is almost there but I'm just not sure how I'd go about it
+[13:42:54] <kcalvinalvin> I'm on jitsi
