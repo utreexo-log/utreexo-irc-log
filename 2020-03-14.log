@@ -1,0 +1,383 @@
+[00:32:02] *** Joins: pigeons_ (~pigeons@androzani.sysevolve.com)
+[00:34:09] *** Quits: pigeons (~pigeons@androzani.sysevolve.com) (Ping timeout: 240 seconds)
+[00:34:10] *** Quits: ysangkok (janus@anubis.0x90.dk) (Ping timeout: 240 seconds)
+[00:34:10] *** Joins: ysangkok (janus@anubis.0x90.dk)
+[02:23:50] *** Quits: nick_freeman (~nick_free@2001:16b8:30e2:a200:8d68:62c4:5660:770e) (Remote host closed the connection)
+[02:24:09] <adiabat> ysangkok: yeah I'm not sure!  I agree the current setup isn't what we want, but there are a couple ways to go about fixing it-
+[02:24:42] <adiabat> right now the main methods that forest provides are Modify(adds []LeafTXO, dels []uint64)
+[02:25:04] <ysangkok> you mean there are multiple desirable APIs?
+[02:25:14] <adiabat> well I mean I don't know the best way to do it :)
+[02:25:34] <adiabat> ProveBlock(hs []Hash) takes hashes, and returns a block proof
+[02:25:50] <adiabat> but Modify takes in hashes and uint64
+[02:26:19] <adiabat> This works in that we can call forest and have it keep the positionMap totally internal and external callers don't have to worry about iot
+[02:26:21] <adiabat> *it
+[02:26:26] <adiabat> but there's 2 problems with that
+[02:26:48] <adiabat> first, what if we want to change it to levelDB or something other than an in-ram map, save it to disk, etc
+[02:27:27] <adiabat> second, we actually need more than what ProveBlock gives: the BlockProof struct it returns doesn't contain anything other than proofs
+[02:27:39] <adiabat> it also needs to contain TxInUndo data
+[02:27:54] <ysangkok> to make a proper proof?
+[02:28:01] <ysangkok> you'd need more for which use case?
+[02:28:16] <adiabat> for bitcoin to know what the utxo data is
+[02:28:28] <ysangkok> aah
+[02:28:35] <adiabat> I'm leaning towards keeping the utreexo library non-bitcoin specific
+[02:28:54] <adiabat> like anyone could use it to throw whatever hashes they want in, and then get inclusion proofs for those hashes out
+[02:29:17] <adiabat> but in bitcoins case, we need not just a proof that the utxo for an input exists
+[02:29:32] <adiabat> but also what it is, like the pubkey script and the amount of satoshis
+[02:30:05] <ysangkok> so when you talk about leveldb, you talk about just storing that in a kv store?
+[02:30:10] <ysangkok> so not actually in the forest?
+[02:30:13] <adiabat> anyway if it's easier for something we can definitely make the positionMap into a PositionMap and public
+[02:30:26] <adiabat> right what the positionMap would turn into is
+[02:30:41] <adiabat> map [Hash]someStruct
+[02:30:50] <adiabat> where the someStruct would be, I guess
+[02:31:07] <adiabat> position uint64, utxoData
+[02:31:21] <ysangkok> well i am just trying to refine the forest itself because i am also seeing it in this light of "general datastructure", i just asked the question because i was wondering about the proper external interface
+[02:31:23] <adiabat> where utxoData has a script []byte, amount int64, height int32
+[02:31:26] <adiabat> and maybe that's all
+[02:31:59] <adiabat> right... for the general data structure, I think we should hide the positionMap...
+[02:32:05] <adiabat> but I'm not even sure about that actually
+[02:32:24] <adiabat> like ProveBlock gives you the proof you need
+[02:32:46] <adiabat> so an external caller shouldn't need to directly worry about positions, or even know that there are positions
+[02:33:13] <ysangkok> so in Java generics terms, it is actually Accumulator<Hash,Tuple<Script,Amount,Height>>, 
+[02:33:29] <adiabat> it would be for bitcoin, yes
+[02:33:43] <adiabat> the accumulator itself just stores hashes
+[02:34:07] <adiabat> so there's another part that needs to keep track of the utxo data (the script/amount/height)
+[02:34:21] <adiabat> basically the preimage of all those hashes
+[02:34:40] <ysangkok> yeah, makes sense
+[02:34:49] <adiabat> the tricky thing is in that in a lot of cases, you don't actually need the script data, which is the biggest part
+[02:35:08] <adiabat> most scripts are p2pkh or p2sh
+[02:35:14] <adiabat> or the segwit equivalents
+[02:35:32] <adiabat> and in that case, you basically get the pre-image of the script in the signature / witness
+[02:35:35] <ysangkok> hmmm are wallet descriptors applicable here?
+[02:35:45] <ysangkok> they are basically generalizations of scripts, iirc
+[02:36:02] <adiabat> I don't think wallet descriptors would work here since we have to be super general
+[02:36:20] <adiabat> it needs to support any weird script we don't even know about yet
+[02:36:40] <ysangkok> yeah, but still optimize for the common case. it is a union: p2pkh OR p2sh OR some-custom-script
+[02:37:08] <adiabat> right, so in any p2pkh / p2sh / p2wpkh / p2wsh case
+[02:37:28] <adiabat> we don't have to save the script, since it will be apparent at spend time in the block itself
+[02:37:41] <adiabat> we also don't have to save the outpoint, since that will also be in the spending tx
+[02:37:53] <adiabat> the hash itself will commit to those things though
+[02:38:17] <adiabat> so in most cases, the extra data proveBlock needs to return is just
+[02:38:24] <adiabat> amt int64, height int32
+[02:38:56] <adiabat> so either 12 bytes, or if we are OK with variable lenght you can compress those
+[02:39:15] <adiabat> problem though is in some cases we need lots of data for the script
+[02:40:19] <ysangkok> when would the heights/amounts/scripts enter utreexo.Forest? if they are to be returned by ProveBlock
+[02:41:08] <adiabat> that's the thing.  Should forest know about them?  if it does, that makes it very bitcoin specific
+[02:41:31] <adiabat> maybe there's just an extraData field associated with each add...?
+[02:41:48] <adiabat> or maybe a separate thing in cmd keeps track of all that
+[02:41:51] <ysangkok> well, if you see the Accumulator as some kind of Map, it can be generic in many languages (not so easy in go :P)
+[02:42:28] <ysangkok> still applicable to other things than bitcoin even if it has the heights/amounts/scripts in the api signatures, cause they would be generic arguments in other languages
+[02:42:30] <adiabat> ehhh it is kindof a map, yeah but... in practice not as simple to add and remove :)
+[02:43:04] <ysangkok> yeah ok, i don't know what to call it. but it is an API that generalizes over multiple datatypes
+[02:43:28] <adiabat> well I just mean if forest.Modify takes in (adds []Leaftxo, dels []uint64) and LeafTxo is more than just a hash
+[02:43:41] <adiabat> hm I guess it already says "leafTXO" which is bitcoin stuff :)
+[02:43:57] <adiabat> also... Duration is unused...? i think
+[02:44:19] <ysangkok> hmmm i think i got crashes when i had negative durations...
+[02:44:39] <adiabat> hmm it's used but not in forest itself
+[02:44:56] <ysangkok> anyway, i guess we can generalize later if it makes things easier
+[02:45:15] <adiabat> yeah it's just a matter of keeping layers / things separate
+[02:45:28] <adiabat> hm.  this is making me think though
+[02:45:44] <adiabat> maybe the proofMap should just have an extraData part, which is just []byte
+[02:46:10] <adiabat> and it can give that byte slice back when ProveBlock is called
+[02:46:17] <adiabat> that would be enough for our use now
+[02:46:22] <ysangkok> oh, that seems straightforward
+[02:46:38] <adiabat> I'm not sure if that's the best way long term but...
+[02:46:51] <adiabat> we don't *actually* have any other uses for this other than bitcoin yet
+[02:47:21] <adiabat> and if it turns out someone else uses it, then cool, and if they don't need the extraData part they can just leave it blank, no big loss
+[02:47:40] <ysangkok> yeah. but how much data is that, is it ok to store it in memory for starters?
+[02:47:59] <adiabat> heh yeah in bitcoin's case it is, at least for now
+[02:48:24] <adiabat> the idea being that a bridge node should have 8GB of ram or so
+[02:48:36] <adiabat> but ... maybe it'd be nice to run a bridge node with minimal ram
+[02:48:59] <adiabat> ForestData is now an interface so it *can* run off disk, though it's a bit slower
+[02:49:24] <adiabat> positionMap could also be made that way I guess
+[02:49:58] <adiabat> just have levelDB... I was really hoping to get *away* from levelDB but for bridge nodes it doesn't seem possible
+[02:50:09] <adiabat> for pollard though, no problem :)
+[02:50:37] <ysangkok> btw https://github.com/bitcoin/bitcoin/blob/master/doc/descriptors.md#features claims that descriptors also cover raw hex scripts
+[02:51:53] <adiabat> yeah I mean.. I supposed we could convert the scripts into this descriptor format
+[02:52:00] <adiabat> but this seems more for user interface
+[02:52:04] <ysangkok> ok
+[02:52:35] <adiabat> like we don't know any of the derivation data 
+[02:52:42] <ysangkok> oh true
+[02:52:58] <ysangkok> yeah hard to compress random looking data, i guess...
+[02:53:01] <adiabat> so yeah possible but not sure it adds anything
+[02:53:19] <adiabat> I think in most cases it can be very small
+[02:53:39] <ysangkok> ok, so if i understand correctly, you think it would be best to do leveldb, so that the node can run on smaller memory systems?
+[02:53:49] <adiabat> sigh... yeah....
+[02:54:00] <adiabat> so disappointing heh
+[02:54:15] <adiabat> but yes, it seems it can't be regenerated from the base of the tree
+[02:54:38] <adiabat> so maybe I can just get rid of the map entirely and switch it to leveldb...
+[02:55:34] <ysangkok> you prefer leveldb over bbolt?
+[02:55:44] <adiabat> levelDB, it seems a lot faster
+[02:55:55] <adiabat> hmm.  there's really only one place it's called from
+[02:55:57] <adiabat> well 2 or 3
+[02:56:05] <adiabat> addv2, and swapNodes
+[02:56:28] <adiabat> the rest are not really important
+[02:56:44] <adiabat> or at least wouldn't apply if it were a db
+[02:56:54] <adiabat> those are the writes I mean, proveBlock does reads
+[02:57:20] <adiabat> so yeah really only a few places to replace it with db calls
+[02:57:49] <adiabat> might be less code as we could get rid of RestoreForest stuff
+[02:57:53] <ysangkok> interesting, yeah, doesn't seem to hard. you are talking about accesses to proofMap, right?
+[02:58:05] <adiabat> yeah
+[02:58:41] <adiabat> the extradata would be like... 1 byte for a flag/type
+[02:59:05] <adiabat> and then if the flag is something known, the only data is amount & height
+[02:59:18] <adiabat> if the flag is unknown, it's the whole pkscript
+[02:59:42] <adiabat> (also with amount & height)
+[03:00:05] <adiabat> and we can use all the weird tricks bitcoin core does, like isCoinbase is the LSB of height
+[03:00:17] <adiabat> and you have to >>1 all the heights after checking coinbaseness, etc
+[03:00:32] <ysangkok> so if it is p2pkh for example, no script at all is stored?
+[03:00:41] <adiabat> yeah, don't need to
+[03:00:54] <adiabat> when you see the signature, it includes the pubkey
+[03:01:01] <ysangkok> aaaaah ok
+[03:01:03] <adiabat> and can hash that to get the script back
+[03:01:12] <adiabat> so like, everything still goes into the leaf
+[03:01:13] <ysangkok> so gonna break for schnorr :P
+[03:01:24] <adiabat> hmmmmm does it?
+[03:01:31] <adiabat> shoot
+[03:01:35] <ysangkok> schnorr does not have pk recovery iirc
+[03:01:46] <adiabat> because they commit to P in e
+[03:01:52] <adiabat> and I always didn't like that
+[03:02:17] <adiabat> bah.  well.  can throw in a hash of the pubkey instead of the whole thing
+[03:02:50] <adiabat> hm.  actually.  any time it's an unknown script type can just use a hash of it
+[03:03:28] <ysangkok> ah cool, yeah
+[03:03:34] <adiabat> well with schnorr that doesn't save space I guess
+[03:03:44] <ysangkok> so that sets an upper bound on it, at least. it seems
+[03:03:56] <adiabat> unless we use hashes shorter than 32 bytes
+[03:04:05] <adiabat> which I'm pretty sure is safe
+[03:04:42] <adiabat> but... I'm not going to push that
+[03:06:12] <adiabat> shoot, didn't realize schnorr breaks that...
+[03:08:40] <adiabat> and it would totally work if it was hash(R || m) instead of hash(R || P || m)
+[03:11:02] <adiabat> .. or maybe not; it might be complicated.  you need to know R, s, m in order to compute the potential P
+[03:11:20] <adiabat> but m could have other pubkeys from other inputs in the sighash
+[03:11:32] <ysangkok> oh tricky :O
+[03:11:42] <adiabat> anyway whatever, another 32 bytes of data for schnorr sigs
+[03:12:38] <adiabat> also ... no actually, can't just take a hash of arbitrary length scripts...
+[03:12:45] <adiabat> I think you have to store the whole thing
+[03:13:14] <adiabat> there's hardly any large scripts so doesn't matter in practice... but it would be nicer to have a fixed length
+[03:13:46] <ysangkok> if using leveldb it probably won't be a problem, i think
+[03:17:03] <ysangkok> so you're saying we can't hash a output script that is not p2wsh or p2sh?
+[03:17:45] <ysangkok> because the script will be needed for verification?
+[03:20:12] <ysangkok> bip-schnorr says they need to commit to P for musig
+[03:23:51] <adiabat> yeah I guess for musig need that...
+[03:24:09] <ysangkok> i am not sure i understand the kind of node you wanna end up with
+[03:24:13] <ysangkok> will it have script execution?
+[03:24:25] <ysangkok> the signatures sign a hash of the script...
+[03:24:31] <adiabat> if the pre-image of the output script appears in the signature, we don't needs to save the script
+[03:24:45] <adiabat> yeah, all scripts and signatures can be verified
+[03:25:16] <adiabat> you can get back the output script from looking at the signature
+[03:25:46] <adiabat> for p2pkh, it's <sig> <pubkey>
+[03:25:57] <adiabat> just hash the pubkey in hash160
+[03:26:11] <adiabat> and you've got the original output script
+[03:26:12] <ysangkok> aah, so by signature, you mean scriptSig
+[03:26:18] <adiabat> yeah
+[03:26:28] <adiabat> arg too many terms
+[03:26:42] <adiabat> or witness, same idea
+[03:27:17] <adiabat> same with p2sh / p2wsh, you take the whole script given and hash it to get back to the scriptPubKey
+[03:27:28] <adiabat> it could be wrong, but then it won't match the leaf
+[03:27:40] <adiabat> since the whole scriptPubKey goes into the leaf hash
+[03:28:19] <ysangkok> yeah, better than electrum :)
+[03:28:39] <adiabat> in terms of validation?  yeah the idea is it's a full node
+[03:28:44] <ysangkok> yep yep
+[03:28:56] <adiabat> and if some day every node & wallet uses it, then you don't need bridge nodes!
+[03:29:07] <adiabat> (which will basically never happen but hey)
+[03:30:11] <ysangkok> but all those raw scripts, are they even standard? if they are not, maybe you could get away with not supporting them at first?
+[03:30:58] <ysangkok> yeah, a beautiful dream... and still more practical than interactive tx construction as with mimblewimble
+[03:31:54] <ysangkok> utreexo could ship with the preimages of the raw output scripts that are in the current blockchain? but ugly
+[03:37:20] <ysangkok> i guess you can't compromise on "full-node", so you can't just assume standardness...
+[03:47:20] <adiabat> yeah even though there aren't many raw scripts, can't really skip them
+[03:47:32] <adiabat> also there are few enough that it will take up hardly any space
+[03:48:11] <adiabat> yeah the reason I don't think you can ever get rid of bridge nodes is that there will always be SPV wallets, web wallets, things like that
+[03:48:47] <adiabat> but who knows, maybe some day a bridge node would be something like a node with an address index, like an electrum server
+[03:49:29] <adiabat> another option is that it seems not too hard to have a partial bridge node
+[03:51:46] <ysangkok> yeah, it has lots of potential. though the guy who runs the electrumx server project is an altcoiner...
+[03:52:30] <adiabat> the electrum model... isn't great.  people just send their whole address list to unknown servers
+[03:52:51] <ysangkok> totally agreed :)
+[03:53:09] <ysangkok> but it would be nice to have those people run bridge nodes :P
+[03:53:38] <ysangkok> so i remember the term CSN, compact state node, is that what you just described?
+[03:54:09] <adiabat> the CSN is the node that verifies but doesn't have the whole forest
+[03:54:18] <adiabat> (basically pollard in the current code)
+[03:54:44] <ysangkok> i was thinking maybe it would be good to have a glossary in the readme
+[03:55:16] <adiabat> yeah... and to change some names
+[03:55:31] <ysangkok> which names need changing?
+[03:57:32] <ysangkok> also, you said "for pollard though, no problem :)" why is it no problem for pollard?
+[03:57:50] <ysangkok> afaik pollard is just forest, but sparse?
+[03:58:08] <adiabat> pollard doesn't have a positionMap at all
+[03:58:18] <adiabat> it doesn't have a ProveBlock method
+[03:58:53] <adiabat> otherwise it's like forest but sparse and pointers instead of having all the data linearly
+[03:59:02] <adiabat> so pollard doesn't need levelDB or anything
+[04:00:35] <ysangkok> ah ok, so pollard is not for bridge nodes?
+[04:00:51] <adiabat> right, pollard can't be a bridge node
+[04:01:02] <ysangkok> ok, so CSN uses pollard, bridge uses forest
+[04:01:10] <adiabat> if you wanted to make some partial bridge node, I don't know, can think about that later
+[04:01:21] <adiabat> for now it seems fine to not worry about that
+[04:01:27] <ysangkok> okay
+[04:01:41] <adiabat> also if it becomes hard to run a bridge node, that means the utxo set is so big that it's hard to run a regular full node
+[04:02:16] <adiabat> since a bridge node has at worst ~2X the data of a regular full bridge node
+[04:03:06] <ysangkok> the paper talks about that tradeoff, where on that curve is the current implementation?
+[04:03:38] <adiabat> oh the curve thing, like caching vs download?
+[04:03:52] <ysangkok> yes
+[04:03:55] <adiabat> that's dependent on how much the pollard stores
+[04:04:08] <adiabat> when you call modify, the leafTXOs you give it
+[04:04:23] <adiabat> have the "remember" bool
+[04:04:35] <adiabat> that says whether to store the leaf or not
+[04:04:42] <ysangkok> aaah ok. so for forest, remember is not used?
+[04:04:50] <adiabat> right, it remembers everything no matter what
+[04:05:12] <ysangkok> things are starting to make sense :D
+[04:05:21] <adiabat> the problem is there's duration and remember but they shouldn't both be in the same place
+[04:05:42] <adiabat> a while ago I had pollard itself making the call on whether to remember or not
+[04:06:12] <adiabat> if you tell pollard to remember everything, it won't need any proofs
+[04:06:27] <adiabat> so pollard.overWire will be 0
+[04:06:37] <adiabat> (hopefully exactly 0...?)
+[04:06:51] <adiabat> and if you have remember = false on everything, it will only keep the tree roots
+[04:06:58] <adiabat> and need to download a lot of proofs
+[04:07:30] <ysangkok> yeah ok, good to finally understand where in the code those things from the paper are
+[04:08:01] <adiabat> sure!  Also I have lots of things to change
+[04:08:10] <adiabat> maybe should put leveldb in to forest...
+[04:08:31] <adiabat> shouldn't be hard.  mostly have been avoiding it because I was hoping to figure out some other way to do it
+[04:08:51] <ysangkok> i don't know about bitcoin core's tricks regarding coinbase, i can't do that :O
+[04:08:52] <adiabat> I had this whole thing i started with a prefix tree...
+[04:09:06] <adiabat> yeah bitcoin core compresses utxos for storage in levelDB
+[04:09:21] <adiabat> not compresses like gzip, but lots of weird bitcoin-specific things
+[04:09:48] <adiabat> I think getting the same serialization as core is good because: 1- they seem to know what they're doing generally :)
+[04:10:03] <adiabat> 2- could be better for compatibility, eventually get it in to core
+[04:10:31] <ysangkok> does that mean we need to link with core to test?
+[04:10:42] <ysangkok> that would require some bindings...
+[04:12:05] <ysangkok> or maybe it is sufficient to open their leveldb and assert stuff
+[04:13:17] <adiabat> yeah integration with core is ... I'm not sure
+[04:13:32] <adiabat> one intermediate step that might be not too hard
+[04:13:43] <adiabat> is a kind of c++ ValidateBlock() call
+[04:13:51] <adiabat> the go code could call out to
+[04:14:14] <adiabat> so we'd get the same script execution and signature checking as c++ bitcoin core is using
+[04:14:49] <ysangkok> i wonder if libbitcoinconsensus has that
+[04:15:07] <adiabat> but getting a CSN into core is trickier because the DB is all over the place in the code, so pulling out the DB is a big code change
+[04:15:35] <adiabat> utreexo kindof makes libconsensus work
+[04:15:50] <adiabat> until now the problem has been that the DB is a critical part of the consensus code
+[04:16:06] <kcalvinalvin> It's a huge change :p
+[04:16:10] <adiabat> heh yeah
+[04:16:26] <ysangkok> looks like somebody has libbitcoinconsensus bindings to go: https://github.com/piotrnar/gocoin/blob/master/tools/verify_tx.go
+[04:16:32] <adiabat> adding bridge node functionality to core is not as big a change, but also not as exciting
+[04:16:46] <adiabat> since you could have bridge nodes that aren't even verifying / full nodes
+[04:17:01] <adiabat> that just store the proofs and stuff without knowing what any of it means
+[04:17:07] <adiabat> and the CSNs do all the validation
+[04:17:31] <kcalvinalvin> ysangkok the problem was that the libconsensus stuff calls leveldb *a lot*
+[04:18:30] <ysangkok> oh, so it would be totally dependent on having a synced bitcoin node?
+[04:18:50] <adiabat> what would be dependent?
+[04:19:41] <ysangkok> i understood calvin as saying that to execute a bitcoin script, you'd have to call libbitcoinconsensus but that would need the bitcoin leveldb, you can't just provide all the necessary data in the function parameters
+[04:19:56] <adiabat> currently yeah
+[04:20:09] <adiabat> but a new / better libconsensus or similar code could work
+[04:20:30] <adiabat> kcalvinalvin was looking at the btcd transaction verification code
+[04:21:17] <kcalvinalvin> oh cool. 
+[04:22:05] <kcalvinalvin> I'll push the rev stuff before tuesday. Almost done now
+[04:22:14] <adiabat> cfields_ mentioned looking at code that c++ part but might be tough
+[04:22:38] <ysangkok> he is talking about merging that into core?
+[04:22:41] <kcalvinalvin> the libutreexo thing?
+[04:23:00] <adiabat> no like, making a variant of libconsensus
+[04:23:21] <adiabat> basically a c++ function that is bitcoin core's block/transaction/script verification
+[04:23:27] <adiabat> but without levelDB
+[04:23:49] <ysangkok> sounds basically impossible to get merged into bitcoin core :O
+[04:23:49] <adiabat> such that all the TxInUndos are given as function arguments instead of looked up as needed
+[04:24:14] <adiabat> initially that function wouldn't be in bitcoin core
+[04:24:21] <adiabat> but we could call it from go
+[04:24:37] <adiabat> and then have a good idea that we're getting the same consensus as core code
+[04:24:43] <kcalvinalvin> The rough setup I have right now is leaving out all the protocol rules
+[04:25:08] <adiabat> eventually though, there's definitely desire to have a levelDB-less node
+[04:25:31] <adiabat> and it's a big change, but I don't think any bigger than say assumeUtxo
+[04:25:34] <kcalvinalvin> Doesn't the c++ libconsensus code call the chainstate here and there?
+[04:25:57] <adiabat> yeah, I shouldn't say "libconsensus" as it wouldn't be based on that
+[04:26:16] <adiabat> it'd have to be a new function patched together from bitcoin core code that did the same thing
+[04:26:41] <adiabat> ValidateBlock([]TxInUndo, MsgBlock) bool
+[04:26:56] <kcalvinalvin> hmmmmm...
+[04:28:38] <ysangkok> all we need is a usable API. if libbitcoin has a useble API, wouldn't it be fine to start out with that?
+[04:29:22] <adiabat> but libconsensus doesn't
+[04:29:54] <ysangkok> yeah, and i guess btcd doesn't either?
+[04:30:08] <ysangkok> that's why i mentioned a third implementation :P
+[04:30:13] <adiabat> btcd doesn't have anything like libconsensus no
+[04:31:49] <ysangkok> this doesn't seem to mention any particular db: https://github.com/libbitcoin/libbitcoin-system/blob/master/src/machine/program.cpp :O
+[04:32:53] <adiabat> hm I guess I don't even know what libbitcoin does
+[04:33:20] <kcalvinalvin> btcd has 5 basic things for validating consensus (besides protocol rules). blockchain.CheckTransactionSanity(), blockchain.IsCoinBase(), blockchain.CheckTransactionInputs(), blockchain.GetSigOps(), and blockchain.ValidateTransactionScripts()
+[04:33:28] <kcalvinalvin> That's what I'm currently working off of
+[04:35:01] <ysangkok> adiabat: it is aiming to do pretty much everything, i am sure it doesn't do everything well. but i did meet the author and he knew quite a lot of details of bitcoin scripting, so i think the interpreter is complete
+[04:35:31] <adiabat> maybe we can use libbitcoin consensus...
+[04:36:14] <ysangkok> are you talking about the one in bitcoin core or this one: https://github.com/libbitcoin/libbitcoin-consensus ?
+[04:36:21] <adiabat> is it the same code as bitcoin core...? doesn't seem the same?
+[04:36:41] <adiabat> yeah like here https://github.com/libbitcoin/libbitcoin-consensus/tree/master/src/clone/script
+[04:37:00] <ysangkok> no, not the same as core at all, completely independent
+[04:37:19] <adiabat> but supposed to be consensus compatible I guess?
+[04:37:27] <ysangkok> yes of course, it is a bitcoin implementation
+[04:39:23] <adiabat> in this repo anyway I don't see anything about block validation
+[04:40:04] <ysangkok> adiabat: it is in another repo: https://github.com/libbitcoin/libbitcoin-blockchain/blob/master/src/validate/validate_block.cpp
+[04:41:42] <adiabat> ok, looking through; the parts that say These checks require chain state, and block state if not under checkpoint.
+[04:42:47] <adiabat> ... what's a bucket... hmm
+[04:43:08] <ysangkok> hmmm, that is a bad sign, if that is the chain state of core
+[04:44:23] <ysangkok> i think buckets is the level of concurrency?
+[04:44:48] <adiabat> yeah I don't know where all these things are defined, maybe other repos
+[04:46:02] <ysangkok> well, as you linked, i guess they do embed libconsensus
+[04:46:21] <ysangkok> so while the interface may be cleaner, it is probably fundamentally not a big change
+[04:46:28] <ysangkok> that comment you mentioned is a very bad sign, i guess
+[04:47:24] <adiabat> I'm still looking through it
+[04:47:30] <adiabat> can't really figure out what it's doing
+[04:47:42] <adiabat> there's not much documentation
+[04:48:10] <adiabat> the wiki has... a whole bunch of weird stuff in "cryptoeconomics" but not much about how to use the validation libraries
+[04:48:24] <kcalvinalvin> oh heh that's just Eric Voskuil
+[04:48:40] <ysangkok> the readme of the blockchain repo does say "The default configuration requires libbitcoin-consensus. This ensures consensus parity with the Satoshi client. To eliminate the libbitcoin-consensus dependency use the --without-consensus option. This results in use of libbitcoin consensus checks."
+[04:49:00] <ysangkok> that makes it sound like if you use that flag, it should have it's own script execution engine
+[04:49:37] <ysangkok> kcalvinalvin: you know him? can't say i know him, though i did meet him
+[04:49:38] <adiabat> it seems like it's geared more towards wallet functionality?
+[04:49:58] <ysangkok> hmmm i don't know his applications...
+[04:50:19] <ysangkok> but if you think it might have promise, i could ask him if he thinks it is easier to use for us
+[04:50:20] <adiabat> like if you want to verify a block, what do you call, and what data do you give it?
+[04:51:25] <ysangkok> he always talked so much about performance, so it is probably a bunch of callbacks in all those parameters to the validate_block class...
+[04:51:33] <ysangkok> so that he can have it async
+[04:52:07] <kcalvinalvin> iirc the performance he was talking about was scalability, as in, if you throw more cpus at it, it'll use it
+[04:52:35] <adiabat> right but I'm just looking for... what to call
+[04:52:47] <adiabat> there's some root validate function that calls the rest?
+[04:54:07] <ysangkok> there is validate_block::connect which takes a handler that is called with something called success , maybe that is the callback that is triggered if the block validates?
+[04:56:02] <adiabat> maybe... I'm just trying to find where it actually does anything
+[04:56:16] <adiabat> like... add up all the fees and checks coinbase tx amount
+[04:58:34] <ysangkok> total_input_value: https://github.com/libbitcoin/libbitcoin-system/blob/master/src/chain/transaction.cpp#L782
+[04:58:48] <ysangkok> fees is calculated from total_input_value: https://github.com/libbitcoin/libbitcoin-system/blob/master/src/chain/transaction.cpp#L853
+[04:58:57] <adiabat> but that's libbitcoin-system
+[04:59:11] <adiabat> not blockchain or consensus 
+[05:00:03] <adiabat> I dunno this just looks like a complete rewrite of bitcoin core
+[05:00:22] <ysangkok> pretty sure it is a complete reimplementation
+[05:00:35] <ysangkok> is_valid_coinbase_claim : https://github.com/libbitcoin/libbitcoin-system/blob/master/src/chain/block.cpp#L693
+[05:01:16] <adiabat> ok so validation code is spread out among all the repos I guess
+[05:01:29] <ysangkok> yeah annoying
+[05:05:29] <ysangkok> hard for me to judge what is easiest to integrate, especially since i havn't looked at btcd and core very much
+[05:05:51] <adiabat> yeah I dunno, btcd might be easier since it's in go and we can chop it up easier
+[05:06:14] <adiabat> also since btcd isn't that heavily used and I think roasbeef is the only maintainer, if we get things working there could probably get it merged
+[05:06:32] <adiabat> libbitcoin seems just as hard as bitcoin core
+[05:06:51] <adiabat> maybe easier, it's hard to tell what it's doing, there's no real documentation about how to use it as a library
+[05:07:14] <ysangkok> what is the current stumbling block with btcd?
+[05:07:30] <adiabat> I haven't really looked, I think kcalvinalvin is looking
+[05:08:24] <ysangkok> it was great chatting with you, i feel like i understand it a bit more now... off to bed!
+[05:08:47] <adiabat> sure, thanks
+[05:09:05] <adiabat> I have lots to work on even before merging with a whole node :)
+[07:53:03] <kcalvinalvin> ysangkok Yeah I know him from the meetups. We held one with him in Seoul
+[09:25:57] *** Joins: nick_freeman (~nick_free@92.116.146.234)
+[10:39:00] *** Quits: nick_freeman (~nick_free@92.116.146.234) (Remote host closed the connection)
+[10:52:31] *** Joins: nick_freeman (~nick_free@92.116.146.234)
+[11:34:09] *** Quits: nick_freeman (~nick_free@92.116.146.234) (Remote host closed the connection)
+[13:34:38] *** Joins: nick_freeman (~nick_free@2001:16b8:3024:4100:61d2:9298:1e42:c40c)
+[13:35:33] *** Joins: nick_fre_ (~nick_free@2001:16b8:3024:4100:915e:f033:2f83:6cb2)
+[13:39:22] *** Quits: nick_freeman (~nick_free@2001:16b8:3024:4100:61d2:9298:1e42:c40c) (Ping timeout: 256 seconds)
+[13:39:56] *** Quits: nick_fre_ (~nick_free@2001:16b8:3024:4100:915e:f033:2f83:6cb2) (Ping timeout: 256 seconds)
+[14:59:37] *** Joins: nick_freeman (~nick_free@2001:16b8:3024:4100:915e:f033:2f83:6cb2)
+[15:00:17] *** Joins: nick_fre_ (~nick_free@2001:16b8:3024:4100:d899:59f1:f6c9:df9e)
+[15:04:27] *** Quits: nick_freeman (~nick_free@2001:16b8:3024:4100:915e:f033:2f83:6cb2) (Ping timeout: 260 seconds)
+[15:13:19] *** Quits: nick_fre_ (~nick_free@2001:16b8:3024:4100:d899:59f1:f6c9:df9e) (Remote host closed the connection)
+[15:14:43] *** Joins: nick_freeman (~nick_free@2001:16b8:3024:4100:31b6:2065:9fe4:2dd)
+[15:19:06] *** Quits: nick_freeman (~nick_free@2001:16b8:3024:4100:31b6:2065:9fe4:2dd) (Remote host closed the connection)
+[15:20:10] *** Joins: nick_freeman (~nick_free@2001:16b8:3024:4100:2012:dd9e:2279:fc51)
+[15:34:41] *** Quits: nick_freeman (~nick_free@2001:16b8:3024:4100:2012:dd9e:2279:fc51) (Remote host closed the connection)
+[16:31:19] *** Joins: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net)
+[18:10:58] *** Quits: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net) (Quit: My MacBook has gone to sleep. ZZZzzz…)
+[18:37:39] *** Joins: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net)
+[19:42:13] *** Joins: nick_freeman (~nick_free@92.116.146.234)
+[19:50:51] *** Quits: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net) (Quit: My MacBook has gone to sleep. ZZZzzz…)
+[19:57:55] *** Quits: nick_freeman (~nick_free@92.116.146.234) (Remote host closed the connection)
+[20:02:07] *** Joins: nick_freeman (~nick_free@2001:16b8:3024:4100:8dc7:ee4e:4ada:cdff)
+[20:38:15] *** Joins: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net)
+[21:35:06] *** Quits: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net) (Quit: My MacBook has gone to sleep. ZZZzzz…)
+[21:42:20] *** Joins: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net)
+[22:59:59] *** Quits: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net) (Quit: My MacBook has gone to sleep. ZZZzzz…)
+[23:38:12] *** pigeons_ is now known as pigeons
+[23:47:29] *** Joins: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net)
