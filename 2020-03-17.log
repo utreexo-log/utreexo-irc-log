@@ -1,0 +1,16 @@
+[03:54:39] <adiabat> hey - will be online tomorrow morning; can do a jitsi call at 9:30ish EDT; at 10:30am have another meeting
+[03:59:19] <ysangkok> ok perfect, will set my alarm
+[04:54:23] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Ping timeout: 240 seconds)
+[08:46:44] <kcalvinalvin> ʕっ•ᴥ•ʔっ
+[13:02:21] <adiabat> ok I'm on meet.jit.si/utreexo
+[13:02:32] <adiabat> oh wait I said 9:30
+[13:02:51] <adiabat> heh well whenever then
+[13:25:49] <kcalvinalvin> one sec
+[13:58:54] <kcalvinalvin> VerifyBlockProof Reconstruct ERROR h 3 no proofs left at pos 940
+[13:58:54] <kcalvinalvin> panic: VerifyBlockProof failed at block 390
+[13:58:54] <kcalvinalvin> goroutine 1 [running]:
+[13:58:56] <kcalvinalvin> github.com/mit-dci/utreexo/cmd/bridgenode.BuildProofs(0xc00709110b, 0x11c2bab, 0xd, 0x11c3d11, 0x12, 0xc00010e000, 0x0, 0x0)
+[13:58:58] <kcalvinalvin> 	/Users/timapple/go/src/github.com/mit-dci/utreexo/cmd/bridgenode/genproofs.go:96 +0x84b
+[13:59:00] <kcalvinalvin> main.main()
+[13:59:02] <kcalvinalvin> 	/Users/timapple/go/src/github.com/mit-dci/utreexo/cmd/main.go:69 +0x255
+[17:03:45] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
