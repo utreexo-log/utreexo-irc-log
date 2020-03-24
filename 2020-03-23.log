@@ -1,0 +1,5 @@
+[04:04:25] <kcalvinalvin> adiabat I'll add the revdata building functions to genproofs unless you were working on it currently
+[08:48:47] <kcalvinalvin> Apparently the "go way" of adding testdata is to name the file "testdata". Then go tools ignores it
+[08:49:00] <kcalvinalvin> ```go help packages``` says it at the bottom
+[19:23:36] *** Joins: nick_freeman (~nick_free@2001:16b8:3092:2500:19be:2e8:2aff:cbab)
+[23:10:01] *** Quits: nick_freeman (~nick_free@2001:16b8:3092:2500:19be:2e8:2aff:cbab) ()
