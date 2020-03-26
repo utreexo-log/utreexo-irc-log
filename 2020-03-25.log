@@ -1,0 +1,8 @@
+[00:42:40] *** Quits: jb551 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[00:46:44] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[01:34:46] <ysangkok> kcalvinalvin: i also did the challenge, did you get the one about choosing transactions for a block?
+[01:35:10] <ysangkok> kcalvinalvin: i am unhappy with my solution because i could have made it choose high-fee transaction closures with just a few lines more, but didn't think of it
+[01:35:48] <ysangkok> kcalvinalvin: and i thought i could throw a knapsack solver at it, but then all the knapsack solvers i tried could handle only toy examples
+[12:32:20] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[12:33:10] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[21:52:18] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Quit: jb55)
