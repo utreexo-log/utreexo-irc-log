@@ -1,0 +1,22 @@
+[00:08:31] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[00:30:58] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[05:51:47] <kcalvinalvin> adiabat How far have you gotten with LeafTXO proofdata adding?
+[05:51:59] <kcalvinalvin> Should I start implementing on my end?
+[05:53:01] <kcalvinalvin> Right now I've just been cleaning up a lot of the code in cmd/, making things easier to read
+[05:53:19] <kcalvinalvin> And I think we could probably make packages now that others can take and use
+[06:52:57] <kcalvinalvin> Also, I want to clean up/refactor some main functions in utreexo/. Could you tell me which bits you're working on?
+[13:25:36] <adiabat> I'll put up a PR tomorrow; I'm changing what goes into leafTXO and want to verify what comes out on the other end
+[13:25:58] <adiabat> I'm also working on a regtest simulator thing which shouldn't conflict with anything
+[13:31:18] <adiabat> for the proofTXO stuff I'm changing, here's what gets touched:
+[13:31:56] <adiabat> In modify, addv2() changes slightly, removev4() doesn't change at all
+[13:32:40] <adiabat> that's about all that changes in forest.go
+[13:33:29] <adiabat> ProveBlock() and VerifyBlockProof() change because the BlockProof changes
+[13:33:59] <adiabat> the same things change in pollard, but not as much
+[13:35:09] <adiabat> hm.  today is like, nice & sunny & warm and stuff so I'm going to do outside work but tomorrow is supposed to be cold and rainy so I'll just work on that PR which should be finishable tomorrow
+[16:22:00] <kcalvinalvin> Ah ok cool. I'm done cleaning up genproofs.go and it's so much more readable :) Almost done with ttl/ and csn/
+[16:22:21] <kcalvinalvin> Am also planning to push documentation with it before the tuesday's call
+[16:22:39] <kcalvinalvin> I guess we can talk about forest.go cleanup then
+[21:40:37] *** Quits: achow101 (~achow101@unaffiliated/achow101) (Quit: Bye)
+[21:40:56] *** Joins: achow101 (~achow101@unaffiliated/achow101)
+[21:44:21] *** Quits: achow101 (~achow101@unaffiliated/achow101) (Client Quit)
+[21:45:22] *** Joins: achow101 (~achow101@unaffiliated/achow101)
