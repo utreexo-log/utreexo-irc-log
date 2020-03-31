@@ -1,0 +1,27 @@
+[03:54:18] <kcalvinalvin> adiabat. On the PR #102, we're still hashing before inputting into the tree.
+[03:55:24] <kcalvinalvin> The hash *is* a big bottle neck at the moment. Would having a compressed PKS work vs hashing the data?
+[03:55:58] <kcalvinalvin> AMT could also be compressed like how core does it right now
+[04:05:15] <kcalvinalvin> Also go test is failing..? Is it using the same tree for the different tests?
+[04:38:20] <ysangkok> kcalvinalvin: it is running "go test -v ./utreexo" in CI, maybe that explains it?
+[04:38:59] <kcalvinalvin> oh right -v broke some backwards compatibility right
+[04:41:43] <ysangkok> i don't think the -v makes any difference? that is just verbosity
+[13:15:49] *** Quits: kallewoof (~quassel@240d:1a:759:6000:a7b1:451a:8874:e1ac) (Ping timeout: 240 seconds)
+[13:16:50] *** Joins: kallewoof (~quassel@240d:1a:759:6000:a7b1:451a:8874:e1ac)
+[14:15:53] <adiabat> kcalvinalvin: what do you mean by "the hash is a big bottleneck"?
+[14:15:55] <adiabat> which hash?
+[14:16:20] <adiabat> yeah not sure about test failing since all I did so far was add the readme huh
+[14:18:20] <adiabat> by compressed PKS, if you mean something like:
+[14:18:52] <adiabat> right now, leafhash is h(BH, OP, CH, AMT, PKS)
+[14:19:14] <adiabat> instead make it h(BH, OP, CH, AMT, TPKS), using the tagged format in posdata
+[14:20:00] <adiabat> hm.  doubt it makes a huge difference speed wise?  But the question is is that safe... hmm
+[14:20:49] <adiabat> I think it's safe to do that because you still have the TXID going in, via OP, which really covers everything...
+[14:20:55] <adiabat> but... no...
+[14:21:12] <adiabat> no maybe it's not safe to do that.
+[14:22:36] <adiabat> anyway I don't even know if that's what you're proposing.  But I think you have to put the whole pubkey script into the leaf hash.
+[14:22:58] <adiabat> either that or give the whole previous transaction as part of the proof so they can check that the txid matches
+[15:37:00] *** Quits: adiabat (~adiabat@63.209.32.102) (Ping timeout: 256 seconds)
+[16:07:10] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[16:43:03] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Ping timeout: 240 seconds)
+[16:47:11] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[17:29:36] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Quit: jb55)
+[18:35:51] <ysangkok> go test also fails when i run it locally on master. it has nothing to do with that PR, i think
