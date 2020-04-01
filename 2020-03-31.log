@@ -1,0 +1,14 @@
+[01:31:42] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[02:46:14] *** Joins: adiabat (~adiabat@63.209.32.102)
+[03:32:55] *** Quits: achow101 (~achow101@unaffiliated/achow101) (Ping timeout: 260 seconds)
+[03:33:27] *** Joins: achow101 (~achow101@unaffiliated/achow101)
+[12:05:46] <adiabat> hi can do a call at 9 or 9:30
+[12:35:36] <kcalvinalvin> 9:30 is good
+[12:35:42] <kcalvinalvin> not sure if that works for ysangkok
+[12:45:35] <adiabat> ok will do 9:30
+[17:52:04] <kcalvinalvin> Testing on master is failing again :/
+[18:08:23] <adiabat> yeah it's weird
+[18:09:46] <adiabat> like... its says fail, but not what fails
+[18:13:46] <adiabat> ok think I found it
+[18:23:54] <adiabat> ok there fixed it... but it's on the "full pollard" thing which is pointless anyway right?
+[18:24:04] <adiabat> so should probably get rid of that since it wasn't any faster...
