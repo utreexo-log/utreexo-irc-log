@@ -1,0 +1,11 @@
+[13:40:45] <adiabat> kcalvinalvin: hey is PR #106 mergable?  I'd like to merge before changing everything around in cmd/
+[13:42:06] <kcalvinalvin> adiabat yes
+[13:42:30] <adiabat> ok cool will test it out & merge
+[13:42:35] <kcalvinalvin> oh wait wait
+[13:42:47] <adiabat> (in like an hour or two)
+[13:42:52] <kcalvinalvin> maybe it un-does the fix
+[13:42:55] <kcalvinalvin> let me rebase
+[13:43:10] <adiabat> ok sure no rush
+[13:57:40] <kcalvinalvin> ok I made a new PR
+[13:57:54] <kcalvinalvin> #107 is the one to merge
+[16:10:33] <adiabat> ok will check that one
