@@ -1,0 +1,126 @@
+[02:54:34] <adiabat> Hey - started using the rev.go code and there are some problems
+[02:55:10] <adiabat> I'm looking at it and will push to a WIP PR if you want to take a look as you are probably more familiar with this weird format
+[02:55:34] <adiabat> also genproofs seems to be height off by 1 
+[03:21:37] <kcalvinalvin> adiabat right the genproofs height+1
+[03:22:02] <kcalvinalvin> About that... remember when the whole cmd was with text
+[03:22:53] <kcalvinalvin> The code skipped genesis but it was fine because it was just parsing a txt file
+[03:23:28] <kcalvinalvin> But I just carried over the logic and so the offsetdata *doesn't* store the offset for the genesis block
+[03:23:43] <kcalvinalvin> so if you ask for block 0, it'll give you block 1
+[03:24:13] <kcalvinalvin> So if you fetch from the files you need to do -1 of actual height
+[03:25:02] <kcalvinalvin> Yeah I did put this in comments somewhere but I guess I was the only one that knew about it
+[03:25:36] <kcalvinalvin> I'll take a look at rev.go
+[03:27:29] <kcalvinalvin> If you look at places in genproofs, you'll see "height +1" a lot. That's because the fetched block's height is -1 of the actual height
+[03:32:50] <adiabat> ok the off by 1 thing is whatever
+[03:33:15] <adiabat> can fix I guess, but the real issue is rev is... I have no idea what it's doing
+[03:33:45] <adiabat> like there's rev data, but it seems to have little or nothing to do with the txins in the block
+[03:34:51] <adiabat> like on block 962
+[03:35:59] <adiabat> whether +1 or -1, nothing around 962 has any transactions at all
+[03:36:12] <adiabat> but the rev data for 962 has 35 rev txs
+[03:36:35] <adiabat> and they're utxos from, like, block 118015, what the heck
+[03:36:42] <adiabat> this is coming from rev00000.dat
+[03:37:01] <adiabat> so why is a utxo from block 118015 in the first rev file argh
+[03:41:36] <kcalvinalvin> hmmmm...
+[03:41:46] <kcalvinalvin> I'll give it a looksie
+[03:42:32] <kcalvinalvin> Maybe I'm deserializing it wrong
+[03:42:40] <adiabat> maybe it's not *that* crazy in that blk00000.dat goes up to that height
+[03:42:51] <adiabat> so there could be rev data from that in there
+[03:42:54] <kcalvinalvin> The Blocks should be right because the magicbytes woudl fail
+[03:42:59] <adiabat> but maybe the rev stuff is in a totally different order
+[03:43:04] <kcalvinalvin> *magicbytes checking*
+[03:43:14] <adiabat> blocks are right, yeah, that's been working for a while
+[03:43:30] <adiabat> this is the first time we've actually trying *using* rev data thought right?
+[03:43:35] <kcalvinalvin> yes
+[03:43:46] <adiabat> and the whole time we're like .. hopefully it's in the same order as the blocks
+[03:43:58] <adiabat> because it'd be crazy for it not to be.... right....???
+[03:44:00] <adiabat> but...
+[03:44:23] <kcalvinalvin> Well sipa did say that the only way it could be wrong is if you've had an orphaned block or something
+[03:44:27] <kcalvinalvin> or a reorg
+[03:44:54] <adiabat> maybe, but like
+[03:45:02] <adiabat> its not a little off, it's way off
+[03:45:16] <adiabat> ?ERROR? block 962 0 inputs but 35 revs
+[03:45:41] <adiabat> and the revs are all these utxos from the end of blk00000.dat
+[03:45:55] <adiabat> like almost the exact end
+[03:46:20] <adiabat> also I should not use mainnet data because it's super depressing, every utxo is worth like millions of dollars
+[03:47:21] <adiabat> anyway I will be up a little longer but will go to bed somewhat soon, and I'm guessing I will not figure it out by then heh :)
+[03:47:27] <kcalvinalvin> lol
+[03:47:42] <adiabat> so if you want to look at it, cool; I'll try figuring it out tomorrow as well
+[03:48:04] <adiabat> like I'm pretty sure the rev data is what we think it is
+[03:48:10] <adiabat> because sometimes it's right. or close
+[03:48:41] <kcalvinalvin> what do you mean close
+[03:48:47] <adiabat> but the rev block you get like, txs, and then txins, but why?  why not just a slice of txins... why organize them into txs...
+[03:48:48] <kcalvinalvin> like an extra tx is in there?
+[03:49:38] <adiabat> also the rev data doesn't have outpoints, which, OK fine it'd be redundant
+[03:50:01] <adiabat> but that means I have to figure out what the utxos are without the outpoints which is tricky
+[03:50:13] <adiabat> also sometimes the pubkey is blank which 
+[03:50:28] <adiabat> well... also sometimes the pubkey is blank in the actual output so what's that about...
+[03:50:59] <adiabat> or... no wait it's not, the block explorer just says it's blank but it's not
+[03:51:07] <adiabat> anyway
+[03:51:22] <kcalvinalvin> > but the rev block you get like, txs, and then txins, but why? oh that's how Core used to do it. I could change it
+[03:51:38] <kcalvinalvin> Now they just use the Coin class
+[03:52:08] <adiabat> do the rev txs mean they correspond to which tx is spending them
+[03:52:10] <adiabat> err
+[03:52:34] <adiabat> what I mean is, if a bunch of txins are grouped into a single rev tx, that's not because those utxos were created at the same time
+[03:52:41] <adiabat> it's because they all get spent at the same time, right?
+[03:52:46] <adiabat> yeah because they have different heights
+[03:54:38] <kcalvinalvin> Yeah it's because they're spent
+[03:56:42] <adiabat> ok the rev stuff is... somewhat coherent in that like, I get a rev block
+[03:57:06] <adiabat> and it works, but it's the rev data for block 119965
+[03:57:17] <adiabat> hmmm
+[03:57:32] <adiabat> and the lastIndexOffsetHeight is 119964
+[03:58:01] <adiabat> so... something weird is going on, like rev is counting down backwards or something, that can't be a coincidence
+[03:59:16] <adiabat> hmm yeah something switched or backwards; the last block we're going to process is the first rev block we get.
+[04:00:24] <adiabat> except not exactly first, there are a couple before that, but they have blank pubkeys
+[04:01:53] <kcalvinalvin> yeah.. ok I kinda see what you're saying
+[04:02:04] <kcalvinalvin> I'll look at it and maybe push a PR today
+[04:02:41] <adiabat> ok if not I'll look at it tomorrow
+[04:03:18] <adiabat> close though!  if the rev stuff works, then genAddDel is done-ish
+[04:03:39] <adiabat> and with no extra database thankfully
+[04:03:59] <kcalvinalvin> yay
+[04:04:16] <kcalvinalvin> ⊂(◉‿◉)つ
+[13:55:46] <adiabat> hey did you find anything with the rev files?
+[13:56:02] <adiabat> I'll stat looking again in an hour or so
+[13:56:42] <adiabat> I thought of something that might be related
+[13:57:10] <adiabat> I have 1 blk file and 2 rev files.  So it reads blk0.dat and rev0.dat, rev1.dat
+[13:57:34] <adiabat> so maybe it's looking at the beginning of the first blk file and the second rev file
+[16:10:54] <kcalvinalvin> adiabat oh the lastIndexOffsetHeight should also be -1 of the actual block height
+[16:10:58] <kcalvinalvin> because that's the offset height
+[16:11:04] <kcalvinalvin> yeah... we should fix this...
+[16:11:09] <kcalvinalvin> So... I think it's right
+[16:16:04] <adiabat> hm ok if that's it then cool...
+[16:16:09] <adiabat> but.. I don't think that's it
+[16:16:57] <adiabat> because it sometimes gets the right amount, but an empty pubkey
+[16:17:23] <adiabat> this is just if I have mainnet blk0 and rev0
+[16:17:41] <adiabat> I added rev1 because I don't know if there's a 1:1 mapping between blk files and rev files
+[16:18:38] <adiabat> probably, in that they both go up to 2021
+[16:30:20] <kcalvinalvin> hmm I haven't come across any nil pubkeys
+[16:31:22] <kcalvinalvin> In line #147 in rev.go, there's sanity checking for nil pubkeys
+[16:31:52] <kcalvinalvin> I'm doing some printf in rev_test and I don't see any empty pubkeys up to block 700,000 on testnet3
+[16:34:33] <kcalvinalvin> oh wait hold up
+[16:42:45] <adiabat> maybe try mainnet?  What I did was just the first blkand rev file from mainnet
+[16:43:09] <adiabat> that might have messed it up somehow. but really it shouldn't
+[16:44:32] <adiabat> or maybe something else I'm doing in my PR is messing it up
+[16:44:58] <adiabat> try running that and see if you get the same ... if it works OK outside of the PR it could be somehting else
+[16:50:36] <kcalvinalvin> I found the bug
+[16:51:00] <kcalvinalvin> RevOffsetfile is returning all 0s for revblocks that aren't from rev00000.dat
+[16:51:05] <kcalvinalvin> I'll push a fix
+[17:05:46] <adiabat> huh ok that could do it
+[17:14:30] <kcalvinalvin> ugh remember when I said the revoffset was building so fast
+[17:14:37] <kcalvinalvin> It wasn't building anything
+[17:35:12] <adiabat> aha :)
+[17:35:19] <adiabat> that speeds things up 
+[18:52:41] <kcalvinalvin> Ok I fixed the revoffset problem but found a script decompress problem
+[18:53:02] <kcalvinalvin> It'll take me a good day.. so I won't be able to push today
+[19:02:15] <adiabat> ok
+[19:02:34] <adiabat> should I look at it? or work on other parts for now?
+[20:00:04] <kcalvinalvin> whoop I think I might have got it
+[20:00:17] <kcalvinalvin> Better to look at other parts for now...
+[20:00:48] <kcalvinalvin> But I think it's working now
+[20:30:16] <kcalvinalvin> adibat
+[20:30:22] <kcalvinalvin> lol Github seems to be down
+[20:30:35] <kcalvinalvin> Can't push :(
+[20:40:18] <adiabat> github's down..? yikes
+[20:40:32] <adiabat> hmm I can see it
+[20:41:16] <adiabat> if you can post the diff to pastebin or something... or put it anywhere else on the internet I can try it out
+[20:42:05] <adiabat> hm yeah the *git* part of github isn't working, but all the web stuff seems to
+[20:42:56] <adiabat> well if you can post it anywhere I can try it, if not I'll make a hack levelDB utxodb for now and continue that way, then replace it with rev files after
+[20:43:10] <adiabat> so no big deal either way
