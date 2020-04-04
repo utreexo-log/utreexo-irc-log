@@ -1,0 +1,15 @@
+[03:36:13] <kcalvinalvin> adiabat I made a PR with the fix
+[04:15:32] <adiabat> kcalvinalvin: cool, looking at it
+[04:15:41] <adiabat> seems like it works
+[04:16:13] <adiabat> both the rev blocks *and* the regular blocks are off by 1 so it matches up :)
+[04:16:34] <adiabat> also rev data exists for utxos that are created and destroyed in the same block
+[04:17:04] <adiabat> which you don't need, but I guess it's easier; don't have to have any special code for that
+[04:20:03] <adiabat> nice, yeah this looks like it works, so everything for the add / del / sig check is there
+[04:20:25] <adiabat> should I merge?  ysangkok pointed out some comment inconsitencies
+[04:20:58] <ysangkok> i think they are fixed already
+[04:22:20] <adiabat> oh, yup they are
+[04:22:23] <adiabat> ok cool merging
+[18:25:55] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Quit: jb55)
+[18:28:16] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[18:30:33] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Client Quit)
+[18:40:05] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
