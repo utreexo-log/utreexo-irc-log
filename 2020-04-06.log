@@ -1,0 +1,10 @@
+[07:37:14] <kcalvinalvin> I've been thinking that the bridgenode doesn't have to keep the entire proofs on disk
+[07:38:25] <kcalvinalvin> Proof generation is fairly quick so you can probably just serve them on request and have a cache
+[07:38:54] <kcalvinalvin> Though I guess initially you'll have plenty of CSNs wanting all the proofs
+[15:54:55] <adiabat> kcalvinalvin: keep the forest in ram only?  you could... but seems risky, as if you crash or lose power you lose the forest
+[17:06:38] *** RubenSomsen_ is now known as RubenSomsen
+[17:25:13] <ysangkok> caching doesn't necessarily mean only in ram...
+[18:00:07] <adiabat> sure, but in this case I guess the idea is to not keep things on disk...
+[18:00:28] <adiabat> you could store only roots, and then ask another bridge node for the rest of the data
+[18:01:14] <adiabat> in that way, "nobody" would need to keep anything on disk, and as long as you don't have everyone turn off at the same time it's OK :)
+[18:02:53] <adiabat> initially I'm not too worried about bridge node storage / i/o / bandwidth etc, and focusing on the CSNs, but there are certainly ways to improve the bridge nodes as well
