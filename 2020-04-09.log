@@ -1,0 +1,8 @@
+[13:17:04] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Write error: Broken pipe)
+[13:19:10] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[15:35:51] <kcalvinalvin> adiabat ysangkok I'm doing last touches to the Utreexo ELI5 article. I'm gonna put it up on Medium and tweet about it. Any other ideas of maybe getting it out there more?
+[15:55:13] <kcalvinalvin> Also, I'm cleaning up comments in the utreexo/ directory
+[15:55:27] <kcalvinalvin> Maybe some functions as well if I come across something to clean up
+[20:07:31] <adiabat> sounds good - I'm making a bunch of fun serialization / deserialization stuff.  Then network code which is my favorite kind of code to write /s
+[20:29:42] <ysangkok> adiabat: an issue with sorting a []uint64 (positions to delete) is that I can find no library function for that. but there is sort.Ints. I think it is would be bad to demand a sorted list, it's too easy to break and get a confusing error
+[20:31:11] <ysangkok> but i see you already committed a fix, so moving on :)
