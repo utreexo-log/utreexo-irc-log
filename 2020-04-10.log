@@ -1,0 +1,5 @@
+[13:40:48] <adiabat> ysangkok: the functions that produce the proofs all have sorted output
+[13:41:44] <adiabat> and most of the time you need the proofs before you know which positions to delete, so it generally works.  But yeah it's like a couple lines to sort it
+[13:42:13] <adiabat> so wouldn't be hard to sort at the beginning of Modify if there's a need
+[17:59:36] *** Quits: tnaka (~quassel@240d:1a:759:6000:a7b1:451a:8874:e1ac) (*.net *.split)
+[18:03:49] *** Joins: tnaka (~quassel@240d:1a:759:6000:a7b1:451a:8874:e1ac)
