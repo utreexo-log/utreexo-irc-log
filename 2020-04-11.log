@@ -1,0 +1,17 @@
+[07:57:15] <kcalvinalvin> adiabat should understanding the code be independent of the Utreexo paper?
+[07:58:06] <kcalvinalvin> I'm going through the batch deletion part and I think it's pretty graspable if you have a paper next to you *but* is impossible if you don't have the paper next to you
+[13:00:57] *** ysangkok is now known as j
+[13:04:17] *** j is now known as Guest67228
+[13:06:28] *** Guest67228 is now known as ja
+[18:11:59] <adiabat> kcalvinalvin: heh ok yeah maybe I can make a readme that's separate from the paper I guess?
+[18:12:25] <adiabat> the batch deletion part in the paper is kindof weird as it's like an appendix, maybe it should be a real part of the paper
+[18:14:17] <adiabat> I put it in because... yeah it's pretty hard to understand.  But sounds like the paper appendix helps! :)
+[18:15:24] <adiabat> I guess it's OK to have comments in the code that refer to sections of the paper to describe the algorithm... but there can be better explanation / readmes in the code as well
+[18:20:22] <kcalvinalvin> Haha yeah appendix is helping a lot. We should talk about documentation on Tuesday
+[18:21:01] <kcalvinalvin> Binary release should happen with like a godoc thingy at least
+[18:26:00] <ja> kcalvinalvin: hey did you have a look at my PR with random forests?
+[18:32:32] <kcalvinalvin> ja hmm ok a right child empty error on forest.Modify()
+[18:33:39] <ja> well, i dunno about the bug, just wondering if the test makes sense
+[18:34:33] <kcalvinalvin> I'll have to do a longer look. Not sure if the test is wrong or if the code is wrong. It is 3:30am in Korea now so will prob do so when I wake up
+[18:34:54] <kcalvinalvin> adiabat did you take a look?
+[18:35:37] <ja> kcalvinalvin: ah sure, there is no hurry :)
