@@ -1,0 +1,51 @@
+[02:40:00] <adiabat> ja: hi- looking at it
+[02:40:15] <ja> thanks!
+[02:40:16] <adiabat> I think the panic is because there are hashes which are all 0s
+[02:40:47] <adiabat> the leafTxo := LeafTXO{Hash: Hash{firstLeafHashByte}} part
+[02:41:18] <adiabat> there are several places where it panics if it sees a "hash" that's all 0s, mostly because I had lots of bugs involving that
+[02:41:58] <adiabat> and it seemed safe because no actual hash would be all 0s, so the panics are still in there... I could take then out I guess
+[02:42:04] <ja> in my example run the sample data it fails on doesn't contain 0 in the map, though
+[02:42:32] <adiabat> hm ok there could be different things going on, that was the first one I saw
+[02:42:45] <adiabat> I will add a Modify check for 0 hash add
+[02:42:58] <adiabat> since that's not really documented or obvious that you can't do that
+[02:43:22] <ja> yeah, that would be nice
+[02:46:52] <ja> i'll adjust the code to avoid zeroes..
+[02:46:54] <adiabat> but yeah that's not the only problem, I'm getting a different error now, looking
+[02:50:08] <ja> sometimes it fails the proveblock check, sometimes it fails deletion
+[02:50:31] <ja> i'll avoid amending the commit so you can see what i fixed
+[02:52:34] <ja> ok, i pushed one commit
+[02:59:42] <adiabat> ok. hm
+[03:00:03] <adiabat> for me now, it fails when there are 2 leaves left.
+[03:00:08] <adiabat> looks like a real bug :)
+[03:01:02] <ja> all right, hope it is an easy fix ;)
+[03:02:17] <adiabat> heh it's probably something dumb; I've hardly ever tested with 2 or 4 leaves
+[03:05:17] <ja> yeah i know it is a bit silly, but i just had to try this to boost my confidence in the algorithm...
+[03:14:55] <adiabat> ja: yeah, thanks though this is good!  it's a bug that's hard to find
+[03:15:33] <adiabat> I'm making a specific test that causes it now; add 5 remove 3 seems to do it.  but only removing some, not others
+[03:24:44] <adiabat> hm, not sure what's going on; I'm trying to reproduce with a similar, non-randomized test and not getting the error.  will push that test
+[03:34:32] <ja> i was afraid that there would be some global state somewhere, but last time i had that suspicion, that wasn't the problem...
+[03:41:46] <adiabat> the failures I'm getting say both
+[03:41:54] <adiabat> proveblock failed proving existing leaf
+[03:42:00] <adiabat> and verifyblockproof failed verifying proof for existing leaf
+[03:43:20] <adiabat> I can't tell what the errors are though... will add that
+[03:45:00] <ja> adiabat: oh , looks like i should have used FailNow instead of Fail()
+[03:45:39] <ja> or actually, since there is always a log line, Fatal is best
+[03:45:52] <ja> i can fix it if you didn't already start?
+[03:46:02] <adiabat> hm.  I think it's a positionMap problem with low numbers of leaves
+[03:46:15] <adiabat> yeah I'm just poking around, you can change anything in the PR
+[03:46:21] <ja> ok, i'll fix it
+[03:46:39] <adiabat> actually I have to go to bed soon, but it seems to be positionMap getting in a wrong state with low numbers of leaves
+[03:47:19] <adiabat> that makes sense as positionMap was changed most recently and I sortof rush changed it back to how it was before
+[03:51:31] <ja> ah, hopefully that's it. i fixed the abortion on error. it's pushed!
+[03:51:53] <ja> but yeah, it's late for gnarly issues :P
+[03:53:07] <ja> one issue with all our prints is that they seem to appear after the log output of the test. so currently, i get a wall of text and i have to search for the test name to find the actual log output for that single test
+[03:53:18] <adiabat> ok cool, I think I know where the problem is... will try to fix tomorrow.  Thanks for finding this!
+[03:53:39] <ja> great! no problem
+[16:59:36] <kcalvinalvin> https://medium.com/@kcalvinalvinn/eli5-utreexo-a-scaling-solution-9531aee3d7ba
+[17:00:04] <kcalvinalvin> The article that I wrote about Utreexo is now up :) Seems to be getting decent traction
+[17:44:38] *** Joins: nick_freeman (~nick_free@2001:16b8:300c:f500:12d:e5dc:38e4:8df0)
+[17:52:03] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[17:52:56] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[23:19:22] *** Quits: nick_freeman (~nick_free@2001:16b8:300c:f500:12d:e5dc:38e4:8df0) (Ping timeout: 260 seconds)
+[23:34:29] *** Joins: nick_freeman (~nick_free@2001:16b8:300c:f500:2145:12ea:689f:54dd)
+[23:59:17] *** Quits: nick_freeman (~nick_free@2001:16b8:300c:f500:2145:12ea:689f:54dd) (Remote host closed the connection)
