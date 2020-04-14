@@ -1,0 +1,143 @@
+[00:12:16] *** Joins: nick_freeman (~nick_free@2001:16b8:300c:f500:2145:12ea:689f:54dd)
+[00:12:57] *** Joins: nick_fre_ (~nick_free@2001:16b8:300c:f500:dc9b:e155:7839:1cb)
+[00:16:38] *** Quits: nick_freeman (~nick_free@2001:16b8:300c:f500:2145:12ea:689f:54dd) (Ping timeout: 246 seconds)
+[00:30:32] <adiabat> Cool!  I "heart"ed it on twitter.
+[00:31:04] <adiabat> If people ask any questions I can show up / answer... so far nothing new on github anyway
+[00:31:30] <adiabat> probably lots of people will be interested in a testnet binary to try out
+[01:20:13] *** Quits: nick_fre_ (~nick_free@2001:16b8:300c:f500:dc9b:e155:7839:1cb) (Remote host closed the connection)
+[01:20:40] *** Joins: nick_freeman (~nick_free@2001:16b8:300c:f500:dc9b:e155:7839:1cb)
+[01:25:10] *** Quits: nick_freeman (~nick_free@2001:16b8:300c:f500:dc9b:e155:7839:1cb) (Ping timeout: 265 seconds)
+[01:30:09] *** Joins: nick_freeman (~nick_free@2001:16b8:300c:f500:dc9b:e155:7839:1cb)
+[01:33:53] *** Quits: nick_freeman (~nick_free@2001:16b8:300c:f500:dc9b:e155:7839:1cb) (Remote host closed the connection)
+[01:34:19] *** Joins: nick_freeman (~nick_free@2001:16b8:300c:f500:dc9b:e155:7839:1cb)
+[01:38:47] *** Quits: nick_freeman (~nick_free@2001:16b8:300c:f500:dc9b:e155:7839:1cb) (Ping timeout: 260 seconds)
+[01:45:08] *** Joins: nick_freeman (~nick_free@2001:16b8:300c:f500:dc9b:e155:7839:1cb)
+[01:46:06] *** Joins: nick_fre_ (~nick_free@2001:16b8:304d:bb00:5c59:d833:66ce:8e9e)
+[01:49:49] *** Quits: nick_freeman (~nick_free@2001:16b8:300c:f500:dc9b:e155:7839:1cb) (Ping timeout: 272 seconds)
+[02:15:10] *** Quits: nick_fre_ (~nick_free@2001:16b8:304d:bb00:5c59:d833:66ce:8e9e) (Remote host closed the connection)
+[08:18:31] *** Joins: nick_freeman (~nick_free@i5C7490F4.versanet.de)
+[09:11:36] *** Quits: nick_freeman (~nick_free@i5C7490F4.versanet.de) (Remote host closed the connection)
+[09:12:46] *** Joins: nick_freeman (~nick_free@2001:16b8:304d:bb00:b07a:79bc:501:8b87)
+[10:09:55] *** Quits: nick_freeman (~nick_free@2001:16b8:304d:bb00:b07a:79bc:501:8b87) (Remote host closed the connection)
+[10:10:30] *** Joins: nick_freeman (~nick_free@2001:16b8:304d:bb00:b07a:79bc:501:8b87)
+[10:14:00] *** Quits: nick_freeman (~nick_free@2001:16b8:304d:bb00:b07a:79bc:501:8b87) (Remote host closed the connection)
+[10:14:26] *** Joins: nick_freeman (~nick_free@2001:16b8:304d:bb00:b07a:79bc:501:8b87)
+[10:14:53] *** Quits: nick_freeman (~nick_free@2001:16b8:304d:bb00:b07a:79bc:501:8b87) (Remote host closed the connection)
+[10:15:01] *** Joins: nick_freeman (~nick_free@2001:16b8:304d:bb00:b07a:79bc:501:8b87)
+[11:35:44] *** Quits: nick_freeman (~nick_free@2001:16b8:304d:bb00:b07a:79bc:501:8b87) (Remote host closed the connection)
+[12:31:40] *** Joins: nick_freeman (~nick_free@2001:16b8:304d:bb00:b07a:79bc:501:8b87)
+[12:32:25] *** Joins: nick_fre_ (~nick_free@2001:16b8:304d:bb00:a943:a994:2c46:e920)
+[12:36:27] *** Quits: nick_freeman (~nick_free@2001:16b8:304d:bb00:b07a:79bc:501:8b87) (Ping timeout: 272 seconds)
+[12:42:44] *** Quits: nick_fre_ (~nick_free@2001:16b8:304d:bb00:a943:a994:2c46:e920) (Remote host closed the connection)
+[12:43:10] *** Joins: nick_freeman (~nick_free@2001:16b8:304d:bb00:a943:a994:2c46:e920)
+[12:45:05] *** Quits: nick_freeman (~nick_free@2001:16b8:304d:bb00:a943:a994:2c46:e920) (Remote host closed the connection)
+[12:45:13] *** Joins: nick_freeman (~nick_free@2001:16b8:304d:bb00:a943:a994:2c46:e920)
+[16:31:24] *** Quits: nick_freeman (~nick_free@2001:16b8:304d:bb00:a943:a994:2c46:e920) (Remote host closed the connection)
+[18:45:32] *** Joins: nick_freeman (~nick_free@i5C7490F4.versanet.de)
+[19:18:17] <adiabat> ja: I still can't reproduce the failures outside of TestSmallRandomForests
+[19:18:38] <ja> weird...
+[19:18:58] <adiabat> I'm not too familiar with how it's working, like using reflect heh 
+[19:19:10] <ja> well it basically just constructs an arbitrary value of that type
+[19:19:28] <ja> the 1,0 test i submitted was generated using this quick-based test
+[19:19:54] <ja> i just copied out the logged tree values and put them in another test
+[19:20:24] <ja> so you could give me an example of a tree that fails in the test but doesn't fail outside?
+[19:20:25] <adiabat> one simple failure is: add 4 elements, delete 0,1,2
+[19:20:59] <ja> ok, i'll try to see if that passes on my machine now
+[19:21:08] <adiabat> no it still fails
+[19:21:12] <adiabat> I just added " TestForestFixed"
+[19:21:19] <adiabat> to try to get the same failure and can't
+[19:21:56] <ja> what still fails?
+[19:22:06] <adiabat> I mean TestSmallRandomForests fails
+[19:22:19] <adiabat> but when I try doing the same add/remove with TestForestFixed, it looks OK
+[19:23:02] <ja> let me just read your TestForestFixed to make sure it actually would error on any problems...
+[19:23:44] <ja> seems like you didn't push it yet?
+[19:23:45] <adiabat> Also I added t.Logf(f.ToString()) to parts of TestSmallRandomForests, and it seems like it's saying "proveblock failed" when it hasn't
+[19:23:54] <adiabat> TestForestFixed is pushed to master
+[19:24:08] <ja> ah sorry, was on wrong branch
+[19:24:43] <adiabat> I think the problem is that TestSmallRandomForests is not adding things in the order it thinks it is
+[19:24:57] <adiabat> I get:
+[19:25:08] <adiabat> adding (the bool values are whether deletion happens): map[64:true 0:false 241:true]
+[19:25:23] <adiabat> and then the tree base is 00:0001 01:f101 02:4001
+[19:25:51] <adiabat> deleting: [0 1], then tree base is 00:4001 01:f101 02:0001
+[19:25:58] <ja> oooh
+[19:26:00] <adiabat> and it fails with proveblock failed proving existing leaf: hash 00010...
+[19:26:28] <ja> i actually think they changed this in a recent go version
+[19:26:30] <adiabat> but 0001 was deleted as it was in position 0
+[19:26:34] <ja> so we may not even have the same behaviour...
+[19:26:49] <adiabat> oh shoot is it a 1.13 vs 1.11 or somehting bug? arg
+[19:27:41] <ja> https://golang.org/doc/go1.12#fmt
+[19:27:49] <ja> "Maps are now printed in key-sorted order to ease testing. "
+[19:28:03] <adiabat> ok but that works either way
+[19:28:10] <adiabat> that only affects the printf
+[19:28:36] <adiabat> (also.. how does it know... or does it sort the whole thing after iterating it...)
+[19:28:54] <ja> but it would cause different behaviour when copying out a printed map to a different test using the clipboard
+[19:29:03] <ja> i dunno how it works, gotta find the diff i guess
+[19:29:55] <adiabat> this isn't a printf map issue though; the test is failing and it seems like it shouldn't, based on what's in the tree
+[19:30:21] <adiabat> the tree initall has  00:0001 01:f101 02:4001, then positions 0, 1 are deleted
+[19:30:53] <adiabat> and then leaf 0001 is asked for, and it fails when there is no proof for it
+[19:31:03] <adiabat> but there shouldn't be a proof for it, because 0001 has been deleted
+[19:31:13] <adiabat> it was in position 0
+[19:31:26] <adiabat> the leaf that remains is 4001
+[19:31:54] <adiabat> the problem seems to be map[64:true 0:false 241:true]
+[19:32:03] <adiabat> it thinks 0 is false, but .. it's not
+[19:32:22] <adiabat> I'm sure the *map* value is false, but it's not actually sticking around
+[19:32:35] <adiabat> so the "adding (the bool values are whether deletion happens)" doesn't seem right
+[19:34:22] <ja> so it's deleting something it shouldn't, somehow leavesToDeleteSet is not correct?
+[19:35:23] <adiabat> yeah seems like it
+[19:35:57] <adiabat> I don't reall get "struct{}{}" though
+[19:36:09] <ja> it's the value of a type with only one element
+[19:36:13] <ja> the 'unit' type
+[19:36:33] <ja> the map must need an equality operations on the keys, i wonder if that could be broken
+[19:36:41] <adiabat> hm... ok.  But yeah in this case, it's adding [64:true 0:false 241:true]
+[19:36:53] <adiabat> but it's not deleting 64 and 241
+[19:37:06] <adiabat> it deleted 4001 and f101
+[19:37:24] <adiabat> which is 64 and 241
+[19:37:34] <adiabat> hm would be nicer to show the map in hex I guess
+[19:37:49] <ja> i think i may be reproduce it with this info
+[19:37:54] <ja> i'll try now...
+[19:39:58] <adiabat> maybe some part where it's looking up, deletions[i] = int(f.positionMap[leafTxo.Mini()])
+[19:40:09] <adiabat> that looks correct though, but something around there..
+[19:42:31] <adiabat> ok got it to do another one (it's weird, it's sometimes different when I re-run the test but usually the same)
+[19:42:46] <adiabat> adding (the bool values are whether deletion happens): map[141:true 158:true 88:false 172:true] deleting: [0 1 2]
+[19:43:13] <adiabat> initial forest 00:9e01 01:5801 02:ac01 03:8d01, then 00:8d01 01:5801 02:ac01 03:9e01
+[19:43:30] <adiabat> then fails 5801 not found. 0x58 = 88
+[19:43:57] <adiabat> but 9e01 is the only one left (0x93 = 158)
+[19:44:16] <adiabat> er 0x9e
+[19:47:00] <ja> aaah
+[19:47:01] <ja> i found it
+[19:47:01] <ja> !
+[19:47:26] <adiabat> ah
+[19:47:26] <ja> it's "el := range deletions" which iterates over indexes, not values
+[19:47:28] <adiabat> me too
+[19:47:30] <adiabat> yeah
+[19:47:45] <adiabat> heh that's why I always do for i, _ := range slice {}
+[19:48:20] <ja> yeah i will adopt that
+[19:48:21] <adiabat> even though that's supposedly not "canonical" or whatever I always put the _ because I've missed that sometimes
+[19:48:52] <adiabat> looks like it passes with _, el := range
+[19:49:17] <ja> yeah
+[19:49:23] <ja> damn, sorry to have wasted your time
+[19:49:25] <adiabat> heh OK phew so the algorithms still work :)
+[19:49:28] <adiabat> no no problem
+[19:49:33] <adiabat> I found some other stuff to fix
+[19:49:43] <ja> i will fix and squash
+[19:50:03] <adiabat> OK cool thanks, I will merge then.  and then try getting rev data all working
+[19:51:02] <ja> ok, i pushed!
+[19:51:24] *** Quits: nick_freeman (~nick_free@i5C7490F4.versanet.de) (Remote host closed the connection)
+[19:52:12] *** Joins: nick_freeman (~nick_free@2001:16b8:304d:bb00:2542:3f77:1ed4:151c)
+[19:54:03] *** Quits: nick_freeman (~nick_free@2001:16b8:304d:bb00:2542:3f77:1ed4:151c) (Remote host closed the connection)
+[19:54:29] *** Joins: nick_freeman (~nick_free@2001:16b8:304d:bb00:2542:3f77:1ed4:151c)
+[19:55:47] <adiabat> ok cool, green checkmark :)
+[19:56:16] *** Quits: nick_freeman (~nick_free@2001:16b8:304d:bb00:2542:3f77:1ed4:151c) (Remote host closed the connection)
+[19:56:23] *** Joins: nick_freeman (~nick_free@2001:16b8:304d:bb00:2542:3f77:1ed4:151c)
+[19:57:08] *** Joins: nick_fre_ (~nick_free@2001:16b8:304d:bb00:748a:b261:22b9:c24b)
+[20:01:11] *** Quits: nick_freeman (~nick_free@2001:16b8:304d:bb00:2542:3f77:1ed4:151c) (Ping timeout: 265 seconds)
+[20:33:30] *** Quits: nick_fre_ (~nick_free@2001:16b8:304d:bb00:748a:b261:22b9:c24b) (Remote host closed the connection)
+[20:37:03] *** Joins: nick_freeman (~nick_free@2001:16b8:304d:bb00:748a:b261:22b9:c24b)
+[22:54:31] *** Quits: nick_freeman (~nick_free@2001:16b8:304d:bb00:748a:b261:22b9:c24b) (Remote host closed the connection)
+[22:54:57] *** Joins: nick_freeman (~nick_free@2001:16b8:304d:bb00:748a:b261:22b9:c24b)
+[22:59:47] *** Quits: nick_freeman (~nick_free@2001:16b8:304d:bb00:748a:b261:22b9:c24b) (Ping timeout: 260 seconds)
+[23:02:07] *** Joins: nick_freeman (~nick_free@2001:16b8:304d:bb00:748a:b261:22b9:c24b)
+[23:04:20] *** Quits: nick_freeman (~nick_free@2001:16b8:304d:bb00:748a:b261:22b9:c24b) (Remote host closed the connection)
+[23:04:40] *** Joins: nick_freeman (~nick_free@2001:16b8:304d:bb00:748a:b261:22b9:c24b)
+[23:33:11] *** Quits: nick_freeman (~nick_free@2001:16b8:304d:bb00:748a:b261:22b9:c24b) (Remote host closed the connection)
+[23:34:34] *** Joins: nick_freeman (~nick_free@2001:16b8:304d:bb00:748a:b261:22b9:c24b)
