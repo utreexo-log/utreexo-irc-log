@@ -1,0 +1,15 @@
+[01:55:36] *** Joins: nick_fre_ (~nick_free@2001:16b8:30aa:cd00:a0ac:96f0:3e9e:91e4)
+[01:59:07] *** Quits: nick_freeman (~nick_free@2001:16b8:3066:1200:3de3:5960:3d95:5530) (Ping timeout: 252 seconds)
+[02:38:15] *** Quits: achow101 (~achow101@unaffiliated/achow101) (Quit: Bye)
+[02:39:44] *** Joins: achow101 (~achow101@unaffiliated/achow101)
+[02:55:54] *** Quits: achow101 (~achow101@unaffiliated/achow101) (Quit: Bye)
+[02:57:00] *** Joins: achow101 (~achow101@unaffiliated/achow101)
+[02:57:54] *** Quits: achow101 (~achow101@unaffiliated/achow101) (Client Quit)
+[02:59:59] *** Joins: achow101 (~achow101@unaffiliated/achow101)
+[05:16:54] *** Quits: nick_fre_ (~nick_free@2001:16b8:30aa:cd00:a0ac:96f0:3e9e:91e4) (Remote host closed the connection)
+[09:10:10] *** Joins: nick_freeman (~nick_free@2001:16b8:30aa:cd00:61e8:7762:7dbb:752d)
+[14:25:11] <ja> i've been thinking about introducing proper logging with filter to adjust on the command line
+[14:25:22] <ja> so that you can enable/disable subsystems like in lnd
+[18:44:08] <ja> ok i sent a PR
+[22:56:51] *** Quits: rjected (~dan@pool-71-184-77-198.bstnma.fios.verizon.net) (Ping timeout: 260 seconds)
+[22:58:24] *** Joins: rjected (~dan@pool-71-184-77-198.bstnma.fios.verizon.net)
