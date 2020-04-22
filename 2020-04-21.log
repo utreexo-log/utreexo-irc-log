@@ -1,0 +1,45 @@
+[00:01:36] *** Joins: nick_freeman (~nick_free@2001:16b8:304a:8400:c5d3:d498:dca1:331f)
+[00:02:00] *** Quits: nick_freeman (~nick_free@2001:16b8:304a:8400:c5d3:d498:dca1:331f) (Remote host closed the connection)
+[00:02:06] *** Joins: nick_freeman (~nick_free@2001:16b8:304a:8400:c5d3:d498:dca1:331f)
+[00:26:21] <ja> are the positions always continously populated? if i initially insert 6 elements, i will have indexes 0..5, right? and if i delete leaf 2, will the indexes be 0..4?
+[01:15:10] *** Joins: nick_fre_ (~nick_free@2001:16b8:306b:7300:4544:fde3:4ac2:1ba)
+[01:17:47] *** Quits: nick_freeman (~nick_free@2001:16b8:304a:8400:c5d3:d498:dca1:331f) (Ping timeout: 246 seconds)
+[02:24:24] <adiabat> ja: cool will look at PR tomorrow
+[02:24:41] <adiabat> yes there are no gaps
+[02:25:08] <ja> ah ok. so now i understand why positionMap is not exposed... you should be able to keep track just by counting elements :)
+[02:25:24] <adiabat> well, you can't actually..
+[02:25:39] <adiabat> it's not exported because the prove functions do it for you
+[02:26:12] <ja> oh, so the reason you can't is because you can't know which position an element will assume?
+[02:26:30] <adiabat> I mean you can, it's deterministic, but it's complicated
+[02:26:51] <adiabat> you basically have to run the remove trasform to figure out where things go
+[02:27:13] <ja> yeah, all right
+[02:27:32] <ja> currently working on making C bindings...
+[02:27:54] <adiabat> and it changes a lot, so it doesn't seem like telling people "your leaf is here at position 572" is that useful, since it will move somehwere else soon
+[02:27:56] <adiabat> cool
+[02:28:16] <ja> looks like the forest API is pretty stable, so it shouldn't be a big burden
+[02:28:46] <adiabat> yeah.  I think kcalvinalvin is changing the names / comments a bit of the forest, but API should stay the same
+[12:49:01] <adiabat> Hi- can do weekly jitsi call at 9:30
+[12:49:28] <adiabat> or whenever, we can change the day / time for this since "days of the week" don't mean much anymore
+[13:08:25] <kcalvinalvin> adiabat Hi I'm available
+[13:08:37] <kcalvinalvin> my irc client is dropping messages...
+[13:31:51] <adiabat> ok give me a minute...
+[13:33:58] *** Joins: stevenroose (~steven@irc.roose.io)
+[14:13:55] *** Quits: nick_fre_ (~nick_free@2001:16b8:306b:7300:4544:fde3:4ac2:1ba) (Ping timeout: 265 seconds)
+[14:22:13] *** Joins: nick_freeman (~nick_free@i5C74B9AF.versanet.de)
+[14:29:43] *** Quits: nick_freeman (~nick_free@i5C74B9AF.versanet.de) (Ping timeout: 250 seconds)
+[15:32:35] <ja> ok i talked to kcalvin and i will remove the new log module in my pr, and have the 'tree' module (formerly 'utreexo') take a single logger which will be used for everything in there. tomorrow i will rebase on top of kcalvin's PR
+[16:34:25] *** Joins: nick_freeman (~nick_free@i5C74B9AF.versanet.de)
+[16:37:35] *** Quits: jamesob (sid180710@gateway/web/irccloud.com/x-ovdtkjaepnqxltbv) (Ping timeout: 246 seconds)
+[16:40:33] *** Joins: jamesob (sid180710@gateway/web/irccloud.com/x-ylcugpkygwylqefk)
+[16:41:09] *** Quits: nick_freeman (~nick_free@i5C74B9AF.versanet.de) (Ping timeout: 265 seconds)
+[16:58:23] *** Joins: nick_freeman (~nick_free@2001:16b8:306b:7300:8045:94f3:3b87:6efd)
+[18:00:23] *** Quits: nick_freeman (~nick_free@2001:16b8:306b:7300:8045:94f3:3b87:6efd) (Remote host closed the connection)
+[18:01:29] *** Joins: nick_freeman (~nick_free@2001:16b8:306b:7300:8045:94f3:3b87:6efd)
+[18:11:08] *** Quits: nick_freeman (~nick_free@2001:16b8:306b:7300:8045:94f3:3b87:6efd) (Remote host closed the connection)
+[19:14:13] *** Joins: nick_freeman (~nick_free@2001:16b8:306b:7300:8045:94f3:3b87:6efd)
+[20:02:12] *** Quits: nick_freeman (~nick_free@2001:16b8:306b:7300:8045:94f3:3b87:6efd) (Remote host closed the connection)
+[20:05:50] *** Joins: nick_freeman (~nick_free@2001:16b8:306b:7300:8045:94f3:3b87:6efd)
+[20:31:48] *** Quits: nick_freeman (~nick_free@2001:16b8:306b:7300:8045:94f3:3b87:6efd) (Remote host closed the connection)
+[20:32:24] *** Joins: nick_freeman (~nick_free@2001:16b8:306b:7300:8045:94f3:3b87:6efd)
+[21:30:09] *** Joins: nick_fre_ (~nick_free@2001:16b8:306b:7300:8045:94f3:3b87:6efd)
+[21:30:52] *** Quits: nick_freeman (~nick_free@2001:16b8:306b:7300:8045:94f3:3b87:6efd) (Read error: Connection reset by peer)
