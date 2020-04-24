@@ -1,0 +1,26 @@
+[06:16:49] <kcalvinalvin> ja Sorry for the delay. It's pushed now
+[06:17:21] <kcalvinalvin> adiabat When can I expect fixes for issue #114
+[06:59:27] *** Quits: cfields (~cfields@unaffiliated/cfields) (Ping timeout: 260 seconds)
+[07:00:15] *** Joins: cfields (~cfields@unaffiliated/cfields)
+[08:48:21] *** Joins: nick_freeman (~nick_free@2001:16b8:30f6:7e00:505d:6b24:535b:f392)
+[14:21:11] *** Joins: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net)
+[15:43:09] <adiabat> kcalvinalvin: arg sorry internet died
+[15:43:32] <adiabat> seems to be back, was out for a day or so.  also no electricity
+[15:44:00] <adiabat> will try to fix tody
+[15:44:04] <adiabat> *today
+[16:02:08] <kcalvinalvin> adiabat oof is that related with covid? 
+[16:06:42] <adiabat> no just wind storm
+[17:20:17] <kcalvinalvin> ok so while you can do subpackages in go, it's not idomatic go and is discouraged
+[17:23:57] <kcalvinalvin> eh... I guess they don't specify directly so it's fine
+[17:41:58] <adiabat> by "subpackage" I just mean a package in a subdirectory though
+[17:46:44] <kcalvinalvin> yup I'll just continue on. I should be able to finish by tuesday
+[17:50:47] <adiabat> I can't get the error on #114
+[17:51:11] <adiabat> when does it happen, in genproofs or in ibdsim?
+[18:00:24] <adiabat> I'll try downloading different blk / rev files.  Do you think you can make a test that triggers the same problem?
+[18:01:01] <adiabat> or print out some more info about like what block, what transaction, things like that.  I might be something weird
+[18:01:24] <adiabat> like... coinbase transaction that goes to unspendable...? or something weird like that
+[18:07:25] <adiabat> yeah tried with different testnet blk/rev, can't get it to crash
+[18:07:29] <adiabat> will comment on github
+[20:46:50] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Read error: Connection reset by peer)
+[20:48:49] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[23:45:22] <ja> kcalvinalvin: is it still WIP?
