@@ -1,0 +1,136 @@
+[01:11:45] *** Joins: nick_fre_ (~nick_free@2001:16b8:3039:2300:e436:b50a:2649:e9c6)
+[01:14:26] *** Quits: nick_freeman (~nick_free@2001:16b8:30f6:7e00:505d:6b24:535b:f392) (Ping timeout: 240 seconds)
+[01:47:49] *** Quits: nick_fre_ (~nick_free@2001:16b8:3039:2300:e436:b50a:2649:e9c6) (Remote host closed the connection)
+[02:01:33] <kcalvinalvin> ja still WIP
+[02:01:52] <ja> then i'll wait a bit more :P
+[02:02:04] <ja> it's ok, there's no rush... still working on c bindings
+[02:05:18] <kcalvinalvin> ja can you reproduce issue #114?
+[02:05:34] <ja> havn't tried, will try now
+[02:05:53] <kcalvinalvin> all I'm doing is building and testing it on testnet blk files
+[02:09:49] <ja> it's running now
+[02:10:09] <ja> ibdsim ran fine, now running genproofs
+[02:10:28] <ja> first 100 rev files passed without issue...
+[02:16:14] <ja> kcalvinalvin: yeah, indeed it did crash
+[02:16:20] <ja> will put the logs on the issue
+[02:16:56] <kcalvinalvin> thanks
+[04:21:03] <ja> i have this issue with the C bindings: on one hand, the C bindings need to be in a package called main, that seems to be a strict rule of cgo
+[04:21:36] <ja> on the other hand, i need to access internal stuff from utreexo-tree. for example, i use the ramForestData and access the list of leaves directly from there.
+[04:22:23] <ja> the c bindings are converting back and forth between c and go structures, that is necessary since c is not garbage collected. so there is already some overhead, and i think it is better to just access internal stuff directly from the c bindings
+[04:22:36] <ja> but i need everything to be public then, because it is getting accessed from a different module...
+[04:23:20] <ja> is it so bad if everything is just public? i mean, this is not production level code, can't we just say "this is not part of the interface, we will break it at any time", and make it public?
+[08:03:27] *** Joins: nick_freeman (~nick_free@2001:16b8:3039:2300:785c:f881:7a06:8408)
+[08:10:47] *** Quits: nick_freeman (~nick_free@2001:16b8:3039:2300:785c:f881:7a06:8408) (Remote host closed the connection)
+[08:11:01] *** Joins: nick_freeman (~nick_free@2001:16b8:3039:2300:785c:f881:7a06:8408)
+[09:29:26] *** Joins: nick_fre_ (~nick_free@2001:16b8:3039:2300:3d9a:9b7:df29:2d7d)
+[09:30:43] *** Quits: nick_freeman (~nick_free@2001:16b8:3039:2300:785c:f881:7a06:8408) (Ping timeout: 265 seconds)
+[12:16:04] *** Quits: nick_fre_ (~nick_free@2001:16b8:3039:2300:3d9a:9b7:df29:2d7d) (Remote host closed the connection)
+[14:16:44] *** Joins: nick_freeman (~nick_free@2001:16b8:3039:2300:3d9a:9b7:df29:2d7d)
+[14:17:35] <adiabat> ja: why do you need to access ramForestData directly in the c binding?
+[14:17:52] <adiabat> is there another way, maybe some other functions can be exported?
+[14:18:15] <adiabat> also, hmm, OK you also get the crash, I need to reproduce this.  I will start making some tests to try and cause it
+[14:18:30] <adiabat> since my blk/rev files don't seem to do it
+[14:18:33] <ja> adiabat: right now, i convert the c-serialization to go, i instantiate the ramForestData directly and shove it in there
+[14:19:01] <ja> adiabat: what would be the better way? i don't wanna add the elements since the c-forest should already satisfy the invariants, and no illegal tree could be stored
+[14:19:56] <adiabat> what do you mean by convert the c-serialization to go?
+[14:20:15] <adiabat> are you writing serialization code in c, and having go call that?
+[14:20:45] <ja> nah, other way around. i wrote c structs, that go copies the forest into
+[14:21:15] *** Quits: nick_freeman (~nick_free@2001:16b8:3039:2300:3d9a:9b7:df29:2d7d) (Ping timeout: 272 seconds)
+[14:21:20] <ja> so that i could port methods one by one, access all the elements of the forest from c
+[14:22:00] <ja> it would be possible to have an opaque wrapper, but then you can't really write any operations for the tree in your alternate language
+[14:22:32] <adiabat> is the goal to have a full re-implementation in c, or just to have c functions be able to call the go forest methods?
+[14:23:16] <adiabat> I guess if it's on disk data this wouldn't be as bit of an issue
+[14:23:27] <adiabat> because then you have access to the raw forest data file
+[14:23:46] <ja> the immediate goal was the latter
+[14:23:49] <adiabat> I guess for ramForestData, all you need is a pointer to the stat of it
+[14:24:34] <adiabat> the ramForestData isn't really garbage collected though, it's basically a giant malloc and it never gets smaller
+[14:25:09] <ja> hmmm i should just show you my code, wait i'll push it
+[14:25:10] *** Joins: nick_freeman (~nick_free@2001:16b8:3039:2300:3d9a:9b7:df29:2d7d)
+[14:25:23] <adiabat> ok
+[14:25:53] *** Joins: nick_fre_ (~nick_free@2001:16b8:3039:2300:28ad:d788:7d88:1417)
+[14:26:07] <adiabat> another way would be to just capitalize everything and make a accumulator interface and tell people to use the interface methods
+[14:27:46] <ja> here it is: https://github.com/ysangkok/utreexo/blob/cgo/c/forest_c_.go
+[14:28:05] *** Quits: nick_fre_ (~nick_free@2001:16b8:3039:2300:28ad:d788:7d88:1417) (Remote host closed the connection)
+[14:28:30] <ja> python though
+[14:28:32] *** Joins: nick_fre_ (~nick_free@2001:16b8:3039:2300:28ad:d788:7d88:1417)
+[14:28:37] <ja> well, when doing this code i definitely asked myself what is even the value of having anything private if you're not doing stable software. maybe i have done too much python though
+[14:29:24] <ja> what would be an accumulator interface? Add/Remove? isn't the interface almost already there?
+[14:29:47] *** Quits: nick_freeman (~nick_free@2001:16b8:3039:2300:3d9a:9b7:df29:2d7d) (Ping timeout: 260 seconds)
+[14:30:08] <adiabat> Yeah, the public / private thing is kind of annoying sometimes, it signals "intent" I guess
+[14:30:28] <adiabat> yeah the internface is basically:
+[14:30:30] <ja> well, it is enforced, so more than just a signal ;)
+[14:31:05] <ja> here are my c-forest representation that i have go copy into: https://github.com/ysangkok/utreexo/blob/cgo/c/forest.h
+[14:31:12] <adiabat> Modify(), ProveBatch(), VerifyBatchProof()
+[14:31:30] <adiabat> hm right now there's a lot of exported stuff that shouldn't be
+[14:31:48] <adiabat> hm I guess Undo() also is the interface
+[14:32:26] <ja> i am actually not even sure if it is possible to have an opaque interface, since you can't let go-objects escape the garbage collector.
+[14:32:26] <adiabat> also for forest it's not certain we even need VerifyBatchProof(), since the bridge node doesn't do that
+[14:32:58] <ja> "Not all Go types can be mapped to C types in a useful way. Go struct types are not supported; use a C struct type. Go array types are not supported; use a C pointer."
+[14:33:17] *** Quits: nick_fre_ (~nick_free@2001:16b8:3039:2300:28ad:d788:7d88:1417) (Ping timeout: 265 seconds)
+[14:33:20] <ja> yeah, i don't care too much about proofs for now
+[14:33:26] <adiabat> hm
+[14:33:41] <ja> this is really just me trying to reimplement the forest with an API into the go forest for verification :P
+[14:33:49] <adiabat> hopefully don't have to change the go code too much to accomodate a c binding though
+[14:34:04] <adiabat> yeah a c rewrite of like transform.go is probably easier
+[14:34:17] <adiabat> since there's almost no go-sepcific stuff, it's just some loops 
+[14:34:18] <ja> well, that is the problem. the code i linked is working, but it is capitalizing all the stuff in utreexo/
+[14:34:45] <adiabat> I mean... as a temoprary measure I think that's OK
+[14:34:55] <adiabat> right now it seems pretty haphazard what's capitalized
+[14:35:16] <adiabat> GetTops shouldn't be...
+[14:35:26] <ja> maybe it would make more sense to just only do the disk format. then the API into the forest would just pass a filename. the filesystem is a portable api :P
+[14:35:34] <adiabat> Add() is but Remove() isn't hah
+[14:35:46] <adiabat> yeah on disk might be easier also
+[14:36:05] <adiabat> easy to see what's going on since if it crashes it leaves the whole thing on disk to look at
+[14:36:39] <ja> ok, i think i'll do that then, let's see...
+[15:14:12] *** Joins: nick_freeman (~nick_free@2001:16b8:3039:2300:28ad:d788:7d88:1417)
+[16:04:12] <kcalvinalvin> hmm I think issue 114 could be some dumb off by one thing
+[16:17:07] <kcalvinalvin> oh nvm I
+[16:17:10] <kcalvinalvin> 'm dumb
+[16:17:13] <kcalvinalvin> oh boy
+[16:17:33] <kcalvinalvin> I didn't have the rev*.dat file on my directory
+[16:17:38] <kcalvinalvin> I'm guessing ja didn't either 
+[16:22:10] <kcalvinalvin> adiabat ok great it works when I throw in the rev*.dat file
+[16:26:05] <ja> why would the rev*.dat be missing?
+[16:28:15] <kcalvinalvin> So right now, the binary searches for the rev*.dat files in the directory you're executing it at
+[16:28:20] <kcalvinalvin> I didn't have it in there
+[16:28:44] <kcalvinalvin> Since you were resuming, there might have been some bugs in there
+[16:29:42] <kcalvinalvin> Try ```rm -r *data testnet-ttldb``` and try running it again
+[16:30:00] <ja> aaaah
+[16:30:32] <ja> maybe we should start putting a version header in the files...
+[16:32:00] <kcalvinalvin> ok I'm hitting another bug
+[16:32:01] <kcalvinalvin> fun
+[16:32:39] <kcalvinalvin> adiabat what does your directory look like?
+[16:34:40] <adiabat> I just have blk00000.dat and rev00000.dat
+[16:34:42] <adiabat> and cmd
+[16:34:49] <adiabat> then it makes a bunch of directories and files
+[16:35:00] <adiabat> for mainnet I have 
+[16:35:14] <adiabat> blk00000.dat  blk00001.dat  cmd  rev00000.dat  rev00001.dat
+[16:35:35] <adiabat> the current master should at least actually give an error instead of crashing
+[16:35:49] <adiabat> it... did err=fmt.errforf() but then didn't return, oops
+[16:36:06] <adiabat> but now should return and the errors should go up and make it quit
+[16:36:45] <kcalvinalvin> ah ok I think there's something wrong with rev reader
+[16:41:26] <kcalvinalvin> adiabat could you try with blk00001.dat and rev000001.dat added?
+[16:41:47] <kcalvinalvin> I'm crashing on block 85780
+[16:54:16] *** Quits: nick_freeman (~nick_free@2001:16b8:3039:2300:28ad:d788:7d88:1417) (Remote host closed the connection)
+[16:55:23] *** Joins: nick_freeman (~nick_free@2001:16b8:3039:2300:28ad:d788:7d88:1417)
+[17:31:24] <adiabat> still crashing? or error
+[17:31:38] <adiabat> will try in a bit (mtg now)
+[18:02:30] <adiabat> kcalvinalvin: this is on testnet?  downloading that now
+[18:02:58] <adiabat> (my servers are all dead... and can't get into building to fix them so gotta go local :)
+[18:03:02] <kcalvinalvin> yes I did that on testnet
+[18:03:10] <kcalvinalvin> oof
+[18:04:00] <adiabat> ok will have testnet blk/rev 01 in a couple min
+[18:04:18] <adiabat> rev00001.dat            47% 9776KB 372.7KB/s   00:29 ET
+[18:04:23] <kcalvinalvin> at times I guess it'll be faster for someone to mail you the blockchain data every week haha
+[18:04:28] <adiabat> aw yeah blazin fast
+[19:16:12] <adiabat> still not getting any problems with first couple files of testnet.  but everyone's files are different... will try moe
+[19:16:14] <adiabat> *more
+[21:15:36] *** Quits: nick_freeman (~nick_free@2001:16b8:3039:2300:28ad:d788:7d88:1417) (Remote host closed the connection)
+[21:57:02] *** Joins: nick_fre_ (~nick_free@2001:16b8:3039:2300:28ad:d788:7d88:1417)
+[22:16:40] *** Quits: nick_fre_ (~nick_free@2001:16b8:3039:2300:28ad:d788:7d88:1417) (Remote host closed the connection)
+[22:16:52] *** Joins: nick_freeman (~nick_free@2001:16b8:3039:2300:28ad:d788:7d88:1417)
+[22:38:52] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[22:45:54] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[22:54:28] *** Parts: nick_freeman (~nick_free@2001:16b8:3039:2300:28ad:d788:7d88:1417) ()
+[22:55:51] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Quit: jb55)
+[23:31:00] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[23:34:11] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Client Quit)
