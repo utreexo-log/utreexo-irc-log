@@ -1,0 +1,14 @@
+[01:04:33] *** Joins: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net)
+[01:17:23] *** Quits: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net) (Quit: My MacBook has gone to sleep. ZZZzzz…)
+[11:05:25] <kcalvinalvin> For forest, just finding the leaf hash in the positionMap is fine right?
+[11:05:37] <kcalvinalvin> No need for VerifyBatchProof
+[12:41:42] *** Joins: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net)
+[16:26:35] *** Quits: adiabat (~adiabat@63.209.32.102) (*.net *.split)
+[16:26:35] *** Quits: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net) (*.net *.split)
+[16:32:43] *** Joins: adiabat (~adiabat@63.209.32.102)
+[16:32:43] *** Joins: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net)
+[17:26:18] *** Quits: adiabat (~adiabat@63.209.32.102) (*.net *.split)
+[17:26:18] *** Quits: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net) (*.net *.split)
+[17:29:31] *** Joins: adiabat (~adiabat@63.209.32.102)
+[17:29:31] *** Joins: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net)
+[21:25:48] *** Joins: rjected (~dan@pool-71-184-77-198.bstnma.fios.verizon.net)
