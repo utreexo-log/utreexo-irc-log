@@ -1,0 +1,12 @@
+[02:28:21] <adiabat> kcalvinalvin I think so? Not sure what situation
+[02:36:50] <adiabat> also, random but like... buildOffsetFile is in bridgenode, but func BuildRevOffsetFile() error {
+[02:37:00] <adiabat> er, BuildRevOffsetFile is in util
+[02:37:28] <adiabat> seems like it'd make sense to put them next to each other, or at least in the same package since they're ... 
+[02:37:46] <adiabat> not doing exactly the same thing, but pretty close
+[05:41:18] <kcalvinalvin> fair point... Should move it out of utils
+[11:47:04] <kcalvinalvin> 9:30 EST right?
+[13:31:36] <adiabat> hey yeah
+[13:31:40] <adiabat> can do jitsi now
+[13:31:49] <adiabat> my internet has been bad last 2 days, hope it works
+[13:32:34] <kcalvinalvin> oof
+[13:32:44] <kcalvinalvin> I'm in the usual jitsi room
