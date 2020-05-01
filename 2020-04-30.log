@@ -1,0 +1,23 @@
+[08:56:30] *** Quits: gchain (gustafmatr@gateway/shell/matrix.org/x-fasvsanzbifsmmhd) (Quit: killed)
+[09:11:36] *** Joins: gchain (gustafmatr@gateway/shell/matrix.org/x-vdrrdplqyzgjgsyw)
+[16:01:44] <ja> rjected: wow cool, i am curious to see how it looks. but i don't know if i can provide useful feedback
+[16:51:23] <kcalvinalvin> rjected that's cool and I'd be interested in taking a look. Do mind that the software itself is still not alpha though
+[16:57:25] <rjected> kcalvinalvin: yeah it's based on what is in the paper, I do understand the code is changing quite a bit
+[16:57:57] <ja> rjected: which tools are you using?
+[16:58:00] <rjected> the end goal is to understand how hash size effects security but I'm not quite there yet
+[16:59:04] <ja> i wanted to do a proof but i don't have experience working with things like observational equivalence
+[16:59:11] <rjected> ja: I'm not fuzzing or doing formal verification or anything, it's a theoretical analysis / formal proof
+[16:59:38] <ja> aaah, i had assumed it was with some proof assistent :O
+[16:59:59] <ja> but of course a machine-verified proof will be easier with a paper proof ;)
+[17:00:10] <ja> somebody recommended me to take a look at ProVerif
+[17:01:53] <ja> rjected: what is some literature you think is relevant for understanding the techniques of your proof?
+[17:05:34] <rjected> ja: there are plenty of resources on cryptographic accumulators, https://eprint.iacr.org/2015/087 is the most relevant that I have in mind
+[17:14:30] <kcalvinalvin> rjected Ah ok. One thing to note would be that the deletion outline in the main section of the paper isn't being used since it's slow. Would be better to focus on the Batch deletion process outlined in the Appendix
+[17:30:33] <rjected> kcalvinalvin: makes sense, I'll keep that in mind
+[20:53:32] *** Quits: cfields (~cfields@unaffiliated/cfields) (*.net *.split)
+[20:53:32] *** Quits: kanzure (~kanzure@unaffiliated/kanzure) (*.net *.split)
+[20:53:46] *** Joins: cfields (~cfields@unaffiliated/cfields)
+[20:53:55] *** Joins: kanzure (~kanzure@unaffiliated/kanzure)
+[22:10:12] *** Quits: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net) (Quit: My MacBook has gone to sleep. ZZZzzz…)
+[22:58:57] *** Joins: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net)
+[23:25:58] *** Quits: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net) (Quit: My MacBook has gone to sleep. ZZZzzz…)
