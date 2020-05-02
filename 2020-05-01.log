@@ -1,0 +1,25 @@
+[00:16:25] <ja> adiabat: sent you a PR for fixing the CI
+[08:25:40] <kcalvinalvin> In the leafDataReadme.md, it states that there's two DBs. We only have 1 in Forest.positionMap right? I don't see the code calling out to this UTXO DB
+[08:30:20] <kcalvinalvin> Also, I found another bug. Do check issue #119
+[13:00:42] *** Joins: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net)
+[15:20:37] *** Quits: adiabat (~adiabat@63.209.32.102) (Ping timeout: 264 seconds)
+[15:22:30] *** Joins: adiabat (~adiabat@63.209.32.102)
+[16:05:08] <adiabat> hey - thanks for #119 that was dumb heh.  But a ~4 line fix
+[16:05:42] <adiabat> I'll update leafDataReadme.md
+[16:06:00] <adiabat> we actually don't have any DBs in accumulator, they're all pushed out to the cmd side
+[16:06:18] <kcalvinalvin> Right ok great :)
+[16:06:29] <adiabat> also maybe we can get rid of pollardfull... cool that we tried it and got it to work but... doesn't seem to have any advantage
+[16:07:03] <kcalvinalvin> sure that's fine
+[16:08:20] <adiabat> heh there's also a million issues, should close them... at least most are fixed anyway
+[16:08:33] <adiabat> but I think today I'll get networking to work, then cleanup
+[16:15:56] <kcalvinalvin> Great!
+[16:16:07] <kcalvinalvin> Also I have some breathing room now. I
+[16:16:19] <kcalvinalvin> I'll *finally* finish my PR this weekend
+[16:20:22] <adiabat> sure... I think the rename PR shuffled everything around so might be annoying to rebase but
+[16:20:34] <adiabat> hopefully that's the last big code reorg
+[16:20:54] <adiabat> I might want to make 2 different binaries, but that's pretty easy / small change
+[18:53:04] <kcalvinalvin> 2 different binaries for bridgenode and csn right?
+[18:53:15] <kcalvinalvin> I can do that along with the big PR
+[18:53:30] <kcalvinalvin> It makes sense
+[22:07:31] *** Quits: kanzure (~kanzure@unaffiliated/kanzure) (*.net *.split)
+[22:12:51] *** Joins: kanzure (~kanzure@unaffiliated/kanzure)
