@@ -1,0 +1,32 @@
+[04:16:44] *** Joins: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net)
+[04:32:01] *** Quits: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net) (Quit: My MacBook has gone to sleep. ZZZzzz…)
+[14:06:23] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Ping timeout: 240 seconds)
+[14:21:07] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[15:05:25] *** Joins: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net)
+[16:32:36] *** Quits: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net) (Quit: My MacBook has gone to sleep. ZZZzzz…)
+[17:12:09] *** Joins: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net)
+[17:23:42] *** Quits: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net) (Quit: My MacBook has gone to sleep. ZZZzzz…)
+[17:38:43] <kcalvinalvin> Ok so I knew this was gonna bite us eventually.. :/ but the heights are being called wrong and I think that's the problem
+[17:40:22] <kcalvinalvin> Way back when everything was in text, parseblock would get everything from blk*.dat and every following binary was based off of that. So when you call the first line, it gave you the block #1 not block #0
+[17:41:27] <kcalvinalvin> So to keep compatibility with that, I made the GetRawBlocksFromFile() ignore block 0. So when you pass 0 as the height value, it would give you block #1
+[17:42:06] <kcalvinalvin> Right now in the latest master, we're calling GetRawBlocksFromFile() with 1 so it's giving us block #2
+[17:43:00] <kcalvinalvin> So all the heights are messed up... I'll make a PR that has the GetRawBlocksFromFile() actually give you block #1 when you give it 1
+[17:48:29] *** Joins: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net)
+[17:53:57] <ja> sounds good!
+[20:20:22] <kcalvinalvin> #PR 120 adds the mentioned documentation. Ended up being cleaner since all the directories are already moved heh
+[20:20:33] <kcalvinalvin> Rebasing...... was not fun
+[20:20:49] <kcalvinalvin> until I realized I'm not changing much
+[20:21:36] <kcalvinalvin> I'll push the changed I mentioned above later today/tomorrow
+[20:30:14] *** Quits: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net) (Quit: My MacBook has gone to sleep. ZZZzzz…)
+[20:55:55] *** Joins: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net)
+[22:47:15] <adiabat> kcalvinalvin: I think I fixed the heights thing on friday?
+[22:47:51] <adiabat> what I changed was:
+[22:48:19] <adiabat> now when you make calls to GetRawBlocksFromFile() or the rev version, and ask for block 0, it will return an error
+[22:49:05] <adiabat> but if you don't ask for block 0, it decrements the block height by one and gets that.  So asking for block 1 will give you byte offset 0
+[22:49:47] <adiabat> This seems to work OK; the heights agree with the heights stored in rev block data.
+[22:50:42] <adiabat> maybe there's a cleaner way to do it but I think the height problem is fixed
+[22:50:51] <adiabat> it's in a9af95c65c7e54ace029a8992b316da501b325ff which is the most recent commit to master
+[22:51:39] <adiabat> just don't want you to write another fix 
+[22:52:13] <adiabat> (I mean you can if you don't like mine heh)
+[22:52:23] <adiabat> (just wanted you to at least know about mine first)
+[23:17:34] *** Quits: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net) (Ping timeout: 246 seconds)
