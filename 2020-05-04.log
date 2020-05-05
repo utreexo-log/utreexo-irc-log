@@ -1,0 +1,72 @@
+[00:07:39] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Quit: jb55)
+[01:04:35] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[04:04:56] <kcalvinalvin> Is the current master working for you on testnet3?
+[04:06:39] <kcalvinalvin> I'm crashing at around when the spends start happening (to be exact, I'm crashing at block #387)
+[04:07:01] <kcalvinalvin> Yeah I did see the off by 1 fixes commit
+[04:07:21] <kcalvinalvin> I don't know... but it is crashing earlier than before...
+[04:07:34] <kcalvinalvin> I'll dig around today
+[13:56:25] <adiabat> yeah it's a dedupe problem
+[13:56:28] <adiabat> almost have it fixed
+[13:56:49] <adiabat> (says in the commit message)
+[13:57:23] <adiabat> basically dedupe hashes shouldn't be in accumulator, as it's pretty bitcoin specific, and genProofs should catch that before calling Modiyu
+[13:57:27] <adiabat> *Modify
+[14:36:07] <adiabat> ok fixed and pushed to master
+[14:36:13] <adiabat> should work now, seems to work OK for me
+[14:47:12] <adiabat> ... ok except ibdsim doesn't work at all.  looking at that
+[14:52:04] <adiabat> ok fixed
+[14:52:34] <adiabat> cool now network PR.  Those last few should have been in their own PR I guess but oh well
+[14:52:44] <adiabat> also maybe I'll first merge the doc PR
+[14:53:17] <adiabat> also ibdsim is way faster than genproofs.  Which makes sense but feels like maybe too big of a difference
+[14:53:33] <adiabat> maybe there was some performance hit to genproofs somewhere.  anyway can look at later
+[16:43:57] <adiabat> mmm no it's working because it's never deleting anything.  Maybe 1 more fix to master...
+[17:08:12] <adiabat> heh yeah as far as I can tell there's no reader for proof data... so the IBDsim client never read the proofs that genproofs made
+[17:10:08] <kcalvinalvin> yeah... I've been debugging for the better part of yesterday afternoon
+[17:11:06] <kcalvinalvin> Code changed a lot haha
+[17:18:57] <adiabat> I'm changing a lot now, merging pFileWorker and pOffsetFileWorker
+[17:19:10] <adiabat> writing a proof reader.  I thought that existed...?
+[17:19:33] <adiabat> but I don't see anything that reads proof.dat / proofoffset.dat
+[18:49:09] <kcalvinalvin> There isn't a proof reader per se but ibdsim reads it during when it syncs
+[18:54:42] <kcalvinalvin> adiabat is there a name for forest.height that you thought of? 
+[18:55:08] <kcalvinalvin> I'll push the changes that ja asked for in the morning.
+[19:02:09] <kcalvinalvin> hmm ok the new changes seem to have fixed the issue I was running into today
+[19:12:29] <adiabat> where does IBDsim read proofs..?
+[19:12:35] <adiabat> I might have deleted it
+[19:13:24] <adiabat> there's no "height" anywhere in forest / pollard now, it's just rows
+[19:14:00] <adiabat> I couldn't find anywhere where IBDsim actually read from proof files or offsets or anything.
+[19:14:15] <adiabat> Possible I accidentally removed it a while ago.  Adding it in now
+[19:18:00] <kcalvinalvin> hmmm maybe I should spend an afternoon and make a docker build for testing or something...
+[19:18:10] <kcalvinalvin> would be more helpful in speeding things along
+[19:18:26] <adiabat> ah pFile was read like a month ago
+[19:18:48] <adiabat> I probably got rid of that accidentally, which made ibdsim work great!
+[19:18:54] <adiabat> because it never had to verify any proofs :)
+[19:19:01] <adiabat> anyway adding back in
+[19:19:22] <kcalvinalvin> oh ok. Hmmm.. Do you think leaving forest.height the same makes sense
+[19:19:31] <kcalvinalvin> because like... it isn't
+[19:20:12] <adiabat> huh?
+[19:20:19] <adiabat> where?
+[19:20:40] <adiabat> you'd rather it go back to forest.height instead of forest.rows?
+[19:20:54] <kcalvinalvin> Wait hold up maybe it isn't there anymore
+[19:21:09] <adiabat> the only "height" in all of accumulator is for the simchain testing thing
+[19:21:12] <kcalvinalvin> oh
+[19:21:16] <kcalvinalvin> noice
+[19:21:20] <kcalvinalvin> :)
+[19:21:48] <adiabat> yeah... ok I will get IBDsim reading proofs again, THEN can do network
+[19:22:02] <adiabat> I changed the proofs, so now it's all the rev data AND proof hashes
+[19:22:21] <adiabat> I guess that change is when I made it stop reading proofs entirele
+[19:22:26] <adiabat> *entirely
+[19:22:32] <kcalvinalvin> well urm.. I guess I could look at more documentation stuff
+[19:23:16] <kcalvinalvin> Would be tad nicer if master didn't break so often.. :)
+[19:25:08] <kcalvinalvin> Which... I'm guilty as well... I'll def look into more CI stuff
+[19:40:04] <adiabat> well none of the *tests* broke
+[19:40:22] <adiabat> we don't have any tests for cmd/, which is I guess the issue
+[19:40:37] <adiabat> accumulator/ which has tests had pretty much worked fine
+[19:41:16] <adiabat> I guess an automated sim-chain kind of thing for genproofs / ibdsim would be the way to test cmd side
+[19:44:57] <kcalvinalvin> The official go documentation says it's ok to add files go sole testing purposes
+[19:45:21] <kcalvinalvin> btcd does this too from what I see. What do you think about just hardcoding in the rev and blk files?
+[19:45:34] <kcalvinalvin> not hardcoding but having it in the repo
+[19:48:03] <adiabat> thing is they're huuuge
+[19:48:16] <adiabat> I think a simulator wouldn't be that hard
+[19:48:52] <adiabat> can either have a simulator that makes blk / rev, or one that creates a regtest and makes commands to bitcoind
+[19:49:03] <adiabat> and then goes through the blk/rev that generates
+[19:49:47] <adiabat> I like randomized also because ... we know it does OK with the couple gigs of testnet3 data, but what if it dies on some other weird thing...
+[19:50:07] <adiabat> a simulator might be able to find that, or like weird numbers of leaves, etc
