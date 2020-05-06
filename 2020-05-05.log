@@ -1,0 +1,7 @@
+[04:23:14] <adiabat> man, yeah we thought things were working, but everything outside of accumulator was broken
+[04:23:22] <adiabat> just... no tests to fail I guess
+[04:24:00] <adiabat> anyway still doesn't work but I'm done for now... everything I fix just uncovers the next problem heh
+[06:27:58] <kcalvinalvin> oof
+[13:07:49] <adiabat> can do a call whenever now... still trying to get dedupe... it's tricky
+[13:10:22] <kcalvinalvin> ah ok
+[13:10:28] <kcalvinalvin> I'll get on jitsi
