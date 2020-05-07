@@ -1,0 +1,16 @@
+[05:44:55] *** Parts: gchain (gustafmatr@gateway/shell/matrix.org/x-vdrrdplqyzgjgsyw) ("User left")
+[05:58:02] *** Quits: achow101 (~achow101@unaffiliated/achow101) (Ping timeout: 260 seconds)
+[06:39:16] *** Joins: achow101 (~achow101@unaffiliated/achow101)
+[06:48:07] *** Quits: achow101 (~achow101@unaffiliated/achow101) (Ping timeout: 258 seconds)
+[07:05:46] *** Joins: achow101 (~achow101@unaffiliated/achow101)
+[19:38:34] *** Quits: ja (janus@anubis.0x90.dk) (Quit: SIGBUS: Mainframe meltdown, evacuate building)
+[19:51:22] *** Joins: user_____ (janus@anubis.0x90.dk)
+[19:52:12] *** Quits: user_____ (janus@anubis.0x90.dk) (Client Quit)
+[19:53:48] *** Joins: user_____ (janus@anubis.0x90.dk)
+[19:53:54] *** Quits: user_____ (janus@anubis.0x90.dk) (Client Quit)
+[19:55:58] *** Joins: ysangkok (janus@anubis.0x90.dk)
+[19:56:56] *** Quits: ysangkok (janus@anubis.0x90.dk) (Client Quit)
+[19:57:16] *** Joins: ja (janus@anubis.0x90.dk)
+[21:02:27] <adiabat> phew OK I think I got everything working
+[21:02:36] <adiabat> at least... everything that I *thought* was working on sunday
+[21:02:45] <adiabat> so now I can actually make the network stuff
