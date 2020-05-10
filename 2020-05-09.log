@@ -1,0 +1,21 @@
+[03:33:01] <adiabat> hey - well got networking working
+[03:33:08] <adiabat> it's very basic, but does work
+[03:33:35] <adiabat> but doesn't support resume yet, and will give up on pretty much any bad data it's sent
+[03:33:47] <adiabat> but I put the location for the signature checking calls
+[03:34:07] <adiabat> so if it has that part, then it's "working" in that it's doing pretty
+[03:34:10] <adiabat> much everything
+[03:34:31] <adiabat> lots of inefficiencies and things need to be optimized but that's cool
+[03:34:47] <adiabat> I will clean up the network PR then merge hopefully soon
+[03:35:34] <adiabat> kcalvinalvin: sig / tx checking code I can work on next, but let me know where your code for that is
+[03:35:55] <adiabat> or you can do that part; there's lots of stuff for me to fix up / optimize
+[03:36:13] <adiabat> like have the server support multiple clients, stop / resume, etc etc
+[03:36:25] <adiabat> also not sending the hashes of the leaves that are proven
+[03:36:40] <adiabat> bunch of other stuff too.  But I also want to get tx/ sig code in to see the whole thing working
+[08:06:31] <kcalvinalvin> code is in my branch at validate-4
+[08:06:47] <kcalvinalvin> adiabat under directory consensus
+[08:07:19] <kcalvinalvin> I was looking to get at consensus and make some tests for the actual cmd
+[08:07:47] <kcalvinalvin> I'll have something on my plate
+[21:29:54] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[21:30:44] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[21:35:26] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[21:36:17] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
