@@ -1,0 +1,40 @@
+[00:44:54] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[00:45:42] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[02:08:21] <ja> hey i have a question regarding parentMany.
+[02:08:41] <ja> if rise > forestRows + 1, uint64 will be called with a negative amount
+[02:09:08] <ja> this will result in a really high number that we shift by
+[02:09:46] <ja> so right now, basically if rise > forestRows + 1, the or operation has no effect
+[02:09:49] <ja> is this intended?
+[02:15:57] <ja> here is an example of what happens if you call uint64 with a negative number https://play.golang.org/p/XnnqkcliRr1
+[03:52:58] <ja> ok, given that they are uint8, it cannot be negative. but it could still underflow, and you'd have a shift in the vicinity of 255
+[04:14:35] <ja> the condition is triggered by the test suite...
+[12:10:09] <adiabat> ja: rise > forestRows would be  invalid, yes, but it doesn't make sense to have this condition
+[12:10:33] <adiabat> that means you want to go up n rows, but there are less than n rows total in the forest
+[12:11:51] <adiabat> it could return an error?  But there are lots of things in utils that could return an error... for parentMany, it would be
+[12:12:04] <adiabat> if position > (1<<forestRows)
+[12:12:20] <adiabat> if rise > forestRows
+[12:13:02] <adiabat> if rise == 0 (well might still work but do nothing?)
+[12:14:47] <adiabat> similarly in childMany you can have drop > forestRows and that would do something nonsensical
+[12:15:11] <adiabat> hm I guess in childMany if drop > forestRows it just returns 0, which at least seems ... better?  Still wrong though
+[12:17:16] <adiabat> for too large rise values, parentMany would also return 0 :
+[12:17:52] <adiabat> (position>>rise) would be 0 since rise is bigger the row of any (valid) position
+[12:19:07] <adiabat> the (mask << forestRows-(rise-1)) part could get either huge or 0 depending on how big the underflow shift is
+[12:19:21] <adiabat> but then the whole thing is & mask at the end, which makes everything 0
+[12:19:44] <adiabat> so it will give the wrong answer, but there is no right answer
+[12:20:54] <adiabat> I get the desire for more assertions, like, position < 1<<forestRows, or rise < forestRows, but I don't think putting errors here is the best way to do it...
+[12:22:46] <adiabat> just because then you have all these calls to child, parent, detectOffset, inForest, etc, and they can all be given invalid arguments
+[12:24:39] <adiabat> so if we want assertions about valid inputs, have them upstream?  Or panic.  I could be OK with panic, since something is seriously broken if parentMany is getting called that way...
+[19:42:53] <ja> yeah, it is fine to panic on broken assumptions
+[19:43:08] <ja> i will submit a PR one of these days. but it will break the tests...
+[19:44:25] <ja> returned errors only make sense when it is e.g. a user error. but this is internal, the caller should not violate the assumptions
+[21:06:25] <ja> adiabat: i am not sure how to fix getRootsReverse which breaks this assumption... i tried something but now it loops infinitely
+[22:01:49] <ja> adiabat: you say that &mask would make everything zero, but my tests do not confirm that. i get e.g. 6, 14 and 30 returned if the rist>forestRows precondition is violated ( which it is)
+[22:29:05] <adiabat> ja: getRootsReverse could break if leaves > (1<<forestRows).  It will ignore the leaves in excess of 1<<forestRows 
+[22:31:05] <adiabat> huh I guess I don't see cases where it parentMany returns non-zero but this is just looking at the code, which is a bit hard to follow
+[22:31:27] <adiabat> I guess there's a way to get (mask << uint64(forestRows-(rise-1)))) & mask to be non-zero, huh
+[22:32:11] <adiabat> anyway in all these functions, position > (1<<forestRows) is not OK
+[22:32:20] <adiabat> and rise or drop > forestRows also not OK
+[22:33:11] <adiabat> forestRows is actually an *almost* redundant variable
+[22:33:40] <adiabat> in 99.9% of the time, you could just call treeRows() on number of leaves, and that will give you forestRows
+[22:34:17] <adiabat> well then the arguments would just be position and numLeaves, which isn't any simpler I guess
+[23:30:31] <ja> adiabat: do you get a panic if you insert "if row+1 > forestRows { panic(...) }" in parentMany and run the test suite?
