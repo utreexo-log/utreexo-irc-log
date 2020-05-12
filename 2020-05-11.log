@@ -1,0 +1,44 @@
+[04:25:15] *** Quits: achow101 (~achow101@unaffiliated/achow101) (Remote host closed the connection)
+[04:26:36] *** Joins: achow101 (~achow101@unaffiliated/achow101)
+[15:16:03] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Ping timeout: 240 seconds)
+[15:19:58] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[15:37:59] <adiabat> ja: I added that to parentMany and ran the tests on master, I don't get any panic
+[15:38:18] <ja> hmm
+[15:38:30] <ja> let me just try again and i'll send a diff
+[15:40:17] <ja>  func parentMany(position uint64, rise, forestRows uint8) uint64 {
+[15:40:17] <ja> +       if rise+1 > forestRows {
+[15:40:17] <ja> +               panic("no go")
+[15:40:18] <ja> +       }
+[15:40:30] <ja> adiabat: this does crash for me
+[15:40:41] <ja> is it because you checked for position and not rise?
+[16:03:14] <adiabat> I just did if rise > forestRows {
+[16:03:45] <adiabat> I don't think the +1 is needed, as there could be cases when rise == forestRows
+[16:04:47] <adiabat> (mask << uint64(forestRows-(rise-1)))) & mask  would become 
+[16:04:59] <adiabat> (mask << 1) & mask
+[16:07:06] <adiabat> I guess if rise == 0 that would also mess things up
+[16:09:06] <adiabat> ... but it doesn't seem to, hm
+[16:09:53] <ja> but the line below uses (forestRows-(rise-1))
+[16:10:10] <ja> so the panic makes more sense with the +1, no?
+[16:10:18] <ja> i mean, we want to panic when the shift amount is negatvie
+[16:11:55] <ja> i don't understand what you mean by needed? i mean, any case with a negative shift is something we'd wanna prevent, no?
+[16:13:37] <adiabat> I guess there's 2 ways
+[16:13:46] <adiabat> if rise is 0, then rise-1 underflows
+[16:14:45] <adiabat> otherwise if both are non-zero, then (forestRows-(rise-1)) goes below 0 when rise-1 > forestRows
+[16:15:01] <ja> oh right
+[16:15:14] <ja> ok, my logic is wrong :O
+[16:15:31] <adiabat> but there are cases when rise ==0
+[16:15:37] <adiabat> which does cause underflow
+[16:15:47] <adiabat> so I think a good way to make it safer
+[16:15:49] <adiabat> is to have
+[16:16:01] <adiabat> if rise == 0 { return position }
+[16:16:28] <adiabat> then panic on rise-1 > forestrows
+[16:16:35] <ja> ok, i'll test it now
+[16:17:08] <adiabat> yeah having those two still has tests working for me
+[16:17:35] <adiabat> and still allows the rise=0 which does seem like that could cause bugs
+[16:18:11] <ja> yeah ok, great!
+[16:18:23] <adiabat> I can merge that in, or if you're making a PR with modifications here you can add that one
+[16:18:52] <ja> i have a PR with some deduplication, but that is unrelated. so it's fine if you put this in
+[16:19:02] <ja> (the deduplication PR has already been sent)
+[16:19:10] <adiabat> ah I see it, cool
+[16:19:26] <adiabat> Hmm need to read this and figure it out :)
+[16:20:36] <ja> even though go is pass-by-value, slices are just pointers, so that's why i thought it must be equivalent
