@@ -1,0 +1,32 @@
+[04:42:14] <ja> adiabat: i see you reimplemented popCount. did you see https://golang.org/pkg/math/bits/#OnesCount64 ?
+[05:56:21] <kcalvinalvin> Is popcount still used? I don't see it in the latest master
+[05:59:11] <ja> kcalvinalvin: https://github.com/mit-dci/utreexo/commit/5075374f3f311977b2e262e81739da49278c3ac6#diff-d35019ea596a7bf1ba58435785ec994aR184
+[08:25:47] <kcalvinalvin> In pollard.go, rem2(), a lot of ```var hn *hashableNode``` have same position
+[08:25:52] <kcalvinalvin> is this the expected result?
+[08:28:54] <kcalvinalvin> There's also duplicate destinations. I'm guessing this is 2 different pair of cousins sharing an aunt?
+[10:43:03] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Ping timeout: 240 seconds)
+[10:55:37] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[11:00:56] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[11:06:25] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[11:16:03] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Ping timeout: 240 seconds)
+[11:24:41] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[13:03:35] <adiabat> ja: huh, had not seen that.  I guess it's standard library so can use it
+[13:04:11] <adiabat> kcalvinalvin: yeah added it when I changed pollard save /load.  seems simpler this way and isn't dependent on being a file, so could be to a network
+[13:05:48] <adiabat> hn *hashableNodes having the same position is not great, I know why it happens...
+[13:06:00] <adiabat> I think there's deduplication so it doesn't actually hash twice?
+[13:07:24] <adiabat> but possibly not everything, given line 202 - " // TODO this doesn't cover eveything "
+[13:07:59] <adiabat> duplicates happen frequently on higher rows 
+[13:08:41] <adiabat> e.g in printout.txt bottom tree
+[13:09:26] <adiabat> if 01, 04 have both changed, then 08 needs to be hashed (due to 01) and 10 needs to be hashed (due to 04)
+[13:09:41] <adiabat> then 12 and 13, because of 08 and 10
+[13:09:44] <adiabat> and then 14, twice
+[13:09:54] <adiabat> both because of 12 and because of 13
+[13:10:48] <adiabat> so that ends up in the nextHashDirt, which should get deduped on line 168...
+[13:12:16] <adiabat> but there are other ways as well, like
+[13:12:47] <adiabat> sometimes you have 2 swaps of the same element on the same row, like swap (04, 05) and (02, 04)
+[13:13:21] <adiabat> I don't know how much duplicate work is being done, hopefully there aren't many cases of hashing the same thing more than once
+[13:13:57] <adiabat> if there are, it's worth it to catch those before it happens since hashing is probably a lot slower than the code to move stuff around
+[13:14:48] <adiabat> hmmm also dedupeSwapDirt() doesn't *actually* dedupe!
+[13:15:17] <adiabat> it dedupes *between* the two slice arguments, but not if the a argument has duplicates
+[13:16:10] <adiabat> so... hm yeah maybe there's duplicate hashing / work still going on, you're welcome to check for that
+[13:16:31] <adiabat> i'm in network world now, which... eh not the most exciting but whatever
