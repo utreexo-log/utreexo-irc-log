@@ -1,0 +1,9 @@
+[02:41:56] <ja> kcalvinalvin: hey
+[05:36:57] <kcalvinalvin> ja util/rev_test.go expects a rev*.dat file in the directory you run it. If you give it those files, it'll work. Golang does support test data with ```testdata/``` so that should be done so it just doesn't run
+[05:38:32] <ja> hmm it tells me RevBlock has no field Block
+[06:01:51] <ja> sent a PR for splitting up remTrans2!
+[06:51:37] <kcalvinalvin> ja oh ok I guess the test is broken :( I'll push a fix
+[06:51:44] <kcalvinalvin> and also review the PR
+[07:05:25] <ja> thanks!
+[17:50:23] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Ping timeout: 240 seconds)
+[17:54:10] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
