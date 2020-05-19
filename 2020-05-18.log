@@ -1,0 +1,28 @@
+[03:36:24] <ja> kcalvinalvin: if you think it is better to keep the dels[2:] iteration instead of the index calculating, i could revert that
+[03:44:53] <ja> ok, i reverted that change, the old slicing is indeed simpler and easier to read, i think
+[06:47:59] <kcalvinalvin> ja I left a review
+[19:50:54] <adiabat> ja: Cool!  Also left some comments, can merge with a couple aesthetic changes
+[19:52:12] <adiabat> rjected: have you looked at speed differences with safeAssignData() ?
+[19:53:13] <adiabat> if it's not much slower, I don't see a problem with doing the mutex.  Though there *shouldn't* be any overwriting there, I guess there still is
+[19:54:04] <adiabat> maybe it'd be better to figure out where the overwrites are coming from and get rid of them before this happens, as redundant hashing is pretty expensive
+[20:12:08] <rjected> adiabat: I can write a benchmark pretty easily, I'll get back to you on that
+[20:12:40] <rjected> Yeah for sure reducing redundant hashing is a good idea
+[20:15:41] <rjected> Another idea would be converting to an atomic.Value or something in sync/atomic but it all depends on the proportion of read vs write, zero-mutex read is nice if we do it a lot
+[20:16:27] <rjected> versus whatever happens behind the scenes when you Load an atomic value
+[20:41:49] <adiabat> it should be write only, then block, then read...
+[20:41:57] <adiabat> at least the way it works now is row at a time
+[20:42:44] <adiabat> if you really wanted to use more cores / threads you could make it not block at the end of a row, but have mutexes for each position
+[20:43:13] <adiabat> so if a higher hash needed to be computed it would wait on the lower hashes to be finished... that seems hard though
+[20:43:38] <adiabat> and it's probably good enough parallelism doing it row at a time and blocking at the end of every row for all hashes to finish
+[20:50:37] <ja> adiabat: i put the panic there because go is not smart enough to realize that all branches are covered by the previous cases
+[20:51:15] <adiabat> ja: right but you can just leave it blank
+[20:51:51] <ja> adiabat: no, the compiler says "missing return". i could 'return nil' with a comment saying that it is impossible
+[20:52:27] <ja> but think i will just do '!delRemains && rootPresent' and then have the default branch return nil
+[20:52:35] <ja> it's smaller and more explicit
+[20:52:39] <adiabat> yeah that seems like it be easier to read
+[20:53:06] <adiabat> the == case is cool, but actually might be confusing
+[20:57:45] <ja> adiabat: ok, i force pushed, i didn't improve the comments, i think you'd be better at that
+[20:59:02] <ja> oh shit
+[20:59:04] <ja> something missing
+[21:00:21] <ja> ok fixed now, it was a duplication of delRemains
+[21:57:27] <adiabat> ah ok
