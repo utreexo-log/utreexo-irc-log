@@ -1,0 +1,12 @@
+[13:20:43] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Ping timeout: 240 seconds)
+[13:22:41] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[18:13:55] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[18:18:48] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[18:24:23] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Ping timeout: 240 seconds)
+[18:38:25] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[19:17:26] <kcalvinalvin> adiabat Are you using any of the btcd library for networking stuff?
+[19:23:24] <kcalvinalvin> https://twitter.com/hrdng/status/1263087443257044992?s=21
+[19:24:11] <kcalvinalvin> Apparently rev blocks are used for generating indexes for BIP158
+[19:24:30] <kcalvinalvin> Should look into that...
+[20:36:25] <adiabat> kcalvinalvin: not using btcd networking no
+[20:36:40] <adiabat> well, unless you count the "wire" package, which is used everywhere
