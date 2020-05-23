@@ -1,0 +1,71 @@
+[02:25:47] <ja> adiabat: why does swapInRow take forestRows? the test suite doesn't trigger the case where len(collapses) != forestRows
+[06:23:06] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[06:23:58] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[07:35:39] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[07:36:40] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[14:57:05] <adiabat> swapInRow needs forestRows so it can give it to swapIfDescendant, which uses it for parentMany
+[14:58:06] <adiabat> I guess len(collapses) will usually be the same as forestRows
+[14:58:32] <adiabat> we probably don't have good testing for cases where forestRows is higher than it needs to be
+[14:59:17] <adiabat> it is kindof a pain to have numLeaves and forestRows as separate things.  it would totally be possible to get rid of forestRows
+[14:59:30] <adiabat> and just compute it on the fly from numLeaves the way pollard does it
+[14:59:58] <adiabat> I think that will be slower, which is why I put in the forestRows stuff, but actually I never measured how much slower
+[15:00:23] <adiabat> maybe there's hardly any difference, and it could be simplified to not have to deal with independed forestRows..
+[16:40:50] <kcalvinalvin> PR by a new person!
+[16:42:21] <adiabat> heh yeah cool
+[16:42:32] <adiabat> oh also just saw #126
+[16:43:12] <adiabat> hmmm should either merge or close #124... I don't actually want a mutex there though, but like... yeah that does need to be fixed
+[16:43:29] <adiabat> maybe mutex now and put a //TODO: remove this mutex...
+[16:43:36] <kcalvinalvin> That works
+[16:44:35] <ja> adiabat: i guess forestRows can be calculated with an arithmetic expression? just a few assembly instructions no? i don't think that would be measurable
+[16:44:44] <ja> but i don't know how you test performance
+[16:46:22] <ja> adiabat: even if it has to pass it to swapIfDescendent, it could just pass len(collapses)... i guess i just prefer fewer arguments because i am not convinced of the performance hit
+[16:46:56] <ja> the problem with inter-dependent arguments is that there is little checking for consistency, and that would indeed bloat the code
+[16:47:12] <adiabat> ja: for the forest right now, it can't be calculated
+[16:47:48] <adiabat> the performance hit would be due to a pretty big change in how forest would work without having an independent forestRows
+[16:48:09] <ja> ah ok, so we can't do that
+[16:48:11] <adiabat> it would potentially call reMap() more ofent
+[16:48:14] <adiabat> *often
+[16:48:29] <adiabat> well we *can*, it just needs a reMap down function
+[16:48:40] <rjected> adiabat: I can update #124 w/ a TODO for removing the mutex, it's probably a good idea to write some benchmarks for stuff so we can see actual performance change in general on a small scale, but that's out of scope for 124
+[16:49:06] <adiabat> right now just gives an error and says "row reduction not implemented", but could implement that and then keep forestRows and numLeaves in sync
+[16:49:55] <adiabat> rjected: ok sure, yeah I can merge it as a temporary thing.  The real issue is that it's duplicating hashing work, which probably doesn't slow it down *that* much
+[16:50:10] <adiabat> but still... kindof ugly to have that, it's basically a bug
+[16:50:57] <rjected> yup, I can look into the duplicate hashing
+[16:51:00] <adiabat> ja: forestRows is independent so that it can be "too high" and stay at eg. 8 when numLeaves goes from 150 to 100
+[16:51:04] <rjected> If noone else is
+[16:51:25] <adiabat> yeah I ... think I know where it is
+[16:51:54] <adiabat> dedupeSwapDirt() doesn't actually dedupe
+[16:52:00] <adiabat> within it's arguments
+[16:52:04] <rjected> oh hmm
+[16:52:05] <adiabat> it might be as simple as doing that
+[16:52:05] <ja> adiabat: hmmm is that because 2^8 = 128 and 100 is below 128?
+[16:52:23] <adiabat> ja: right, so forestRows should go down to 7
+[16:52:38] <adiabat> but instead it just stays at 8, and there's a bunch of empty space
+[16:52:56] <ja> yeah ok, i kinda get it
+[16:53:04] <adiabat> the thinking is... what if in the actual usage, you get right around a threshold, like 65535 leaves or something
+[16:53:26] <adiabat> and it goes up and down every block, and keeps calling reMap(), which is very slow
+[16:54:10] <adiabat> but I don't think it actually does that.  But maybe it's a risk.  So it does add a bit of complexity to have a separatre forestRows
+[16:54:14] <ja> it's kinda like garbage collection, no?
+[16:54:32] <adiabat> kindof, yeah, where it instead just leaves unused memory
+[16:54:37] <adiabat> to avoid collecting
+[16:54:54] <adiabat> because it knows that numLeaves will go back up pretty soon
+[16:55:08] <adiabat> so don't free the memory you'll just have to allocate again soon
+[16:56:13] <ja> i think i will understand it more once i write some more tests for my haskell impl
+[16:56:41] <adiabat> ok, sounds good.  Yeah it is one of the weirder aspects, and maybe a premature optimization
+[16:56:49] <kcalvinalvin> speaking of that, is the haskell repo open source?
+[16:57:03] <kcalvinalvin> Would be cool to look at it
+[16:57:05] <ja> yeah, it's just my fork, it's the cgo branch
+[16:57:12] <kcalvinalvin> ah ok
+[16:57:23] <adiabat> but it does feel that especially in an adversarial setting, someone could try to push numLeaves up and down over a power of 2 to harass bridge nodes
+[16:57:55] <ja> kcalvinalvin, it's pretty dumb right now, just a function for function port. just bought the optics book, would be cool if some optics could apply
+[17:01:17] <ja> adiabat: it's an interesting problem for sure, this tradeoff between minimal data usage and performance over many operations. it just irks the haskeller in me when something is not minimal . but of course i have to concede that it shouldn't be DoSable
+[17:08:22] <adiabat> ja: yeah there might be a better way that avoids the complexity, not sure
+[17:08:54] <adiabat> since there currently is forestRows, it probably makes sense to pre-allocate a lot and start at forestRows = 20 or so
+[17:10:31] <ja> i find the porting makes me understand the data dependencies. i like splitting things into pure functions since the mutable algorithms are easier to comprehend once they are segregated from the pure functions, which can be treated as black boxes, kinda
+[17:11:40] <ja> it's funny how this even carries over into go, imho. if a go function takes only slices of primitives, a reader knows that the callee can't mutate that
+[17:13:30] <ja> adiabat: but it would be a small speed up no? if i understand correctly, forestrows can only grow. so the time lost is because a batch init of a large tree is faster than a few remaps
+[17:14:26] <ja> but are those remaps so expensive?
+[17:33:33] <adiabat> yeah remap is really expensive
+[17:33:46] <adiabat> O(n) where n is numLeaves
+[21:06:13] *** Quits: achow101 (~achow101@unaffiliated/achow101) (Ping timeout: 264 seconds)
+[22:01:44] *** Joins: achow101 (~achow101@unaffiliated/achow101)
