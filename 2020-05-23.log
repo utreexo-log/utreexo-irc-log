@@ -1,0 +1,4 @@
+[21:56:05] <ja> seems like accumulator.DedupeSwapDirt([]uint64{33, 40}, []accumulator.Arrow{{1, 40}}) returns [33 40]
+[21:56:08] <ja> isn't that wrong?
+[21:58:15] <ja> i thought it would remove any elements of a that appear in b.to, assuming they are both sorted
+[23:25:00] <ja> i don't understand makeDestInRow. is there any particular reason that the condition is "len(maybeArrow) == 0" instead of "len(maybeArrow) == 0 || len(hashDirt) != 0 && hashDirt[0] > maybeArrow[0].To"?
