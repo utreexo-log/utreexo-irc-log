@@ -1,0 +1,19 @@
+[01:26:35] *** Joins: dergoegg1 (~dergoegge@196.240.57.220)
+[01:28:54] *** Quits: dergoegg1 (~dergoegge@196.240.57.220) (Client Quit)
+[01:32:47] *** Joins: dergoegge (~dergoegge@196.240.57.220)
+[04:50:01] *** Quits: rjected (~dan@pool-71-184-77-198.bstnma.fios.verizon.net) (Ping timeout: 264 seconds)
+[05:04:48] *** Joins: rjected (~dan@pool-71-184-77-198.bstnma.fios.verizon.net)
+[18:10:08] <dergoegge> hey guys! i am computer science student from Berlin and i would like to contribute some more to utreexo. any pointers on what i should work on?
+[18:41:12] <ja> dergoegge: IMHO some more comments in the algorithms would be nice
+[18:42:00] <ja> dergoegge: people seems to want a script interpreter to enable full-node equivalent security, the others can talk to you about that
+[18:42:33] <ja> dergoegge: maybe check out if kcalvinalvin has some branches to see what he is working on
+[19:12:48] *** Quits: dergoegge (~dergoegge@196.240.57.220) (Ping timeout: 265 seconds)
+[19:54:25] *** Joins: dergoegge (~dergoegge@196.240.57.220)
+[19:55:12] <ja> dergoegge: did you see my problem with dedupeSwapDirt ? maybe you can confirm the bug or tell me if i am wrong
+[19:59:34] <ja> dergoegge: ah, calvin just sent a new PR
+[23:09:21] <dergoegge> ja: can confirm thats either a bug or the documentation of dedupeSwapDirt is inaccurate. 
+[23:14:30] <ja> thanks. i think it is most likely a bug, would be weird to write the docs if there were such a weird edge case. probably an off-by-one
+[23:15:00] <ja> would be awesome if it could explain the problems people have been having syncing testnet
+[23:15:59] <dergoegge> ja: should i look into fixing it or do you want to do that?
+[23:16:36] <ja> dergoegge: i think it would be a great first issue, so if you want, please go ahead!
+[23:17:19] <dergoegge> ja: ok great
