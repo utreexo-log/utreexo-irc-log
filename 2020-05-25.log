@@ -1,0 +1,23 @@
+[00:09:28] <dergoegge> ja: not an off-by-one but still an easy fix: #129
+[00:11:03] <dergoegge> are these testnet issues documented somewhere? 
+[01:23:27] <ja> dergoegge: no, but if you try syncing to testnet, it halts somewhere, should be easy to reproduce. but you need the testnet chain of course
+[01:32:21] <dergoegge> ja: just ran into that issue. i opened a issue on github #130. is that what other people have been reporting aswell?
+[01:33:06] <dergoegge> i had the same issue for the current master and the branch with my fix for dedupeSwapDirt
+[01:41:27] <ja> hmm i don't know, because i havn't tried recently. but probably tadge will come on in about 12 hours and he can tell you
+[01:41:54] <ja> thanks for the fix!
+[03:45:22] <rjected> adiabat: Can you explain to me what you mean by "within its arguments"? Do you just mean the arguments should be modified in dedupeSwapDirt()?
+[03:58:58] <rjected> we can for sure do that, but there would be exra elements in `a` if any dedupe actually happened. It would also prevent needing to allocate the `c` array (can just modify `a` itself and return a slice of `a`)
+[04:04:57] <rjected> you'd always have to overwrite the first argument with the return value though
+[04:05:04] <kcalvinalvin> dergoegge I left a comment on issue #130
+[07:44:34] *** Quits: dergoegge (~dergoegge@196.240.57.220) (Read error: Connection reset by peer)
+[07:47:00] *** Joins: dergoegge (~dergoegge@196.240.57.220)
+[14:37:47] <kcalvinalvin> adiabat does ibdsim work for you at the moment?
+[14:38:34] <kcalvinalvin> It just panics that it couldn't connect to 127.0.0.1 on master
+[15:07:05] <dergoegge> kcalvinalvin: is there a log from genproofs that says "blockServer accept error: ..."? is 127.0.0.1:8338 still accepting connections? if not i might know what happened
+[15:09:47] <kcalvinalvin> Ah I just didn't have genproofs running. Huh that's cool, didn't know networking stuff is almost there
+[19:01:37] *** Quits: dergoegge (~dergoegge@196.240.57.220) (Ping timeout: 246 seconds)
+[19:22:32] *** Joins: dergoegge (~dergoegge@196.240.57.220)
+[22:43:48] *** Joins: dergoegg1 (dergoegge@gateway/vpn/nordvpn/dergoegge)
+[22:46:42] *** Quits: dergoegge (~dergoegge@196.240.57.220) (Ping timeout: 260 seconds)
+[23:09:53] *** Quits: stevenroose (~steven@irc.roose.io) (Quit: ZNC 1.7.4 - https://znc.in)
+[23:11:09] *** Joins: stevenroose (~steven@irc.roose.io)
