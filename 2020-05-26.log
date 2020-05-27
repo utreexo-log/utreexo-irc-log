@@ -1,0 +1,83 @@
+[00:26:23] <adiabat> Hi - sorry was offline for the weekend, but back to work :)
+[00:26:54] <adiabat> dergoegge: welcome & glad to have more people working on this!
+[00:27:21] <adiabat> there are lots of things to work on -- there's also a weekly utreexo call in 13 hours
+[00:28:05] <adiabat> if the timezone you're in works for that you're welcome to join & we can talk about what we're working on and good places to start
+[00:28:37] <adiabat> or can stick to IRC / github, whichever works
+[00:28:52] <adiabat> I should probably update the github project stuff...
+[00:29:22] <adiabat> one area I don't think anyone's working on now is an integration test for the cmd side
+[00:29:58] <adiabat> something like a script that spins up a bitcoin-core regtest node, mines lots of blocks and makes lots of transactions
+[00:30:14] <adiabat> and then the cmd side can go through the blk.dat and rev.dat files it creates
+[00:30:41] <adiabat> so we have randomized blk/rev files without having to move around gigabytes, just generate on the fly
+[00:38:51] *** dergoegg1 is now known as dergoegge
+[00:43:34] <adiabat> also yeah the #130 issue... commented on that
+[00:43:52] <dergoegge> adiabat: i will try to join, but may be i wont make it since my sleep schedule is all fucked up currently... thats at 15:30CET?
+[00:44:54] <adiabat> yes 15:30 CET, 9:30am EDT for me
+[00:45:41] <adiabat> I'm OK doing it at a different time, kcalvinalvin is in korea and fanquake is in australia so there's not really any good time for everyone heh
+[00:50:40] <adiabat> ja: looking at makeDestInRow() ... the comment calling it is a bad sign...
+[00:52:46] <dergoegge> no thats fine for me, i have to get my schedule back to normal anyway.
+[00:55:09] <adiabat> ok cool it's meet.jit.si/utreexo
+[00:55:53] <adiabat> ja: I think there was a reason for the len(hashDirt) != 0 part... but maybe that reason is gone?
+[00:55:59] <fanquake> I should be around again tonight
+[00:56:08] <adiabat> I should comment more *when* i'm coding, not after...
+[00:56:41] <dergoegge> the integration tests sound like a good thing for me to work on, since it doesn't really require indepth knowledge of the accumulator package
+[00:57:03] <adiabat> dergoegge: yeah it could even be in python or shell script or something
+[00:57:28] <adiabat> I thought something like that would exist in the bitcoin-core test suite but not really I guess
+[00:57:55] <ja> how would you get the block data into utreexo from shell script :O ?
+[00:58:28] <adiabat> shell script would call bitcoin-cli rpcs a bunch
+[00:58:37] <adiabat> to generate a few blk / rev files
+[00:58:41] <adiabat> then stop bitcoin-core
+[00:58:51] <adiabat> then run cmd genproofs
+[00:58:54] <adiabat> and cmd ibdsim
+[00:59:24] <adiabat> maybe shell script wouldn't be the best way to do it, but I think you could
+[01:03:00] <dergoegge> i could also do it in go and use some bitcoin rpc client library for the rpc calls, that way we wouldn't have to use a different language.
+[01:03:38] <adiabat> sure, also true, it can certainly be done from go test as well
+[01:07:44] <dergoegge> why does bitcoin core need to be stopped? is that because of parallel access to leveldb? because eventually that shouldn't be the case right?
+[01:08:58] <ja> here's a weird idea: you can make c bindings for utreexo and have bitcoind call directly into it
+[01:09:50] <adiabat> I guess bitcoin core can keep running... we just need read access to the blk/rev files
+[01:10:32] <adiabat> ja: heh yeah, could do that... cfields made the start of a c++ utreexo library too
+[01:11:11] <adiabat> I just want to get it like "working" (even if buggy / slow) and then I guess have a spec / other languages / bindings / implementations
+[01:12:03] <ja> formal spec like promela or tla+ ? :P
+[01:12:44] <ja> regarding reading blk/rev i assume bitcoin doesn't open them in some exclusive mode?
+[01:13:36] <ja> *bitcoin-core
+[01:15:45] <adiabat> hah not "formal" but more bip-like
+[01:15:58] <adiabat> I think it just appends only to blk / rev
+[01:16:30] <adiabat> if it re-arranged things in them I'd be pretty ... like, cmon you're writing things in the wrong order *and* reordering the data...?
+[01:34:37] <dergoegge> regarding #130: could this also be a bug in bitcoin-core? seems weird that blk and rev files randomly don't have the same order.
+[01:37:05] <dergoegge> apperently not: https://bitcoin.stackexchange.com/a/92141/96288
+[02:54:43] *** Quits: dergoegge (dergoegge@gateway/vpn/nordvpn/dergoegge) (Ping timeout: 265 seconds)
+[03:00:42] <adiabat> dergoegge: yeah it's pretty random, I don't think these .dat files are really meant for external use...
+[12:42:30] *** Joins: dergoegge (dergoegge@gateway/vpn/nordvpn/dergoegge)
+[15:32:23] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[15:37:52] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[16:43:25] *** Quits: dergoegge (dergoegge@gateway/vpn/nordvpn/dergoegge) (Ping timeout: 264 seconds)
+[17:11:24] *** Joins: dergoegge (~dergoegge@ip5b41d881.dynamic.kabel-deutschland.de)
+[17:12:20] *** Quits: fanquake (sid369002@gateway/web/irccloud.com/x-phqdamalznlcbqrw) (Ping timeout: 265 seconds)
+[17:14:34] *** Joins: fanquake (sid369002@gateway/web/irccloud.com/x-xwnmppxqhszbxoka)
+[17:16:28] *** Quits: dergoegge (~dergoegge@ip5b41d881.dynamic.kabel-deutschland.de) (Ping timeout: 272 seconds)
+[17:16:33] *** Joins: dergoegg1 (~dergoegge@196.240.57.156)
+[18:32:31] *** Quits: dergoegg1 (~dergoegge@196.240.57.156) (Ping timeout: 258 seconds)
+[19:32:22] <adiabat> We have received several complaints about variable names and the official utreexo steering committee is looking in to the matter
+[19:33:05] <adiabat> heh but ok what should things be called, like in types.go lines 68-96 or so
+[19:33:18] <adiabat> bitcoin blocks are just... "blocks"
+[19:33:56] <adiabat> along side that block there's the accumulator proof, which is a bunch of hashes and some int64s
+[19:34:27] <adiabat> and also the leafData for every input spent.
+[19:34:32] <adiabat> right now it's
+[19:34:47] <adiabat> bitcoin block: block
+[19:35:01] <adiabat> extra data associated with that block: UData
+[19:35:14] <adiabat> block and UData together: UBlock
+[19:36:22] <adiabat> or maybe don't even stick the accumulator proof and leafdata slice together into the same struct?
+[19:36:43] <adiabat> then a "UBlock" would just be - block, accumulator proof, []leafdata
+[19:37:09] <adiabat> (oh and rememberLeaves which I guess could also be merged into the accumulator.BatchProof if that's easier
+[22:07:12] <adiabat> also I can't figure out how to do the UtxoViewpoint without changing btcd; everything is unexported
+[22:07:31] <adiabat> just need to capitalize a bunch of stuff then it'll work
+[22:10:54] <ja> adiabat: i use vim-go , it has a command called GoRename which does everything automatically. i think it calls into gopls
+[22:11:13] <adiabat> for the UBlock structs?
+[22:11:27] <adiabat> Yeah my IDE can rename everything too, I was just wondering if people have better names
+[22:11:35] <ja> aaah ok
+[22:11:37] <adiabat> kcalvinalvin didn't seem to like the names :)
+[22:11:39] <ja> which IDE do you use?
+[22:11:43] <adiabat> LiteIDE
+[22:11:59] <adiabat> it's go-specific and pretty simple but I like
+[22:12:01] <adiabat> *it
+[22:58:39] *** Joins: dergoegge (~dergoegge@196.240.57.204)
+[23:13:20] <dergoegge> adiabat: UtxoViewpoint has methods to add tx outputs: *AddTxOut*, not 100% sure if that works as needed though
