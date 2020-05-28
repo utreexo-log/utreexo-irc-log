@@ -1,0 +1,92 @@
+[00:17:23] <adiabat> dergoegge: unfortunately it doesn't fit, it needs a transaction, and adds all its outputs
+[00:17:29] <adiabat> we don't have transactions, just utxos
+[00:18:10] <adiabat> I made a NewUtxoEntry() function for btcd, it's super simple and I just coped the clone() method
+[00:18:33] <adiabat> func NewUtxoEntry(amount int64, pkScript []byte, blockHeight int32, isCoinbase bool) *UtxoEntry { obvious }
+[00:19:06] <ja> obvious, my favorite language keyword ;)
+[00:21:38] <ja> adiabat: is the output of updateDirt supposed to be unique? because it is not
+[00:22:14] <ja> i mean, i have repeating values like 140, 141, 140, 141...
+[04:08:58] <kcalvinalvin> adiabat I'll clean up my re-naming PR and push it this week
+[04:46:35] *** Quits: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net) (Quit: ZNC 1.7.4+deb7 - https://znc.in)
+[04:47:52] *** Joins: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net)
+[12:38:17] <adiabat> ja: it's supposed to be but isn't
+[12:38:44] <adiabat> so that's a bug I guess, but doesn't affect correctness, just slows things down
+[15:04:39] <ja> adiabat: do you think it would be slower to return a map[uint64]struct{} (basically a set, since the value type is the unit type) ?
+[15:05:03] <ja> that wouldn't be in order, but i guess if you can traverse in order, it would be fine?
+[15:08:48] <adiabat> yeah there's no ordered maps huh
+[15:09:07] <adiabat> also it seems like even without maps it woudln't be to hard to avoid duplicate
+[15:10:16] <ja> by enforcing that the new element is bigger than the last and not just unequal?
+[15:12:19] <adiabat> possibly...
+[15:12:45] <adiabat> if it's always duplicates back and forth yeah
+[15:13:06] <adiabat> but does it ever go 140, 141, 134, 144...
+[15:13:07] <adiabat> I'm not sure
+[15:14:51] <ja> well, changing != to < breaks the tests
+[15:16:35] <adiabat> yeah I think it needs to be a bigger change than just that
+[15:16:35] <adiabat> I can take a look later this week & maybe get it optimized
+[15:18:38] <ja> excellent! i can't grok it...
+[15:20:35] <adiabat> heh yeah I think that was an area that was tricky and didn't understand it super well either, and once I got it working just said OK good enough
+[15:20:42] <adiabat> but... it's not really good enough
+[16:15:15] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[17:25:05] <dergoegge> i got started on the integration test, but genproofs currently panics and i am unsure if thats my fault or if there is actually something wrong. all the test currently does is mine 101 empty blocks and then run genproofs. i created a draft pr: #132
+[17:27:24] <kcalvinalvin> dergoegge interesting WIP PR. Do you plan to remove the json file for the completed PR?
+[17:29:16] <dergoegge> yeah i want to get rid of it, i currently dont know a good way to generate lots of test transactions. that file is just used to create 1000 txos.
+[17:29:56] <dergoegge> the rpcs sendmany and sendtoaddress are kinda slow, so generating lots of transactions would take a while
+[17:34:03] <kcalvinalvin> adiabat any ideas?
+[18:34:56] <adiabat> faster than sendtoaddress?
+[18:34:59] <adiabat> or why the panic?
+[18:35:21] <adiabat> Not sure about panic, for me genproofs runs OK on testnet / mainnet data now
+[18:35:24] <adiabat> with current master
+[18:36:12] <adiabat> sendmany is probably not as fast because of the sighash problem
+[18:36:19] <adiabat> I think it doesn't default to mining to segwit
+[18:36:44] <adiabat> so if you can set it to mine to bech32 addresses and send to bech32 addresses that might be faster
+[18:37:25] <ja> it doesn't mine to any address per default now, you gotta supply it
+[18:37:34] <ja> generate -> generatetoaddress
+[18:37:42] <adiabat> also instead of the address list you can just call 
+[18:37:44] <adiabat> yup that :)
+[18:37:51] <adiabat> oh also
+[18:38:07] <adiabat> yeah just getnewaddress and pipe that to sendtoaddress
+[18:38:25] <adiabat> but presumably the wallet is slower than the block checking, so that might slow it down
+[18:38:46] <adiabat> but more small transactions is maybe faster than fewer large transactions, and for utreexo testing either works
+[19:15:31] <kcalvinalvin> adiabat I don't think we even need to do a fake utxoview
+[19:16:27] <kcalvinalvin> Everything we need is there! This is exciting :)
+[19:42:19] <kcalvinalvin> In my WIP PR, (#128). The directory 'consensus/' isn't getting any complaints by the compiler now :) Haven't tested yet but I think we're there
+[20:16:58] <adiabat> I guess the approach I was looking at was to use as much btcd code as possible
+[20:17:21] <adiabat> consensus/txvalidation.go is a lot of code but it's all pretty much copied from btcd right?
+[20:19:08] <adiabat> ... I mean of course everything in btcd is lowercase which is superannoying, so the newTxValidator() call is private...
+[20:20:16] <adiabat> I guess I'm just more coming at it from trying to change / add the fewest things to btcd
+[20:21:10] <ja> so you'd have a fork with a diff that just changes capitalization?
+[20:21:17] <adiabat> like if all we need is NewUtxoEntry(), and it doesn't touch anything else, that seems like people would be fine merging it
+[20:21:44] <adiabat> but changing the txValidator struct so it doesn't have a UtxoViewpoint in it anymore... that's not really something they can merge
+[20:21:49] <adiabat> and keep normal btcd operation
+[20:22:18] <adiabat> ja: ideally not a fork
+[20:22:56] <adiabat> if we open a PR that's just hey can we add NewUtxoEntry() it's like 5 lines and doesn't change anything
+[20:23:22] <adiabat> I mean maybe they'd ignore the PR but it seems pretty harmless and easy to merge
+[20:39:01] <ja> roasbeef is maintaining it now, so it's all up to him, i guess
+[20:45:08] <rjected> Well jcv has been more active, I can help get this merged if you want - it doesn't seem controversial
+[20:45:56] <rjected> btcd process to get stuff merged is usually just submit PR, then review, then get maintainer to merge
+[20:47:24] <rjected> First step is submit PR though, who wants to do it?
+[20:48:21] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[20:48:40] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[21:09:32] *** Quits: dergoegge (~dergoegge@196.240.57.204) (Ping timeout: 246 seconds)
+[21:12:36] *** Joins: dergoegge (~dergoegge@196.240.57.204)
+[21:25:07] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[21:25:34] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[21:58:27] <dergoegge> adiabat i have not been able to get genproofs to run in regtest mode, it just panics. you should be able to reproduce this by running the test script in my pr *but* read the top comment in that file first so you dont mess up your bitcoin.conf.
+[22:01:16] <adiabat> dergoegge: ok will try the regtest pr, maybe there's something going on that's regtest specific..?  I can think of a few things
+[22:01:32] <adiabat> like maybe the regtest blk.dat files have some different formatting
+[22:01:41] <adiabat> I think so far I've only looked at testnet / mainnet
+[22:02:01] <adiabat> rjected: I think before a PR we should have code that uses it to do something
+[22:02:26] <adiabat> if it's just "hey we might want this or use this later" it's not as persuasive
+[22:02:58] <adiabat> if it's "hey we have utreexo working calling btcd, with a couple minimal additions (mainly for exporting) we can use it
+[22:03:38] <adiabat> that seems like they're more likely to merge it, especially if there's no impact to btcd
+[22:04:00] <adiabat> if we can then start working on better integration or getting btcd itself to use utreexo libraries, great
+[22:04:17] <adiabat> but that would be later once we've got this genproofs /ibdsim working well
+[22:04:45] <dergoegge> adiabat: that could be the case, the error comes from util.GetRawBlockFromFile
+[22:05:30] <adiabat> hmm I can check, it might be using a different 4 bytes separating each block
+[22:40:15] <dergoegge> also: i tried using sendtoaddress and piping it getnewaddress at first but thats just way to slow or i guess it depends on how many transactions we want in the blocks. should the blocks be full? or are ~10txs per block enough? 
+[22:46:16] <rjected> adiabat: yeah you're right there probably should be some need for the export rather than adding an export just in case
+[22:48:11] <rjected> But in the event that there is that need, or you have to do some weird workaround to call btcd code, it would be a good idea to pr I think
+[22:48:36] <rjected> especially if it's a
+[22:48:47] <rjected> *an export / just making something public
+[22:49:49] <rjected> changing APIs or making something non backwards compatible would be more difficult (but not impossible, depending on how necessary) to merge
+[23:00:15] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[23:00:52] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
