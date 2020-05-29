@@ -1,0 +1,82 @@
+[00:00:27] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[00:01:19] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[00:36:17] <dergoegge> adiabat: i figured out what caused the panic. #133 fixes it.
+[02:19:26] <kcalvinalvin> adiabat Ah ok sure. Are you working on it at the moment? I could change to use a pretend utxoviewpoint fairly easily
+[02:24:08] <kcalvinalvin> yes txvalidation basically replaces every utxoviewpoint with the actual data it needs
+[02:24:14] <kcalvinalvin> Besides that it
+[02:24:20] <kcalvinalvin> 's pretty much the same
+[02:32:43] *** Quits: dergoegge (~dergoegge@196.240.57.204) (Read error: Connection reset by peer)
+[02:41:41] *** Joins: dergoegge (~dergoegge@196.240.57.204)
+[04:16:36] *** Quits: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net) (Ping timeout: 272 seconds)
+[05:00:24] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Quit: Leaving)
+[05:00:51] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[10:35:12] *** Joins: dergoegg1 (~dergoegge@196.240.57.204)
+[10:38:02] *** Quits: dergoegge (~dergoegge@196.240.57.204) (Ping timeout: 246 seconds)
+[11:00:41] *** Quits: dergoegg1 (~dergoegge@196.240.57.204) (Ping timeout: 272 seconds)
+[11:02:32] *** Joins: dergoegge (~dergoegge@196.240.57.204)
+[11:13:37] *** Joins: dergoegg1 (~dergoegge@196.240.57.204)
+[11:16:31] *** Quits: dergoegge (~dergoegge@196.240.57.204) (Ping timeout: 272 seconds)
+[11:44:25] *** Joins: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net)
+[12:16:21] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[12:17:05] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[12:33:58] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[12:34:25] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[13:13:09] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[13:13:34] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[13:15:15] *** Joins: dergoegge (dergoegge@gateway/vpn/nordvpn/dergoegge)
+[13:17:12] *** Quits: dergoegg1 (~dergoegge@196.240.57.204) (Ping timeout: 246 seconds)
+[14:22:45] <kcalvinalvin> adiabat I made a PR that does has minimal code change
+[14:23:38] <kcalvinalvin> But idk... there really isn't any good way to get UtxoViewPoint to work without unsafe or copying the whole code
+[14:24:43] <kcalvinalvin> Unless I guess something is pushed to btcd... Not sure how they'll like the change since it does make the package more dangerous
+[14:31:45] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[14:32:43] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[14:56:38] *** Quits: dergoegge (dergoegge@gateway/vpn/nordvpn/dergoegge) (Read error: Connection reset by peer)
+[15:05:31] *** Joins: dergoegge (dergoegge@gateway/vpn/nordvpn/dergoegge)
+[15:53:03] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[15:53:30] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[16:51:13] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[16:51:43] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[18:33:06] <adiabat> kcalvinalvin: ok looking at PR
+[18:43:36] <adiabat> I think I see where you're going with this but I don't think this apporach works...
+[18:43:41] <adiabat> *approach
+[18:44:11] <adiabat> the vp.AddTxOuts(tx, ub.Height) part I think will not work properly
+[18:44:48] <adiabat> because UtxoViewpoint.AddTxOuts() puts the utxos into the map indexed by outpoint, which includes the txid
+[18:45:22] <adiabat> and there isn't any way to manually force a txid; when you give it the tx in vp.AddTxOuts() it calculates the txid itself
+[18:45:26] <adiabat> from the tx you give it
+[18:46:02] <adiabat> but the tx we're giving it, in this case the one constructed on line 76, doesn't have any inputs
+[18:46:23] <adiabat> so the txid will be different and not match any actual txid that shows up in a real block
+[18:46:45] <adiabat> and we don't have access to the previous inputs in this case.  We do know what the txid was, because we know the outpoint
+[18:47:16] <adiabat> but we don't have the whole previous transaction.  We could try to store the whole thing, so that we could feed it to vp.AddTxOuts() 
+[18:47:21] <adiabat> that would get the correct txids but...
+[18:47:42] <adiabat> that's a big change ... no that's huge, that would change everything
+[18:47:48] <adiabat> we can't get it from the rev data at all
+[18:48:32] <adiabat> anyway this is why I think we do need a NewUtxoEntry() call; otherwise we can't add correct entries to the utxoViewpoint
+[18:49:55] <adiabat> either that, or a way to get a msgTx to have a forced txid.  Which is cached, so maybe...?
+[18:50:17] <adiabat> or just get em to capitalize their func (view *UtxoViewpoint) addTxOut()
+[18:50:36] <adiabat> which takes totally different arguments from the func (view *UtxoViewpoint) AddTxOut()
+[18:50:46] <adiabat> despite being named... the same thing!
+[18:51:15] <adiabat> the lowercase one we could use, as it accepts an outpoint directly, but the uppercase one calls tx.Hash() itself
+[18:51:45] <adiabat> the first line of which is if t.txHash != nil { return t.txHash } ... which is also not exported! hah
+[18:52:34] <adiabat> I mean if I was in charge of the btcd codebase, I think having UtxoViewpoint.AddTxOut() and UtxoViewpoint.addTxOut() 
+[18:53:37] <adiabat> which take completely different arguments and work differently is... a bit daft and I'd just export the lowercase one 
+[18:53:44] <adiabat> and get rid of the uppercase one
+[18:53:59] <adiabat> But... that seems like a bigger change, because things call those two
+[18:54:44] <adiabat> not just but in mempool.go they call utxoView.AddTxOut()
+[18:55:10] <adiabat> I mean it'd be super easy to change that to have the caller calculate the outpoint but whatever
+[18:55:42] <adiabat> Adding a NewUtxoEntry() call is 5 lines or so, and doesn't affect anything else, nothing else in btcd has to change
+[18:56:10] <adiabat> anyway I think that's the best / lowest impact way but if there are other ways we can definitely try.  I just don't see any
+[18:56:51] <adiabat> and their current exported AddTxOuts() doesn't work for us, unless there's some tricky way around it but I couldn't find one
+[20:19:52] *** Joins: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net)
+[21:53:20] <dergoegge> adiabat: currently ibdsim panics on regtest, i think its because util.UblockNetworkReader does not check for EOF when receiving ublocks, so when the server closes the connection because its done sending the ibdsim panics on the deserialization call. ideally the server should probably not close the connection and announce a new ublock when it sees a new block right?
+[21:53:43] <dergoegge> but i wonder why this did not happen on test/mainnet
+[21:54:13] <dergoegge> (which i have not tested, but you said that it works)
+[22:43:20] <dergoegge> btw. there is way to read/write private go fields: https://itnext.io/manipulating-private-fields-in-go-4da4ca525717. don't know if using unsafe pointers is worth it though.
+[22:46:03] <dergoegge> could be used to set t.txHash, and then call AddTxOut
+[22:46:13] <dergoegge> thats a total hack though :D
+[23:08:40] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[23:09:34] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[23:16:18] <adiabat> dergoegge: oh it's giving EOF errors on testnet after everytyhing's done
+[23:16:52] <adiabat> yeah IBDsim needs to do something besides panic when done, just have a clean exit
+[23:17:44] <dergoegge> i already implemented an exit to get the test running, should i send a PR?
+[23:26:42] <dergoegge> #136
+[23:27:27] <adiabat> OK
