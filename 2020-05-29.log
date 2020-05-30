@@ -1,0 +1,70 @@
+[00:11:50] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[00:12:07] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[05:05:54] <kcalvinalvin> adiabat yup am aware of that
+[05:07:13] <kcalvinalvin> If NewUtxoEntry() can be put inside btcd code then sure.... but it's not gonna build for anyone unless we make a patch script...
+[08:23:16] <kcalvinalvin> Just looked at PR #135 and it works well. Just have to get a PR into btcd...
+[08:24:44] <kcalvinalvin> Maybe coax them by presenting this as a first PR of the whole Utreexo implementation later down the road? (which I want to do)
+[12:31:57] *** Quits: dergoegge (dergoegge@gateway/vpn/nordvpn/dergoegge) (Ping timeout: 246 seconds)
+[12:34:24] *** Joins: dergoegge (dergoegge@gateway/vpn/nordvpn/dergoegge)
+[14:19:29] <adiabat> rjected: can you ask btcd people?  I think the NewUtxoEntry() is super minimal change that they'd be cool with but you know more about what they're working on?
+[14:19:48] <adiabat> also yeah #135 works and checks all the signatures but it's slow... 
+[14:19:51] <adiabat> which I mean, yeah
+[14:20:01] <adiabat> checking signatures is the slow part
+[14:20:53] <kcalvinalvin> #137 is the backup I guess. One thing I'm working out but it should also work
+[14:21:04] <kcalvinalvin> after that thing is worked out
+[14:27:00] <adiabat> OK... I mean, I really like the #135 way better and think exporting just that will be OK...
+[14:27:23] <adiabat> so I don't want you to spend a ton of effort on other ways and we don't end up using it...
+[14:27:38] <adiabat> but yeah #135 is fun with the dedupe
+[14:27:45] <adiabat> that took some figuring out but I like it
+[14:28:37] <adiabat> and I *think* it protects against misordered dedupe.  Though not on the genproofs side, but we're not checking consensus on genproofs side anyway
+[14:29:07] <adiabat> also I could try hooking more in to the attach block btcd stuff but... for now checking all txs/sigs is pretty good
+[14:29:25] <adiabat> but... yeah there is all that like, soft forks and stuff to deal with
+[14:33:46] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[14:38:33] <kcalvinalvin> I do like the fake UtxoView thingy. I think the rev stuff may be out of order..? Can't fail with utxoview
+[15:02:42] <adiabat> rev stuff is out of order?  I think it's in the right order
+[15:03:21] <adiabat> but yeah, the fact that it's a map lets you add things in on the fly, like the dedupe output skiplist
+[15:03:49] <adiabat> which seems to work; I manually tried to get it to fail and it seemed to work
+[15:04:40] <kcalvinalvin> Yeah idk what's going on with my branch
+[15:05:00] <kcalvinalvin> Besides mempool, what's the next "big" feature to finish?
+[15:05:48] <kcalvinalvin> Lots of small cleansups/fixes todo
+[15:07:43] <rjected> adiabat: yeah I can ask
+[15:11:43] <rjected> I'm just going to put an issue up on btcd and tag people to get opinions
+[15:12:09] <rjected> It would be best though if accompanied by a PR
+[15:15:47] <rjected> I guess now that I think about it, maybe a PR is the best place to have discussion so I'll just ping ppl on irc
+[15:16:53] <adiabat> I can make the NewUtxoEntry() PR
+[15:17:12] <adiabat> it's 15 lines or something
+[15:17:43] <adiabat> https://github.com/mit-dci/utreexo/pull/135/files#diff-3f7b8f9991ea957f1f4ad9f5a95415f0R104-R117
+[15:17:58] <adiabat> or you can, whichever works better :)
+[15:19:14] <kcalvinalvin> adiabat ibdsim doesn't resume right now right?
+[15:19:26] <kcalvinalvin> And ttl values aren't being used as well right?
+[15:26:03] <rjected> If you change the value/pkscript params to a *wire.TxOut then I think it would be all good
+[15:26:28] <rjected> Like I would hit "approve" on review
+[15:27:27] <adiabat> kcalvinalvin: I think IBDsim is still OK with resuming
+[15:27:39] <adiabat> ttl is not used now though
+[15:28:06] <adiabat> rjected: you think they'll want a *wire.TxOut instead of amount int64, pkScript []byte?
+[15:28:16] <adiabat> sure either way works
+[15:36:12] <rjected> It doesn't really matter too much it's really just a nit because the type is already there, like why not use it
+[15:41:14] <rjected> oh crap I just remembered we can't actually merge anything because roasbeef needs to turn off travis
+[15:43:25] *** Quits: dergoegge (dergoegge@gateway/vpn/nordvpn/dergoegge) (Ping timeout: 264 seconds)
+[15:46:40] <rjected> fun times in btcd land
+[15:57:09] *** Joins: dergoegge (dergoegge@gateway/vpn/nordvpn/dergoegge)
+[15:57:39] <adiabat> turn off travis...? huh
+[15:59:34] <kcalvinalvin> Oh yeah cuz github integration with travis literally blocks merging if travis doesn't pass
+[15:59:48] <adiabat> fun :)
+[16:15:28] <rjected> yep, and this #1575 pr got merged which removed the Travis yml (we're switching to GitHub actions) so now travis is confused and can't run, so nothing passes and nothing is mergeable
+[16:17:11] <adiabat> ok made PR #1588 in btcd
+[16:17:31] <adiabat> looking at it though, really they should change AddTxOut()... 
+[16:17:36] <adiabat> but whatever, either way is fine
+[16:22:26] <rjected> changing AddTxOut would be a larger change and is also changing the signature of an exported function so a little more controversial
+[16:24:05] <rjected> but it being controversial depends on whether or not people are actually using that function
+[16:24:59] <rjected> I don't think people are, and stuff gets changed all the time
+[16:25:05] <rjected> but yeah
+[17:40:18] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 246 seconds)
+[17:56:14] *** Quits: dergoegge (dergoegge@gateway/vpn/nordvpn/dergoegge) (Ping timeout: 240 seconds)
+[18:06:25] *** Joins: dergoegge (dergoegge@gateway/vpn/nordvpn/dergoegge)
+[18:16:42] *** Quits: dergoegge (dergoegge@gateway/vpn/nordvpn/dergoegge) (Read error: Connection reset by peer)
+[18:21:15] *** Joins: dergoegge (dergoegge@gateway/vpn/nordvpn/dergoegge)
+[19:01:16] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[20:14:46] *** Quits: dergoegge (dergoegge@gateway/vpn/nordvpn/dergoegge) (Read error: Connection reset by peer)
+[20:17:58] *** Joins: dergoegge (dergoegge@gateway/vpn/nordvpn/dergoegge)
+[21:09:49] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 264 seconds)
