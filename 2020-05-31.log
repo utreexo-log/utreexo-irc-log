@@ -1,0 +1,56 @@
+[00:05:41] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[00:06:26] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[03:55:48] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[05:37:06] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 260 seconds)
+[07:26:40] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[13:31:59] *** Quits: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net) (Quit: My MacBook has gone to sleep. ZZZzzz…)
+[13:33:58] *** Joins: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net)
+[13:37:41] *** Quits: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net) (Client Quit)
+[13:57:57] *** Joins: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net)
+[14:01:06] *** Quits: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net) (Client Quit)
+[14:13:05] *** Joins: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net)
+[14:20:30] *** Quits: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net) (Quit: My MacBook has gone to sleep. ZZZzzz…)
+[14:27:52] *** Joins: dergoegge (~dergoegge@196.240.57.116)
+[14:37:54] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[14:38:12] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[14:58:16] *** Joins: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net)
+[15:23:58] *** Quits: dergoegge (~dergoegge@196.240.57.116) (Quit: leaving)
+[16:15:13] *** Quits: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net) (Quit: My MacBook has gone to sleep. ZZZzzz…)
+[18:53:16] <kcalvinalvin> adiabat Did you start working on the rev block check thingy?
+[18:53:31] <kcalvinalvin> I may give a go at reading the index/ directory
+[18:53:42] <kcalvinalvin> Doesn't seem *that* hard
+[18:58:32] <ThomasV> hi, is there a workaround for #130?
+[18:59:57] <kcalvinalvin> ThomasV for the moment, no. But a fix is coming soon...
+[19:01:10] <ThomasV> kcalvinalvin: thanks. also, is there a document specifying how you build the root hashes?
+[19:03:03] <kcalvinalvin> I assume you're talking about CSN nodes. All you do is call Modify() method for Pollard and it generates it by itself
+[19:04:00] <kcalvinalvin> Same for bridgenode as well. There's a Modify() method for ```type Forest```
+[19:04:49] <kcalvinalvin> https://github.com/mit-dci/utreexo/blob/8c6bca077f9119f838a4fc7f21082eedd0606f55/accumulator/pollard.go#L9 < the code for modifying CSN root hashes
+[19:05:03] <ThomasV> I mean a specification of what the code does
+[19:05:35] <ThomasV> ok thanks
+[19:06:05] <kcalvinalvin> Well, yeah there isn't really any good spec of what the code does yet
+[19:06:14] <kcalvinalvin> We should put that on the TODO list
+[19:07:28] <ThomasV> maybe write a BIP :-)
+[19:08:28] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[19:09:44] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[19:14:18] <kcalvinalvin> That's in the works :) Just need to get the actual mempool implementation done
+[19:17:00] <ThomasV> what needs to be done in relation to mempool?
+[19:30:55] <rjected> there's a todo list? or is it just the set of all todo's in the repo
+[19:31:45] <rjected> oh i found the projects page nvm
+[19:37:05] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 272 seconds)
+[20:59:31] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[22:48:41] <adiabat> kcalvinalvinL haven't started the rev shuffler, I agree it doesn't sound too hard as it's pretty similar to the blk shuffler
+[22:49:23] <adiabat> ThomasV: hopefully #130 will be fixed (99% fixed) in a day or two, this is the rev block check issue
+[22:50:14] <adiabat> also I should write more of a spec... there is a paper but it's almost a year old ... I'd say everything in the paper is still true
+[22:50:47] <adiabat> but there are other things the paper didn't describe in the code; maybe I should update the paper too
+[23:00:29] *** Quits: achow101 (~achow101@unaffiliated/achow101) (Quit: Bye)
+[23:00:51] *** Joins: achow101 (~achow101@unaffiliated/achow101)
+[23:02:09] <adiabat> rjected: yeah there's projects on github but that should also be updated.  Some things are pretty much done, which is great...
+[23:02:44] <adiabat> and then there's new stuff to do, but really it's like, what should we do next... try to improve ibdsim and stick a wallet on it?
+[23:02:54] <adiabat> merge the utreexo sync into btcd?
+[23:02:58] <adiabat> get it into core...?
+[23:04:11] <adiabat> I guess first get ibdsim working well, to the point where people can reliably download / build / run it and it works
+[23:37:45] <ja> i think it is way to early to try to do anything with core given how conservative it is
+[23:38:12] <ja> i was thinking maybe i'd be better to have two BIPs? one with the algortihmic foundations, and one with the application in bitcoin
+[23:38:22] <ja> like the schnorr BIPs
+[23:39:02] <ja> the first bip would contain stuff like updateDirt ;)
+[23:41:38] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 260 seconds)
