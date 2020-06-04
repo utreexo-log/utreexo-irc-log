@@ -1,0 +1,39 @@
+[00:03:49] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[00:04:38] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[03:16:30] <ja> looks like elements passed to dedupeSwapDirt are not sorted
+[04:38:43] <ja> sent a PR to fix it
+[05:07:07] <ja> regarding panics, i think an internal function should definitely panic if its contract is violated. go has a weak type system, it is basically impossible to restrict the types such that no illegal parameters can be passed
+[05:07:32] <ja> if we wanted no panics, basically every function would then have to return error. it pollutes the type signatures
+[05:09:19] <ja> we should document function invariants and make sure we do not violate them
+[05:10:29] <ja> why doesn't the division operator return error in go? ;) because some operations have contracts that the caller is responsible for keeping
+[05:47:01] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 264 seconds)
+[07:21:05] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[10:04:53] *** Quits: adiabat (~adiabat@63.209.32.102) (Ping timeout: 246 seconds)
+[10:24:24] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 246 seconds)
+[11:26:28] <rjected> ja: you're correct on the point of why the division operator panics on divide by zero for example, but function signatures in go pretty much always have (error) as a return argument. It's not polluting the type signature or anything, it's very normal to detect and propagate errors with a nil check in Go.
+[11:28:35] <rjected> https://eli.thegreenplace.net/2018/on-the-uses-and-misuses-of-panics-in-go/
+[11:32:50] <rjected> panics for sure *are* used in go, but if you look at the ratio of "if err != nil {return err}" to "if err != nil {panic(err)}" I think it would be something like 100:1
+[11:40:00] <rjected> also https://golang.org/doc/effective_go.html#panic
+[11:42:21] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[11:59:03] *** Joins: adiabat (~adiabat@63.209.32.102)
+[12:23:59] *** Joins: dergoegge (dergoegge@gateway/vpn/nordvpn/dergoegge)
+[12:31:57] <dergoegge> ja: internal panics are ok i agree but i think exported functions should not panic, so maybe we should add a recovery from a panic for those (just in case).
+[12:34:27] <dergoegge> "The convention in the Go libraries is that even when a package uses panic internally, its external API still presents explicit error return values." - https://blog.golang.org/defer-panic-and-recover
+[12:38:18] <dergoegge> TIL that deferred functions still get executed when the function panics
+[13:30:29] <rjected> yep
+[13:41:25] <rjected> personal test for panics though: if it's in a cmd main, driver, fuzzer, test, or dealing with necessary updates to info on disk, it's probably ok to panic rather than return an error
+[14:11:00] <adiabat> I think panics are OK when it's something wrong with the programming that shouldn't be able to happen
+[14:11:33] <adiabat> I think the accumulator still panics if one of the inputs to a parent hash function is all 0s
+[14:12:20] <adiabat> if that's happening it means there's uninitialized data that's in the tree somehow, so all bets are off and everything's broken
+[14:13:27] <adiabat> at that point it seems like there's no meaningful way to recover since everything's broken
+[14:13:44] <adiabat> I guess you could return an error there, and cmd would grab it and say "the accumulator is broken"
+[14:14:44] <adiabat> but then you have methods like parentHash(r, l) Hash -> parentHash(r, l (Hash, error)
+[14:15:18] <adiabat> which means you have to make everything that calls it also return an error... gets annoying, and really, wherever that error ends up
+[14:15:44] <adiabat> it's going to end the program, because it's an internal "this program is written wrong" error
+[14:41:32] <rjected> Right, I think that specific case in parentHash is one of the cases where a panic is warranted, and it's not exported + isn't a function of a struct so it makes sense
+[14:54:36] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 246 seconds)
+[15:56:04] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[16:31:00] *** Quits: dergoegge (dergoegge@gateway/vpn/nordvpn/dergoegge) (Quit: leaving)
+[17:00:57] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 246 seconds)
+[21:27:47] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[21:38:16] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 256 seconds)
