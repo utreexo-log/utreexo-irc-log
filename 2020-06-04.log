@@ -1,0 +1,43 @@
+[03:46:19] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[04:40:40] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 256 seconds)
+[05:35:34] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[08:12:00] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 246 seconds)
+[08:50:00] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[09:03:29] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Quit: Leaving)
+[12:36:40] *** Quits: ja (janus@anubis.0x90.dk) (Ping timeout: 246 seconds)
+[12:37:22] *** Joins: ja (janus@anubis.0x90.dk)
+[15:34:25] <adiabat> kcalvinalvin: do you have a levelDB lookup PR?  I can take that, or do the fingerprint based sortinf
+[15:34:34] <adiabat> *sorting
+[15:34:45] <kcalvinalvin> Haha nice timing
+[15:34:54] <kcalvinalvin> I just figured it out
+[15:35:05] <adiabat> ok cool I won't work on it then :)
+[15:35:06] <kcalvinalvin> Just need to actually put it into rev stuff now
+[15:35:27] <kcalvinalvin> It's weird though... I don't get the nVersion field with CBlockFileIndex
+[15:35:52] <adiabat> doesn't block me because my files are luckily sorted the right way but for some people it's sortof blocking for genproofs I guess
+[15:36:00] <adiabat> we don't need nVersion right?
+[15:36:03] <kcalvinalvin> Every testnet block record gives me nVersion:  180100
+[15:36:09] <kcalvinalvin> we don't but it's odd.
+[15:36:17] <kcalvinalvin> Like... what's that 18 in the front?
+[15:36:30] <kcalvinalvin> Everything else is correct so I know it's working
+[15:39:42] <kcalvinalvin> Maybe I'm missing something... I'll get something by the end of the week though
+[16:37:55] <adiabat> it's probably some weird ... endian / encoding thing?
+[16:38:38] <adiabat> but yeah nVersion is pretty irrelevant, doesn't apply to utxos
+[16:38:59] <adiabat> I guess it *could* have applied to utxos as a soft fork, and could technically in the future
+[16:39:17] <adiabat> but since bitcoind's database now doesn't keep track of it, it's pretty much gone
+[17:03:27] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[17:04:18] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[21:04:07] <adiabat> so.... should I switch utreexo's imports to rjected/btcd ...?  Been almost a week with no reponse to the PR
+[21:04:45] <adiabat> maybe I really shouldn't complain because I am bad about missing PRs / issues and leaving them / forgetting about them and stuff
+[21:05:06] <adiabat> but also maybe we should switch anyway if there's more btcd changes and experiments we want to try
+[22:35:52] *** Quits: fjahr (sid374480@gateway/web/irccloud.com/x-ixfgxajkuakwodov) (Ping timeout: 272 seconds)
+[22:36:02] *** Quits: RubenSomsen (sid301948@gateway/web/irccloud.com/x-wnrvylavwplwbmfq) (Ping timeout: 260 seconds)
+[22:36:18] *** Quits: digi_james (sid281632@gateway/web/irccloud.com/x-emzhhmbvslajbhfe) (Ping timeout: 256 seconds)
+[22:36:29] *** Quits: fanquake (sid369002@gateway/web/irccloud.com/x-xwnmppxqhszbxoka) (Ping timeout: 272 seconds)
+[22:36:37] *** Quits: jamesob (sid180710@gateway/web/irccloud.com/x-ylcugpkygwylqefk) (Ping timeout: 260 seconds)
+[22:36:37] *** Quits: valwal_ (sid334773@gateway/web/irccloud.com/x-vpbnsrodnoqsjuqc) (Ping timeout: 260 seconds)
+[22:38:48] *** Joins: fanquake (sid369002@gateway/web/irccloud.com/x-fhmfssifughellja)
+[22:39:11] *** Joins: digi_james (sid281632@gateway/web/irccloud.com/x-ixyargxtdibxiafd)
+[22:39:11] *** Joins: valwal_ (sid334773@gateway/web/irccloud.com/x-qifsswwtchwsflxx)
+[22:40:50] *** Joins: RubenSomsen (sid301948@gateway/web/irccloud.com/x-ozlyifiugrtfpnrc)
+[22:42:06] *** Joins: jamesob (sid180710@gateway/web/irccloud.com/x-jggcdmnrhnqruafg)
+[22:43:32] *** Joins: fjahr (sid374480@gateway/web/irccloud.com/x-nnnlcpasqlezucfe)
