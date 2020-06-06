@@ -1,0 +1,39 @@
+[00:03:40] *** Joins: dergoegge (~dergoegge@196.240.57.60)
+[00:05:51] <dergoegge> adiabat: +1 switching to rjected/btcd, that way we can all test the validation/#135 can be merged. 
+[00:07:13] <dergoegge> switching back is always possible if they merge your PR
+[01:01:15] *** Quits: dergoegge (~dergoegge@196.240.57.60) (Quit: leaving)
+[01:25:11] *** Joins: ghost43_ (~daer@gateway/tor-sasl/daer)
+[01:25:23] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Ping timeout: 240 seconds)
+[02:21:54] *** Quits: ghost43_ (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[02:22:11] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[04:03:03] <kcalvinalvin> adiabat yeah why not
+[09:11:15] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[09:21:27] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[16:16:00] <adiabat> ok will switch & merge #135
+[20:29:17] <adiabat> rjected: maybe I'm not on the right branch or something but when I try to import github.com/rjected/btcd/blockchain stuff it won't compile
+[20:29:38] <adiabat> I guess because all the code in rjected/btcd still refers to itself as btcsuite/btcd
+[20:47:11] <adiabat> I did this in a bunch of folders:
+[20:47:13] <adiabat> grep -RiIl 'btcsuite\/btcutil' | xargs sed -i 's/btcsuite\/btcutil/rjected\/btcutil/g'
+[20:47:40] <adiabat> as well as with btcd, and got it to compile.  Not sure if there's a cleaner way but that works
+[22:37:26] <rjected> there may be a cleaner way
+[22:37:31] <rjected> let me try something
+[22:55:26] <rjected> actually nah
+[22:55:54] <rjected> was trying to see if I could go modules magic my way out
+[23:06:25] <rjected> trying again, let me see if this works
+[23:19:25] <rjected> also why btcutil? that hasn't changed at all, just btcd
+[23:20:50] <rjected> ohhh oof
+[23:21:37] <rjected> oh wait no
+[23:22:30] <rjected> yeah ok so we don't actually have to change the import paths at all if we add a go.mod to utreexo
+[23:22:53] <rjected> let me push to my fork
+[23:25:46] <ja> rjected: i think adiabat is on go 1.11 though
+[23:26:27] <rjected> I thought 1.11 had modules?
+[23:26:34] <rjected> or does it not
+[23:27:02] <rjected> anything pre-1.11 though would be unfortunate though
+[23:27:50] <ja> it was gradually introduced over a few versions
+[23:27:58] <ja> maybe we can get adiabat to upgrade, i dunno
+[23:28:53] <ja> maybe it works with 1.11 already
+[23:34:36] <rjected> It says in https://blog.golang.org/using-go-modules that "As of Go 1.11, the go command enables the use of modules when the current directory or any parent directory has a go.mod" so RIP
+[23:34:58] <rjected> more importantly "Inside $GOPATH/src, for compatibility, the go command still runs in the old GOPATH mode, even if a go.mod is found"
+[23:35:08] <rjected> so yeah this part will not work
+[23:36:45] <rjected> In that case, grep | xargs sed works, adiabat if btcd builds under the find/replace then feel free to commit changes
+[23:37:22] <rjected> just make sure that the btcutil imports in btcd and utreexo are not rjected/btcutil because that's an entirely separate repo and I haven't forked it yet so
