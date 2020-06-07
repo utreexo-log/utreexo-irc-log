@@ -1,0 +1,63 @@
+[00:02:37] <adiabat> the find / replace is kindof annoying so I can try the go.mod thing
+[00:02:53] <adiabat> I needed to do btcutils because they call each other a lot
+[00:04:06] <adiabat> I'd get things like:
+[00:04:09] <adiabat> cannot use pubKey (type *"github.com/btcsuite/btcd/btcec".PublicKey) as type *"github.com/rjected/btcd/btcec".PublicKey
+[00:07:45] <adiabat> which is the version that auto-connects to google... I should update to the one right before that
+[00:23:21] <adiabat> which is I guess 1.12
+[00:24:03] <adiabat> yeah I added some "ppa" but that didn't work, could download go-1.12 but wasn't sure where it went
+[00:24:18] <adiabat> now trying to install go1.12.17.linux-amd64.tar.gz
+[00:24:43] <adiabat> maybe I should upgrade the whole linux thing to 20.04... but I know that would break everything
+[01:43:04] <rjected> I just upgraded to 20.04 and it didn't break _everything_ but yeah it broke a lot of things
+[01:48:40] <rjected> https://github.com/Rjected/utreexo/commit/34d7ecc662323f619c180e109f44596339612d54
+[01:50:19] <rjected> whoops wait need to make an amend
+[01:51:41] <rjected> https://github.com/Rjected/utreexo/commit/5870a
+[01:52:04] <rjected> It's a hash so I guess you can truncate most of it and they can still identify the commit
+[01:52:40] <rjected> It has a green check so yep
+[02:12:35] <ja> adiabat: there is a ppa for newer go builds if you use ubuntu
+[02:13:06] <ja> always worked for me: https://launchpad.net/~longsleep/+archive/ubuntu/golang-backports but of course, it is just some random guy...
+[03:20:05] <adiabat> ja: yeah I tried that, then apt install golang-1.12 which did something, but it probably put the compiler somewhere else
+[03:20:17] <adiabat> anyway I have go 1.12.17 now
+[03:20:31] <adiabat> pretty sure that one doesn't phone home to google when you try to compile
+[03:36:47] <ja> adiabat: you can see where it is with something like 'dpkg -L golang-1.12-go'. probably in /usr/lib/go-1.12/bin/go
+[12:30:04] *** Joins: dergoegge (~dergoegge@37.120.217.220)
+[15:10:24] <kcalvinalvin> ok rev is fixed now :)
+[15:10:45] <kcalvinalvin> Need to put a datadir option for cli though
+[15:11:15] <kcalvinalvin> Should the binary still generate the data folders where they run it?
+[16:42:11] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[16:53:03] <adiabat> I'm changing data folders in the hook PR
+[16:59:32] <adiabat> so... I guess where run is better than /home/user/.secretFolder
+[17:00:02] <adiabat> (I know that's convention but where run seems better for now)
+[17:14:46] <rjected> yeah go 1.13 added phone home
+[17:23:09] <ThomasV> adiabat: hi, any progress on #130?
+[17:25:50] <kcalvinalvin> ThomasV PR #144 fixes it. The actual fix is there, just need the datadir option which adiabat is almost done with
+[17:26:24] <ThomasV> great, I will try it
+[17:27:47] <kcalvinalvin> ThomasV just replace line 249 in bridgenode/rev.go in PR #144 with the path to index/ and it should work
+[17:28:11] <ThomasV> thanks
+[17:28:49] <kcalvinalvin> Also, word of warning. I think touching the index/ forces you to reindex
+[17:29:00] <kcalvinalvin> Might want to make a separate copy first
+[17:29:53] <kcalvinalvin> https://github.com/bitcoin/bitcoin/issues/12690
+[17:29:58] <kcalvinalvin> Might be this...
+[17:30:38] <ThomasV> does your process 'touch' it?
+[17:30:42] <kcalvinalvin> yes
+[17:30:55] <ThomasV> why?
+[17:31:46] <kcalvinalvin> There's no way to tell where the revblock for a particular block is without touching the block index
+[17:32:26] <kcalvinalvin> I guess this is also something to fix/improve upon down the road. Do mind that the whole project is still *very* early
+[17:33:22] <ThomasV> so I should not run it while bitcoind is running? :D
+[17:36:23] <kcalvinalvin> Well, you couldn't run it while bitcoind is running anyways since leveldb doesn't support one db being used by 2 separate processes
+[17:36:34] <kcalvinalvin> But yeah, right now, it will force you to reindex
+[17:42:20] <kcalvinalvin> oh wait, there seems to be an easy enough fix
+[17:48:15] <kcalvinalvin> Ah it's just an option. I'll throw that in the non-draft PR
+[18:40:45] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 246 seconds)
+[18:47:40] *** Quits: dergoegge (~dergoegge@37.120.217.220) (Quit: leaving)
+[19:24:40] <adiabat> kcalvinalvin: can't we look at the DB in a read-only mode?
+[19:25:13] <adiabat> we don't want to be messing up the blocks/ dir or index, all we need is read access
+[19:52:40] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[21:10:25] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 264 seconds)
+[21:50:49] <ja> i am getting so tired of changing the internal forest functions to dump their arguments to json that i wonder if i should use eBPF to do it, then i wouldn't need patching...
+[22:15:23] *** Joins: dergoegge (~dergoegge@37.120.217.220)
+[22:32:54] <rjected> If this is for debugging, you can do %#v or %v or %+v and don't have to deal with json at all
+[22:33:02] <rjected> in a sprintf
+[22:33:29] <rjected> really a simple sprintf is all you need
+[22:51:57] <ja> it is to extract samples for testing for equivalence with my haskell implementation. i had sprintf before but it was cumbersome to parse compared to json.Marshal
+[22:52:26] <ja> the idea is that  i would run the test suite unmodified and the eBPF program could extract the samples.
+[22:52:58] <ja> since, if i do it with json.Marshal, i for example need to make from/to of arrow into From/To or json.Marshal will not emit them
