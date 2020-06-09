@@ -1,0 +1,120 @@
+[02:08:37] *** Quits: rafalcpp (~racalcppp@ip-178-214.ists.pl) (Ping timeout: 264 seconds)
+[02:43:53] *** Joins: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net)
+[04:09:28] *** Quits: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net) (Quit: My MacBook has gone to sleep. ZZZzzz…)
+[04:14:59] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[04:34:44] *** Joins: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net)
+[04:52:49] *** Quits: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net) (Quit: My MacBook has gone to sleep. ZZZzzz…)
+[05:10:31] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 265 seconds)
+[06:41:14] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[09:01:59] *** Joins: rafalcpp (~racalcppp@ip-178-214.ists.pl)
+[10:38:27] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 272 seconds)
+[11:13:46] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[11:37:21] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 272 seconds)
+[11:45:50] *** Quits: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net) (Ping timeout: 256 seconds)
+[11:46:04] *** Joins: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net)
+[11:48:23] *** Joins: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net)
+[13:16:02] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[14:22:20] *** Quits: rafalcpp (~racalcppp@ip-178-214.ists.pl) (Excess Flood)
+[14:24:45] *** Joins: rafalcpp (~racalcppp@ip-178-214.ists.pl)
+[14:43:29] *** Joins: adiabat (~adiabat@63.209.32.102)
+[15:11:01] <kcalvinalvin> PR #144 is ready for review/merge :)
+[15:15:05] <adiabat> oops I rebooted this and was off IRC for a day ish
+[15:15:14] <adiabat> hopefully didn't miss anything too critical
+[15:16:08] <adiabat> neato, does #144 mess up core's levelDB? or safe to try on a synced up one
+[15:16:55] <kcalvinalvin> adiabat that problem is gone :)
+[15:21:24] <adiabat> cool.  will try it
+[15:21:33] <adiabat> does it work if bitcoind is still running?
+[15:21:53] <kcalvinalvin> Nope. Leveldb doesn't support 2 processes accessing a single db
+[15:21:54] <adiabat> I mean you can read files when someone else has a lock on em right..?
+[15:21:56] <adiabat> hmm
+[15:22:07] <kcalvinalvin> rocksdb (fork of leveldb) does though
+[15:22:09] <kcalvinalvin> heh
+[15:22:25] <adiabat> so you have to shutdown bitcoind to run genproofs...
+[15:22:34] <kcalvinalvin> yes
+[15:22:45] <adiabat> & obviously there's no RPC to tell you anything about where rev blocks are
+[15:22:58] <kcalvinalvin> Or I guess you could copy only the index/ dir and point to that
+[15:23:09] <adiabat> hmm
+[15:23:28] <adiabat> on mainnet, it's 91M
+[15:23:38] <adiabat> so could just copy the whole thing into RAM and read from there
+[15:24:15] <adiabat> the OS doesn't care about levelDB being picky, it'll let you copy the files even though bitcoind has a lock on em
+[15:26:04] <ThomasV> kcalvinalvin: why are you not using bitcoind's RPC to read the blocks?
+[15:27:07] <adiabat> we're not
+[15:27:09] <adiabat> we can't...
+[15:27:39] <adiabat> we read blocks directly from blk0000_.dat and rev0000_.dat
+[15:27:52] <ThomasV> why can't you?
+[15:28:02] <adiabat> there's no RPC that provides the rev data
+[15:28:21] <ThomasV> what is in the rev data?
+[15:28:38] <adiabat> in the blocks folder, there's rev000xx.dat
+[15:28:59] <adiabat> those have all the utxos consumed in a block, and it mostly corresponds to the blocks in block0000xx.dat
+[15:29:11] <adiabat> but not *quite*, which is annoying :)
+[15:29:46] <adiabat> so the rev000xx.dat files have a big part of the data we need to build the utxo proofs, and it's already mostly arranged the right way
+[15:30:20] <ThomasV> long term you'll probably have to use RPC, so you need'll to parse the transactions
+[15:30:36] <ThomasV> you'll need
+[15:31:16] <adiabat> well maybe long term the code is merged in to bitcoind or something
+[15:31:38] <adiabat> right now there is no RPC that gives any of that data out, so we'd have to introduce new ones into bitcoind which seems hard
+[15:32:23] <adiabat> the rev files are kind of interesting because they're not well known, and they take up a ton of space
+[15:32:38] <adiabat> also if you prune and don't have the old rev files, you can't reorg back before that
+[15:32:41] <kcalvinalvin> Hopefully it gets into Bitcoin Core before I'm 30
+[15:32:51] <kcalvinalvin> 7 years *might* be enough
+[15:32:52] <adiabat> heh, or btcd
+[15:32:53] <ThomasV> introducing a new RPC sounds easier than merging the whole thing into bitcoin core
+[15:32:59] <adiabat> yeah maybe...
+[15:33:07] <adiabat> how does btcd do blk/rev files...?
+[15:33:26] <kcalvinalvin> all the data that would be in rev is thrown all into leveldb
+[15:33:34] <adiabat> oh that's worse
+[15:33:45] <adiabat> that's... substantially worse, weird
+[15:33:45] <kcalvinalvin> Prob one of its bottlenecks
+[15:33:57] <kcalvinalvin> Well it does keep all the utxos in memory so...
+[15:34:03] <adiabat> yeah I would imagine.  the blk/rev files are definitely optimized for writing
+[15:34:22] <kcalvinalvin> Also, I think a lot of the genproofs time is spent on reading blocks
+[15:34:28] <adiabat> like it just dumps them on to disk in whatever order it feels like, which is why we get to have fun reading them 
+[15:34:40] <kcalvinalvin> Cuz the test I've written does nothing but read blocks from disk and it's sooooo slow
+[15:34:41] <adiabat> reading as in deserialize?
+[15:34:47] <kcalvinalvin> No not even that
+[15:34:52] <ThomasV> btw, how long does genproof take currently on mainnet?
+[15:35:09] <adiabat> genproof should only take a few hours right?
+[15:35:19] <adiabat> it's faster than syncing up, or should be
+[15:35:38] <adiabat> because genproofs doesn't do any signature checking
+[15:35:52] <kcalvinalvin> Haven't benched the *whole* mainnet in a while but I assume it takes a few hours
+[15:36:26] <kcalvinalvin> The good news is that there's plenty of optimizations left to do
+[15:36:30] <adiabat> yeah I don't think anything has made genproofs slower.  well #144 might heh.  hopefully not
+[15:41:56] <kcalvinalvin> oh I should mention leveldb from core is only used during the offsetfile generation
+[15:42:10] <kcalvinalvin> It's not needed after that
+[15:42:55] <adiabat> right
+[15:43:11] <kcalvinalvin> So *technically* you can run bitcoind while running genproofs
+[15:43:11] <adiabat> ah OK there's a rev offset as well, cool
+[15:43:28] <adiabat> I think a good way to do it would be, have genproofs like
+[15:43:56] <adiabat> use... os.Copy? or ioutil or something to read the whole folder into ram, then tell levelDB to open that copy
+[15:44:02] <adiabat> then build the offset file
+[15:44:11] <adiabat> then delete the copied db from ram
+[15:44:26] <adiabat> I mean it's fine now, we can just say to stop bitcoind when you start this
+[15:44:50] <adiabat> but that might be an effective way to not interrupt bitcoind, since the database we're looking at is so small
+[15:45:04] <adiabat> and the actually data we need is even smaller, it's like a few megabytes
+[15:52:27] <kcalvinalvin> ok yeah I'll look at doing that
+[16:10:19] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 272 seconds)
+[17:18:50] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[17:25:40] <rjected> adiabat: I asked jcv to take a look at the btcd pr, he requested changes
+[17:44:47] *** Quits: rafalcpp (~racalcppp@ip-178-214.ists.pl) (Ping timeout: 260 seconds)
+[18:25:51] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 272 seconds)
+[18:29:10] <adiabat> oh cool, yeah that's easy to fix
+[18:29:42] <adiabat> also rjected - what do I do to get your imports working with go 1.12?
+[18:30:11] <adiabat> maybe should ask on direct or search more about go modules...
+[18:37:05] <adiabat> kcalvinalvin: on #144 I get a panic leveldb: not found
+[18:37:27] <adiabat> after it finished the blk offsetfile... can put in github
+[18:49:02] *** Joins: rafalcpp (~racalcppp@ip-178-214.ists.pl)
+[18:59:41] <adiabat> kcalvinalvin: I'm on 206fe55d8a1bf529839db633de0434e141db01bd
+[19:00:12] <adiabat> also it might be a path thing, I'm giving it a datadir
+[19:03:51] <adiabat> no it's not a datadir thing, I made a ~/.bitcoin and put it there and ran without datadir but same thing
+[19:32:05] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[19:48:49] *** Quits: rafalcpp (~racalcppp@ip-178-214.ists.pl) (Ping timeout: 264 seconds)
+[21:08:14] <rjected> adiabat: I put a commit on top of the current? utxoview branch in github.com/rjected/utreexo/tree/sad-sed
+[21:08:52] <rjected> I'm able to build / test / etc with that
+[21:10:13] <rjected> oh might need to update this actually
+[21:10:37] <rjected> but yeah you can sorta see what it's doing in the commit
+[21:19:32] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 246 seconds)
+[21:21:28] <rjected> yeah okay updated, now it points to the current HEAD of rjected/btcd
+[21:31:45] <rjected> just check that out, let me know if you prefer that to replacing all btcd imports in rjected/btcd. cons are that we have to update the go.mod pseudo-version in utreexo every time we want to use a feature added in btcd
+[21:43:39] *** Joins: rafalcpp (~racalcppp@ip-178-214.ists.pl)
+[22:26:41] <adiabat> hm... ok maybe can go over the options on call tomorrow?
+[22:28:28] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[22:29:45] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
