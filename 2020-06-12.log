@@ -1,0 +1,136 @@
+[00:15:24] *** Quits: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net) (Quit: My MacBook has gone to sleep. ZZZzzz…)
+[00:33:28] *** Joins: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net)
+[00:34:04] *** Quits: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net) (Client Quit)
+[01:17:30] *** Quits: fanquake (sid369002@gateway/web/irccloud.com/x-fhmfssifughellja) (Ping timeout: 246 seconds)
+[01:20:57] *** Joins: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net)
+[01:23:19] *** Joins: fanquake (sid369002@gateway/web/irccloud.com/x-dpentetezvtqljkq)
+[01:40:39] *** Quits: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net) (Quit: My MacBook has gone to sleep. ZZZzzz…)
+[01:56:51] *** Joins: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net)
+[02:26:07] *** Quits: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net) (Quit: My MacBook has gone to sleep. ZZZzzz…)
+[05:37:49] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[06:33:52] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 256 seconds)
+[07:39:00] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[09:48:06] <ThomasV> is deletion of leaves order-independent?
+[09:52:16] <ThomasV> also, does batch deletion result in the same tree as multiple DeleteOne operations?
+[12:04:07] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 272 seconds)
+[12:52:44] *** Joins: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net)
+[13:03:24] *** Quits: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net) (Quit: My MacBook has gone to sleep. ZZZzzz…)
+[13:17:10] *** Joins: gojiHmPFPN (~textual@c-73-47-220-190.hsd1.ma.comcast.net)
+[13:25:39] *** Joins: rafalcpp (~racalcppp@ip-178-214.ists.pl)
+[15:11:50] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[16:20:19] <adiabat> ThomasV: from the accumulator's point of view, deletion order does matter, but we delete everythin in a block at the same time
+[16:21:05] <adiabat> I don't think DeleteOne is used at all... maybe we should get rid of it
+[16:21:14] <ThomasV> adiabat: ok, so it means an implementation that deletes in a different order would still be compatible
+[16:22:10] <adiabat> Possibly not; calling DeleteOne many times is much less efficient than deleting all at once, and I may result in the leaves being in different order
+[16:22:53] <ThomasV> oh, sorry, I read "does not matter" :(
+[16:23:07] <adiabat> so that would change the proofs.  It may end up with the same ordering, but there's ni guarantee
+[16:23:09] <adiabat> *no
+[16:23:34] <ThomasV> hmm, ok, so another implementation would have to go block after block
+[16:23:56] <adiabat> It's possible to get the same result deleting one at a time, but it would be a lot slower
+[16:24:15] <adiabat> because with each deletion, you need to hash all the way back up to the root
+[16:24:40] <ThomasV> yeah thats what I'm currently doing :D
+[16:24:43] <adiabat> in a tree with say 1 million leaves, and you delete 1000, that'd be about 1000*20 hashes
+[16:25:02] <adiabat> but deleting all at the same time ends up being much fewer hashes
+[16:25:18] <adiabat> especially if they are near each other
+[16:26:09] <ThomasV> adiabat: in the paper you mention maintaining an index of utxo->path_to_leaf. how is that cheaper than using pointers and not having to maintain that index?
+[16:26:47] <adiabat> How would pointers work?
+[16:26:47] <ThomasV> (for the bridge node, where all hashes are written contiguously)
+[16:27:07] <adiabat> The main thing is given a hash, you need to know where it is
+[16:27:21] <adiabat> so you can do a linear search, it just takes too long
+[16:27:48] <ThomasV> well, you could do a malloc for each node and have pointer to the parent
+[16:28:29] <adiabat> yes you can get there, but you don't know where "there" is.  If I'm given some 32 byte leaf hash, I know that leaf is somewhere in my tree
+[16:28:39] <adiabat> but my tree has millions of leaves, and they're not in order
+[16:29:01] <ThomasV> oh, but you would still have an index, utxo->pointer to the node in memory
+[16:29:10] <adiabat> right, which is basically what it is
+[16:29:16] <ThomasV> the thing is you would not need to maintain it
+[16:29:24] <adiabat> it's just a mapping of hash to position, which is uint64
+[16:29:47] <ThomasV> yes but you need to update those positions everytime you shuffle a subtree
+[16:29:51] <adiabat> oh if it was all pointer based, the pointer would follow it you mean
+[16:29:57] <ThomasV> yes
+[16:30:04] <adiabat> yeah, I actually had pollard working that way for a while
+[16:30:24] <adiabat> and changed it because it was trickier... it does work though
+[16:30:38] <ThomasV> was it slower?
+[16:30:49] <adiabat> I don't think so
+[16:31:00] <adiabat> but... it's not really needed in pollard ( the sparse forest)
+[16:31:18] <adiabat> the full forest is where it's needed, and I haven't tried it there
+[16:31:32] <ThomasV> maybe batch deletion is easier with the array approach because you can easily sort leaves
+[16:32:11] <adiabat> I can see how it might be faster, you just swap pointers when moving things
+[16:32:29] <adiabat> but it also seems a bit harder to code, but maybe worth it
+[16:33:00] <ThomasV> hmm.. it's actually easier to code.. unless there is something I don't get in the array approach
+[16:33:06] <adiabat> I'm not sure how much the position map slows things down... I don't *think* it's a bottleneck compared to hashing but haven't measured
+[16:33:43] <ThomasV> btw, why go and not c++/bitcoind ?
+[16:34:08] <adiabat> I just liking working with go better :)  Eventually I will need to make a c++ version I think
+[16:35:40] <adiabat> the part that would be harder with pointer based is keeping it all on disk.  In ram it's not too bad, but then need to write to disk sometimes, maybe not every block
+[16:36:18] <adiabat> also forest currently has no pointers involved, so switching to pointers is 50% more memory usage
+[16:36:42] <adiabat> (every 32 byte hash gets an extra 2 8-byte pointers, 32 -> 48 bytes per node in tree)
+[16:39:18] <ThomasV> how do you update the position map? do you maintain a list of all leaves that have been shuffled in the current batch?
+[16:42:17] <adiabat> every time a leave moves (anything on the bottom row) the position map is updated
+[16:42:53] <adiabat> https://github.com/mit-dci/utreexo/blob/master/accumulator/forest.go#L226
+[16:43:28] <adiabat> I think that function is the only place it happens
+[16:47:12] <ThomasV> adiabat: another question. when you do a swap, I guess you swap with the closest leaf on the row. choosing another candidate would probably affect the result, just like deletion is order dependent
+[16:47:52] <ThomasV> so, to perform swaps in a compatible way, I kind of need the position index, regardless of using pointers
+[16:49:00] <adiabat> The swaps are not always with closest
+[16:49:18] <adiabat> there's some freedom in how the swaps work, especially when deleting many things at once
+[16:49:22] <ThomasV> ok.. but the choice would affect the result, right?
+[16:49:33] <adiabat> with DeleteOne there's basically only one way to do it
+[16:49:47] <adiabat> yeah that would affect the ordering of the leaves
+[16:50:15] <adiabat> It's very possible that there are better ways to swap things, that result in shorter proofs by keeping leaves together
+[16:50:16] <ThomasV> so it would be good to document how the candidate is chosen :-)
+[16:50:35] <adiabat> I haven't played around with it, and it probably doesn't make a huge difference, but it could be something to optimize
+[16:51:35] <ThomasV> my question is not about performance, it's about reproducibility
+[16:51:57] <adiabat> ah OK then yeah everyone has to do it the same way otherwise they'll get different proofs
+[16:52:20] <ThomasV> exactly
+[16:52:24] <adiabat> right now it's pretty simple, it's "extract twins" so ignore two deletions that are siblings
+[16:53:06] <adiabat> then the swaps are with the sibling of the next deletion to the right
+[16:53:26] <ThomasV> ok, that's what I thought :-)
+[16:53:44] <adiabat> so that's "closest" but only looking at the next over; there could be an algorithm that minimizes swap distance over the whole range
+[16:53:52] <adiabat> https://github.com/mit-dci/utreexo/blob/master/accumulator/transform.go#L104
+[16:53:57] <ThomasV> but you can see that if I only use pointers, I will not know who is the 'next to the right'
+[16:54:11] <adiabat> that's the swap algo now which is pretty simple
+[16:54:52] <adiabat> well even with pointers it should be possible I think
+[16:55:14] <adiabat> you can tell position by the path you take to get to a node, how many left / right pointers you take
+[16:55:23] <ThomasV> I think too.. I just need to know what you are doing 
+[16:56:16] <adiabat> the current way is to look at the positions of all the deletions
+[16:56:30] <adiabat> and operate first on those positions to get a list of what to swap
+[16:57:14] <adiabat> in DeleteOne, you can't actually swap anything, you can only move roots
+[16:58:23] <adiabat> swapping is the optimization deleting many at a time gives you, as you can move everything around into the final ordering and then re-hash everything from there
+[16:58:56] <adiabat> interestingly, when *adding* leaves, adding one at a time is just as efficient as adding many at once
+[17:01:00] <adiabat> there are a bunch of things where you could definitely do it differently and it would still work, and maybe even be better
+[17:01:26] <adiabat> one of the biggest: right now it takes the block, deletes all inputs then adds all outputs
+[17:01:43] <adiabat> this seems simplest, but might not be most efficient!
+[17:02:08] <adiabat> doing add first then delete would be simple to change, but think that would be worse / slower
+[17:02:45] <adiabat> but what might be better is to mark all the deletions, overwrite them with the new additions, and then only do deletions / swapping / etc if there are more deletions than additions
+[17:03:08] <adiabat> that would minimize the swapping part, in many (most!) blocks there wouldn't be any
+[17:03:43] <ThomasV> oh but it would be hard to maintain compatibility with your implementation then
+[17:03:47] <adiabat> the downside is the leaves would not be grouped together as much by creation time.  So maybe it ends up being worse due to longer proofs
+[17:03:53] <adiabat> yeah this would be totally incompatible
+[17:04:07] <adiabat> right now though nobody's using it in the wild yet so
+[17:04:26] <adiabat> easy to switch :)
+[17:05:13] <adiabat> I haven't tried looking at the performance of different ways, maybe I should... my guess is it won't make much difference so I've just left it the simplest way
+[17:05:32] <adiabat> but if it ends up being 20% faster or something, definitely worth switching
+[17:09:07] <ja> with the c bindings i made it would be easier for any alternate implementation to ensure compatibility ;)
+[17:10:52] <adiabat> ja: yeah bindings are easiest.  I think it's also cool if there's a different language rewrite, because then might find some edge cases & nail down the spec better
+[17:11:35] <adiabat> but yeah it is a "consensus" kind of thing; if two different computers do different things with the accumulator, their proofs won't work for each other
+[17:12:41] <ThomasV> heh
+[17:14:24] <adiabat> hmm also if we do find better ways to do it, there can be different versions, so when they connect they should announce versions to check compatibility
+[17:14:43] <adiabat> like maybe people start using it and a year later there's a better algorithm
+[17:15:31] <adiabat> for nodes to upgrade / update to a different algo, they can be presented with a proof
+[17:15:50] <adiabat> that whatever accumulator state they have now, here's the equivalent with the new algo
+[17:16:11] <adiabat> proof would be pretty big though.  But it beats having to re-sync the whole blockchain
+[17:22:38] <ThomasV> adiabat: suppose I have a light node with only the accumulator. I get a block, with a proof for each utxo that is spent in the block. I guess I will also need to receive a special ordering, that matches the batch deletion process?
+[17:24:10] <ThomasV> or at least I will need to implement a strategy that mimics the batch deletion
+[17:24:48] <adiabat> the way we have it now, is it gets the proof, and the utxo data for each input
+[17:25:42] <adiabat> and the proof does cointain a list of positions within the forest
+[17:26:07] <ThomasV> oh, but the swap candidate is part of the proof, so I guess that's how you can do it
+[17:26:36] <adiabat> yes, the deletion algorithm is such that only the proofs are needed / used for swaps
+[17:26:56] <ThomasV> ...my brain hurts..
+[17:29:20] <adiabat> they both use the exact same data
+[17:29:25] <adiabat> heh :)  You can kind of thing of "verify proof" and "delete" as the same function; 
+[17:29:37] <adiabat> (hm those two lines got switched)
+[19:57:13] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 272 seconds)
+[20:37:58] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[20:53:16] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[20:54:04] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[21:18:17] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 272 seconds)
+[21:54:07] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[22:21:05] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 246 seconds)
