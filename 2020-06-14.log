@@ -1,0 +1,49 @@
+[01:28:08] *** Joins: fogof (47d90053@71.217.0.83)
+[01:46:26] *** Quits: fogof (47d90053@71.217.0.83) (Remote host closed the connection)
+[05:05:58] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[07:09:49] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 246 seconds)
+[08:42:55] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[11:30:19] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 272 seconds)
+[11:31:11] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[11:39:49] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 272 seconds)
+[12:46:58] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[14:08:39] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 272 seconds)
+[15:20:31] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[15:30:13] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Remote host closed the connection)
+[15:30:40] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[16:52:22] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[18:16:17] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 272 seconds)
+[19:52:09] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[21:05:23] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 272 seconds)
+[21:13:51] <ja> is SwapNodes only supposed to swap leaves? or any node?
+[21:16:16] <ja> i guess it only swaps leaves if row==0
+[21:48:33] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[22:08:52] <adiabat> ja: SwapNodes works on nodes of any row
+[22:09:56] <adiabat> and it has some extra code for leaves to keep the positionMap up to date
+[22:15:51] <ja> adiabat: it also works if the nodes are not on the same row? i guess not?
+[22:21:44] <ja> adiabat: i think swapNodes breaks if the childMany result is the same, right? would it be good to add something like 'if a==b { return }'?
+[22:23:08] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 256 seconds)
+[22:45:56] <adiabat> ja: trying to swap nodes on different rows is ... undefined behavior
+[22:46:47] <adiabat> also the function arguments don't support it because you only have one argument for "row"
+[22:47:45] <adiabat> swapNodes doesn't test the sanity of it's arguments and doesn't return an error but you can give it invalid things
+[22:48:11] <adiabat> like a row that doesn't agree with the arrow, a row higher than the highest row in the forest, etc
+[22:48:40] <adiabat> we could check for these things and panic I guess
+[22:49:59] <adiabat> but the s.from == s.to case... I think that just ends up being a no-op?
+[22:52:19] <ja> adiabat: there is already a check if from == to. but there is no check after the childMany test. doesn't seem to be a no-op since my haskell equivalence property tests fail if add/remove that check
+[22:53:25] <adiabat> so you'd have s.from != s.to, but then childMany(s.from, row, f.rows) == childMany(s.to, row, f.rows) ?
+[22:53:47] <adiabat> I don't see how that could happen... maybe if something else is pretty wrong
+[22:54:09] <adiabat> different nodes will never share children...
+[22:55:33] <adiabat> maybe if row is bigger than f.rows or something broken like that?  But in a normal working case, if s.from != s.to, any descendent can't be the same
+[22:59:32] <ja> ah... i am trying to understand the invariants to write a proper property test...
+[23:00:33] <ja> do we have a function to compute the row number from the node position?
+[23:05:51] <ja> the childMany collision seems to happen because i am using integer keys in the tree. so i'll change it to use something pseudorandom
+[23:06:01] <ja> using all the bits of the key size
+[23:13:11] <ja> if the childMany collision is such a broken situation, should I make a PR for a panic there?
+[23:21:08] <ja> oh wait, aah wait, childMany isn't dependent on the data inserted, only on the positions
+[23:44:27] <adiabat> ja: if you know the forest.rows and position, you can get row number
+[23:44:59] <adiabat> what do you mean by "data inserted">
+[23:45:28] <adiabat> I don't know of any cases where you can call childMany with different positions and get the same result
+[23:46:48] <adiabat> position gets shifted up (<<) so maybe if there's some huge position that overflows... or if the mask it's &'ded with makes it look the same
+[23:47:18] <adiabat> anyway childMany *shouldn't* return the same values for different positions; if it doesn't that's a bug somewhere
+[23:47:54] <adiabat> if you can get it to happen in swapNodes then maybe panic there, or something upsstream from there is breaking other assumptions
+[23:48:15] <adiabat> but yeah some of these assumptions aren't really made explicit which they should be
