@@ -1,0 +1,23 @@
+[00:17:54] *** Quits: rafalcpp (~racalcppp@ip-178-214.ists.pl) (Ping timeout: 240 seconds)
+[02:57:41] <ja> ok, i fixed it. it was because the nodes were not on the same row
+[02:57:50] <ja> helpful tips, thanks!
+[03:24:24] <rjected> there should be a way to get it working in gopath but if moving outside gopath works then maybe do that for now
+[05:08:58] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[05:34:56] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 256 seconds)
+[06:46:31] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[07:10:27] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[10:09:40] *** Joins: rafalcpp (~racalcppp@ip-178-214.ists.pl)
+[10:44:08] *** Joins: ghost43_ (~daer@gateway/tor-sasl/daer)
+[10:44:43] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Ping timeout: 240 seconds)
+[10:45:38] *** ghost43_ is now known as ghost43
+[10:52:51] *** Quits: rafalcpp (~racalcppp@ip-178-214.ists.pl) (Ping timeout: 260 seconds)
+[10:57:35] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 272 seconds)
+[11:37:49] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[13:26:25] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 272 seconds)
+[14:50:57] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[15:24:51] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 272 seconds)
+[17:30:04] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[17:45:56] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 256 seconds)
+[20:17:35] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[20:22:37] *** Joins: rafalcpp (~racalcppp@ip-178-214.ists.pl)
+[20:55:42] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 256 seconds)
