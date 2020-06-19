@@ -1,0 +1,28 @@
+[05:54:56] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[06:33:44] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 246 seconds)
+[06:35:08] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[06:49:56] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 256 seconds)
+[07:58:45] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[11:26:36] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 246 seconds)
+[12:10:56] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[13:23:09] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 246 seconds)
+[14:20:11] *** Joins: dergoegge (~dergoegge@dslb-002-202-130-089.002.202.pools.vodafone-ip.de)
+[14:22:26] <dergoegge> adiabat: i started working getting the integration test to run on github actions. But there was an error and now the job will run until job time limit is reached.
+[14:23:01] <dergoegge> can you kill that job for me?
+[14:24:24] <dergoegge> https://github.com/mit-dci/utreexo/actions/runs/139742377
+[14:25:48] <dergoegge> i will put a limit in the script, so this doesn't happen again. maybe you can also reduce the default job time limit?
+[15:09:05] <adiabat> dergoegge: I clicked cancel workflow
+[15:09:09] <adiabat> I think that cancelled it
+[15:10:00] <adiabat> do you know where I can change the time limit..?
+[15:14:06] <adiabat> seems like there's only a per-job setting, not a global / default (or I can't find it)
+[15:14:24] <adiabat> https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idtimeout-minutes
+[15:41:06] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[15:46:07] <dergoegge> i have no experience with actions so i dont know if there is a global setting. but the per job limit seems good enough
+[16:52:15] *** Joins: ThomasV_ (~thomasv@unaffiliated/thomasv)
+[16:55:23] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 272 seconds)
+[19:55:07] *** Quits: dergoegge (~dergoegge@dslb-002-202-130-089.002.202.pools.vodafone-ip.de) (Quit: leaving)
+[19:57:40] *** Quits: ThomasV_ (~thomasv@unaffiliated/thomasv) (Ping timeout: 256 seconds)
+[21:37:02] *** Joins: ThomasV_ (~thomasv@unaffiliated/thomasv)
+[21:53:53] *** Quits: ThomasV_ (~thomasv@unaffiliated/thomasv) (Ping timeout: 246 seconds)
+[23:04:52] *** Joins: dergoegge (~dergoegge@dslb-002-202-130-089.002.202.pools.vodafone-ip.de)
+[23:34:01] *** Quits: dergoegge (~dergoegge@dslb-002-202-130-089.002.202.pools.vodafone-ip.de) (Quit: leaving)
