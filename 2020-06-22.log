@@ -1,0 +1,95 @@
+[02:02:49] *** Quits: achow101 (~achow101@unaffiliated/achow101) (Quit: Bye)
+[02:09:33] *** Joins: achow101 (~achow101@unaffiliated/achow101)
+[03:04:50] *** Quits: achow101 (~achow101@unaffiliated/achow101) (Quit: Bye)
+[03:05:24] *** Joins: achow101 (~achow101@unaffiliated/achow101)
+[03:47:31] *** Quits: achow101 (~achow101@unaffiliated/achow101) (Quit: Bye)
+[03:47:51] *** Joins: achow101 (~achow101@unaffiliated/achow101)
+[04:11:27] *** Joins: achow101_ (~achow101@unaffiliated/achow101)
+[04:12:32] *** Quits: achow101_ (~achow101@unaffiliated/achow101) (Client Quit)
+[04:24:46] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[04:54:23] *** Quits: achow101 (~achow101@unaffiliated/achow101) (Quit: Bye)
+[04:54:43] *** Joins: achow101 (~achow101@unaffiliated/achow101)
+[05:00:21] *** Quits: achow101 (~achow101@unaffiliated/achow101) (Quit: Bye)
+[05:00:38] *** Joins: achow101 (~achow101@unaffiliated/achow101)
+[05:20:42] *** Quits: achow101 (~achow101@unaffiliated/achow101) (Quit: Bye)
+[05:20:59] *** Joins: achow101 (~achow101@unaffiliated/achow101)
+[05:45:00] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 256 seconds)
+[06:21:38] *** Quits: achow101 (~achow101@unaffiliated/achow101) (Quit: Bye)
+[06:22:16] *** Joins: achow101 (~achow101@unaffiliated/achow101)
+[06:37:12] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[09:42:55] *** Joins: rjected (~dan@pool-71-184-77-198.bstnma.fios.verizon.net)
+[10:20:59] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 272 seconds)
+[11:07:35] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[12:10:18] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 246 seconds)
+[14:01:41] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[16:03:13] *** jb551 is now known as jb55
+[16:12:29] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 272 seconds)
+[16:30:08] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[16:58:00] <adiabat> Hey normally the weekly call is at 9:30 am EDT but this week how about 3 hours later, at 12:30PM EDT
+[16:58:33] <adiabat> That's harder for people in KST but I think kcalvinalvin you're doing exams and stuff this week so not really working on this much?
+[17:00:20] <ja> oooh, i will definitely join in then :)
+[17:00:25] <adiabat> Aaron wants to join and he's on US pacific time so that fits better... and it's still OK for europe, and mayyybe KST could still work as it's like 1:30 am
+[17:00:28] <adiabat> ok cool
+[17:01:39] *** Joins: aaron (uid451246@gateway/web/irccloud.com/x-ybqoqeqqmegbygnd)
+[17:02:02] *** aaron is now known as Guest79442
+[17:07:39] *** Guest79442 is now known as aaronc2347
+[17:07:59] <aaronc2347> hi
+[17:08:02] <aaronc2347> test
+[17:08:08] <ja> i read you aaron
+[17:12:40] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[17:20:29] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[17:28:04] <kcalvinalvin> adiabat Yeah I'm not doing much at the moment. My focus will be back on Utreexo starting this Saturday.
+[17:28:27] <kcalvinalvin> Yeah you guys could go ahead with that. Might hop on if I'm not asleep
+[17:30:15] <adiabat> kcalvinalvin: no no problem, exams and stuff
+[17:30:29] <adiabat> I also haven't been doing as much, there are like, DCI meetings and things
+[17:31:17] <adiabat> aaronc2347: welcome to IRC!  The communications protocol of the 80s... today.
+[17:31:19] <kcalvinalvin> Was planning to say this at the call tomorrow but since I might not be on, I guess I could just say it here.
+[17:31:39] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 272 seconds)
+[17:31:47] <kcalvinalvin> The same guy that runs mempool.space might be up for running a bridgenode once we're ready to go
+[17:32:06] <adiabat> fun, yeah I don't think there will be a shortage but great
+[17:32:06] <kcalvinalvin> Haven't really filled him on the details since I don't know it yet either :)
+[17:32:35] <adiabat> it's not any harder than running an archive node now, which is... not hard
+[17:32:48] <adiabat> although I guess it's huge?
+[17:32:54] <adiabat> hmm should test that
+[17:33:01] <kcalvinalvin> Wouldn't it be a hassle bandwidth wise?
+[17:33:03] <adiabat> full genproofs size for mainnet
+[17:33:17] <adiabat> bandwidth is only an issue if everyone's downloading from you
+[17:33:31] <kcalvinalvin> Assuming a bunch of people just start to play around with little nodes
+[17:33:39] <adiabat> yeah could get annoying maybe
+[17:33:57] <adiabat> I have a bitcoin mainnet node that's archive and has been running forever
+[17:34:04] <adiabat> it's about 1 TB a month
+[17:34:27] <adiabat> (all upload, like 100GB month down)
+[17:35:27] <adiabat> I bet with erlay the download would get cut in half
+[17:35:29] <kcalvinalvin> Eh maybe we would spin up some AWS lightsail nodes if it *really* starts to become a problem
+[17:35:38] <kcalvinalvin> Or maybe that's not a problem but a really good thing :)
+[17:35:44] <adiabat> doesn't AWS charge insane upload fees?
+[17:35:56] <kcalvinalvin> oh right.. :/
+[17:36:11] <adiabat> I have MIT servers... one of which is dead but
+[17:36:21] <adiabat> I think soon I'll be able to go back there and fix it
+[17:36:26] <adiabat> like in the next few weeks
+[17:36:47] <adiabat> I guess we need to distinguish better...
+[17:36:49] <kcalvinalvin> Well, I can spin up a server here (my ISP doesn't have a bandwidth cap) and seems like a Japan server is doable so...
+[17:36:57] <adiabat> there's the proof archive, and then the bridge itself
+[17:37:24] <adiabat> the archive is pretty big, actually we haven't measured it have we?
+[17:37:31] <adiabat> maybe 500GB?
+[17:37:34] <kcalvinalvin> Not for full mainnet no
+[17:37:43] <kcalvinalvin> Prob around that much
+[17:37:44] <adiabat> well 300GB for regular blocks
+[17:37:51] <adiabat> and then an extra 200 or something
+[17:38:06] <adiabat> there are wasy to reduce that, potentially by a lot
+[17:38:26] <adiabat> but yeah an "archive" utreexo node will be big
+[17:38:32] <kcalvinalvin> oh boy the sync speeds on hdds would be terrible :/ Maybe this is a good time to benchmark those as well
+[17:38:47] <adiabat> a "bridge-only" is just the forest, which is 4GB or so
+[17:39:00] <adiabat> wait, why would sync on HDD be bad?
+[17:39:14] <kcalvinalvin> For a full bridgenode with all the proofs
+[17:39:27] <adiabat> I don't think it'll be that bad
+[17:39:34] <adiabat> but yeah we haven't tested it
+[17:39:55] <adiabat> I bet you can do full mainnet genproofs on an HDD in under a day
+[17:40:01] <adiabat> hm.  actually I don't know. heh
+[17:40:23] <adiabat> but genproofs doesn't really *do* anything, like it doesn't know what anything is, there's no signature checking etc
+[17:40:37] <adiabat> so it shouldn't be too slow.
+[17:41:13] <kcalvinalvin> Ah right. Yeah but we should definitely start benchmarking
+[20:35:42] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[20:42:55] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 272 seconds)
+[21:13:31] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[22:03:35] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 256 seconds)
