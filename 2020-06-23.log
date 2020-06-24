@@ -1,0 +1,21 @@
+[04:33:13] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[05:16:34] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 246 seconds)
+[07:43:00] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[08:04:54] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 240 seconds)
+[08:24:25] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[09:02:54] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 240 seconds)
+[09:18:19] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[11:24:31] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 272 seconds)
+[12:15:30] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[13:07:45] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 272 seconds)
+[15:13:01] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[16:28:39] <ja> good morning
+[16:30:21] <adiabat> hey - Ok going on call now
+[16:30:26] <adiabat> meet.jit.si/utreexo
+[19:10:01] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 272 seconds)
+[20:31:13] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[21:04:14] *** Joins: dergoegge (~dergoegge@194.36.108.52)
+[21:04:18] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 265 seconds)
+[21:05:57] <dergoegge> adiabat: using interface{} would still have the same problem, i think. interface{} is implemented as two pointers, one to type info and one to the value.
+[21:08:45] <dergoegge> but i think we could use unsafe.Pointer and store the nieces as uintptr that should work. haven't really used the unsafe package before though
+[21:43:38] *** Quits: dergoegge (~dergoegge@194.36.108.52) (Ping timeout: 256 seconds)
