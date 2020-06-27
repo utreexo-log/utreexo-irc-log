@@ -1,0 +1,18 @@
+[04:24:55] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[04:35:16] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[04:36:03] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[05:53:01] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 264 seconds)
+[07:00:08] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[10:59:47] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 272 seconds)
+[11:57:22] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[12:49:59] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 272 seconds)
+[13:53:42] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[15:01:17] <adiabat> dergoegge: yeah might need unsafe, which I'd hope to avoid but if it really saves time / memory might have to
+[15:01:36] <adiabat> also -- why is github all circles now
+[15:03:18] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[15:04:10] <adiabat> monitors are still rectangles.  even if they were circles... rectangles still pack better in a circle than circles do
+[15:04:15] <adiabat> </complaint>
+[15:10:15] <rjected> I would definitely try to concretely figure out if there's a time/mem benefit before introducing unsafe, another advertisement for go test -bench from me lol
+[15:10:43] <kcalvinalvin> Working on some benchmarking stuff at the moment so seems like I'm doing the right thing
+[15:12:29] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 272 seconds)
+[15:19:54] <rjected> oh nice
