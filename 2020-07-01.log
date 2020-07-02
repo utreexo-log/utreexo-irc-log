@@ -1,0 +1,29 @@
+[04:05:15] *** Quits: adiabat (~adiabat@63.209.32.102) (Ping timeout: 260 seconds)
+[04:34:30] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[04:39:12] *** Joins: adiabat (~adiabat@63.209.32.102)
+[05:29:22] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 256 seconds)
+[06:31:04] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[10:04:48] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 246 seconds)
+[11:32:37] *** Quits: aaronc2347 (uid451246@gateway/web/irccloud.com/x-koazhvtlntblmooy) (Quit: Connection closed for inactivity)
+[11:42:11] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[12:31:29] *** Joins: dergoegge (~dergoegge@196.240.57.36)
+[12:32:51] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 246 seconds)
+[12:35:06] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[13:06:09] <dergoegge> for new blocks the CBlockFileInfo is sometimes written to the cache of the /index leveldb, and when we then read the on disk version of /index the CBlockFileInfo for those blocks don't show up.
+[13:06:34] <dergoegge> setting -dbcache=0 does not work because there is a min cache size: https://github.com/bitcoin/bitcoin/blob/e491e556469863d39539a3acc7c80fc929b55f04/src/init.cpp#L1518-L1521
+[13:06:43] <dergoegge> i dont know how to get around this
+[13:08:41] <dergoegge> is there a way to tell bitcoind to flush those caches? one way would be to restart bitcoind but thats no good in our case.
+[13:39:07] <fanquake> dergoegge: I'll have to check tomorrow, but there might be an RPC you can call that'll flush them as a side-effect
+[13:47:03] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 246 seconds)
+[13:48:49] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[13:53:21] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 246 seconds)
+[13:54:23] <dergoegge> fanquake: ok thanks, an RPC like that would be nice
+[14:06:54] *** Quits: dergoegge (~dergoegge@196.240.57.36) (Quit: leaving)
+[15:09:15] *** Joins: dergoegge (~dergoegge@196.240.57.36)
+[15:25:09] <dergoegge> adiabat: i am currently filling out that bitmex grant form. would it be ok for you if i put you down as a reference? also if anyone else would be ok with that let me know, i don't know any other people in this space yet :D
+[16:32:28] *** Quits: dergoegge (~dergoegge@196.240.57.36) (Quit: leaving)
+[17:15:48] *** Quits: gnusha (~gnusha@unaffiliated/kanzure/bot/gnusha) (*.net *.split)
+[17:26:23] *** Quits: rjected (~dan@pool-71-184-77-198.bstnma.fios.verizon.net) (*.net *.split)
+[17:29:29] *** Joins: rjected (~dan@pool-71-184-77-198.bstnma.fios.verizon.net)
+[17:53:38] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[21:18:55] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 272 seconds)
