@@ -1,0 +1,28 @@
+[00:58:54] <adiabat> dergoegge: yeah I can be a reference
+[01:01:29] <adiabat> bitmex funding people developing utreexo would be very cool :)
+[03:05:01] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[03:45:38] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 260 seconds)
+[04:11:17] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[04:30:00] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Remote host closed the connection)
+[04:30:27] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[05:43:25] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 264 seconds)
+[06:31:52] *** Quits: cfields (~cfields@unaffiliated/cfields) (Remote host closed the connection)
+[06:33:00] *** Joins: cfields (~cfields@unaffiliated/cfields)
+[07:03:56] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[13:16:51] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 246 seconds)
+[14:15:07] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[15:14:15] *** Quits: achow101 (~achow101@unaffiliated/achow101) (Ping timeout: 264 seconds)
+[15:14:25] *** Joins: achow101 (~achow101@unaffiliated/achow101)
+[15:37:13] <kcalvinalvin> I managed to get 80% speedup in offsetfile generation :0
+[15:37:16] <kcalvinalvin> PR soon :)
+[15:37:33] <kcalvinalvin> just need to clean up the code
+[18:13:27] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 240 seconds)
+[18:48:13] <adiabat> 80% is pretty good :)
+[18:48:48] <adiabat> is it like, goes from taking 10 seconds to 6 seconds
+[18:48:55] <adiabat> or 10 seconds to 2 seconds
+[18:49:06] <adiabat> I can see how both of those are "80%"
+[18:50:12] <adiabat> well the first would be 10 to 5.555 not 6 but... anyway
+[20:00:32] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[20:03:46] <kcalvinalvin> The github tests are failing since the binary names changed
+[20:03:59] <kcalvinalvin> So csn_bridge.sh is failing
+[21:41:37] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 264 seconds)
