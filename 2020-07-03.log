@@ -1,0 +1,15 @@
+[05:54:11] *** Joins: fogof (49a23865@c-73-162-56-101.hsd1.ca.comcast.net)
+[06:02:35] *** Quits: fogof (49a23865@c-73-162-56-101.hsd1.ca.comcast.net) (Remote host closed the connection)
+[07:30:46] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[11:19:29] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 244 seconds)
+[12:46:19] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[19:25:08] <kcalvinalvin> adiabat Originally I tested it on my chromebook with external ssd and it was 10 seconds to 2 seconds but only for user + system time
+[19:25:14] <kcalvinalvin> clock time was like 30%
+[19:26:03] <kcalvinalvin> Tested it on the macbook with the internal ssd and the wall clock is down like 80%
+[19:26:17] <kcalvinalvin> I think your mileage varies on how fast your disk is
+[19:27:26] <kcalvinalvin> I haven't put any concurrency here though. So it could go even faster but I'm not sure if it's worth the complexity/effort since it's fairly quick anyways..
+[20:29:42] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 260 seconds)
+[21:45:53] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[22:17:14] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 240 seconds)
+[22:18:25] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[23:18:10] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 244 seconds)
