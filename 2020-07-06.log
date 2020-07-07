@@ -1,0 +1,42 @@
+[03:03:12] <kcalvinalvin> adiabat I think there's some allocations that isn't necessary. I'll try removing those today
+[17:29:19] *** Joins: aaronc2347 (uid451246@gateway/web/irccloud.com/x-rhnklawfgzbcjcws)
+[17:44:01] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[17:56:16] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[18:16:04] <kcalvinalvin> It's probably since I've only synced til 2014 but btcd is taking 82% of the time on gc and db (~40% on gc and ~40% on db)
+[18:16:59] <kcalvinalvin> Seems like utreexo thrown in there would help *a lot*
+[18:21:32] <ja> kcalvinalvin: how do you measure time spent in gc?
+[18:24:59] <rjected> kcalvinalvin: it's not because you've only synced till 2014, gc is crazy in btcd
+[18:25:20] <rjected> well maybe it is, depending on what you were expecting
+[18:25:43] <rjected> utreexo would help a ton
+[20:36:59] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[21:13:42] *** Joins: ThomasV_ (~thomasv@unaffiliated/thomasv)
+[21:15:13] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 264 seconds)
+[21:23:54] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[21:25:15] *** Quits: ThomasV_ (~thomasv@unaffiliated/thomasv) (Ping timeout: 258 seconds)
+[21:42:03] <adiabat> well... that seems like the next step then, shove utreexo into btcd
+[21:42:15] <adiabat> I actually don't think it'd be *that* hard
+[21:42:35] <adiabat> I mean fairly hard but not crazy
+[21:43:02] <adiabat> also now I have a server
+[21:46:04] <adiabat> there was a bunch of google cloud credits.  I spent like 2 hours just trying to figure out how to get ssh keys to work
+[21:46:30] <adiabat> anyway it's 35.188.186.244
+[21:47:04] <adiabat> I could give it a hostname I guess. bridgenode.tadge.net? or .lit3.co?  I have some random domains
+[21:49:16] <adiabat> I will try to have a bridge node of current master up and running on there, most of the time
+[21:49:55] <adiabat> also I guess if anyone wants I can put their ssh keys on it.  Or if you have your own servers you can do the same 
+[21:50:03] <adiabat> and we can have a binary randomly choose from a list
+[21:50:25] <adiabat> also I'm writing up some road map stuff and... I think we should have a quick "release" soon / now ish
+[21:50:30] <adiabat> just to get some interest
+[21:50:57] <adiabat> but then it's a bit weird because it seems like right after the release we switch to getting utreexo into btcd
+[21:51:31] <adiabat> which doesn't actually throw away too much code, but 'utreexoserver' and 'utreexoclient' would likely not make it
+[22:01:06] *** Quits: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net) (Ping timeout: 256 seconds)
+[22:33:42] *** Joins: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net)
+[23:05:35] *** Joins: ThomasV_ (~thomasv@unaffiliated/thomasv)
+[23:06:37] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 246 seconds)
+[23:23:42] <adiabat> also, getting a "panic: varint is 7" at the end of genproofs
+[23:26:23] <adiabat> maybe should do this on github... but yeah why does rev.go #247 have that error?
+[23:26:37] <adiabat> if varint != 0, return error
+[23:26:56] <adiabat> then the next line is ti.Varint = varint... which must always be 0 at that point
+[23:27:29] <adiabat> so why even have that field if it's always 0?
+[23:27:46] <adiabat> anyway I'm going to take out the !=0 check there and see if everything still works fine
+[23:29:46] <adiabat> also ti.Height is always non-zero right?
+[23:30:00] <adiabat> since you can't spend anything from height 0
+[23:49:06] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
