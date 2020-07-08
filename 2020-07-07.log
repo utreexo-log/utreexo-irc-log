@@ -1,0 +1,107 @@
+[00:15:32] *** Joins: dergoegge (~dergoegge@152.89.163.100)
+[01:04:01] *** Quits: dergoegge (~dergoegge@152.89.163.100) (Quit: leaving)
+[02:07:17] *** pigeons_ is now known as pigeons
+[02:55:24] <kcalvinalvin> adiabat ti.Height is non-zero for all transactions *after* bitcoind 0.15. Before, they would all be 0 except for the last output
+[03:00:41] <kcalvinalvin> I think it's ok to get rid of the ```if varint != 0``` but ti.Height check is useful since wire.ReadVarInt is expensive
+[03:03:01] <kcalvinalvin> ja I've been using pprof, a golang profiling tool recently
+[03:06:10] <adiabat> kcalvinalvin: in the code it was if varint != 0 return error, which goes directly to a panic
+[03:06:31] <adiabat> so any non-0 varint would crash genproofs
+[03:07:06] <adiabat> anyway it's never used anywhere once it's read so I just took out reading it
+[03:07:16] <adiabat> we can put it back if it does something (other than panic)
+[03:07:41] <kcalvinalvin> I.. think you'd have to read it since I think it'll screw with reading the data that's after that
+[03:08:07] <adiabat> it is annoying that we have to read it to advance the pointer in the reader
+[03:08:09] <adiabat> yeah
+[03:08:35] <adiabat> it still crashes though at the end of genproofs for me
+[03:08:41] <kcalvinalvin> yeah I think crashing genproofs might have been a mistake for varint != 0 when height is >0. But odd how that didn't crash anything? Usually when varint was != 0, it meant that rev files were being read wrong
+[03:08:58] <adiabat> I dunno I have rev files that do that
+[03:09:04] <adiabat> and so did aaronc2347 I think
+[03:09:10] <kcalvinalvin> Yeah idk what's crashing it... 
+[03:09:28] <adiabat> I mean, rev files, and blk files I guess, are kind of mysteries
+[03:09:49] <adiabat> so we should try to recover or just say "OK we're done" if there's something weird in them
+[03:09:51] <kcalvinalvin> Apparently there are a handful of blocks that don't have a matching rev block
+[03:09:59] <adiabat> yeah I have that now
+[03:10:32] <adiabat> without the varint thing, I get an unexpected EOF panic
+[03:10:40] <kcalvinalvin> I guess that happens when you finish syncing and get bad blocks/not best blocks
+[03:11:18] <adiabat> I guess we should try to not panic on external data that's messed up, but try to ignore / recover maybe
+[03:11:18] <kcalvinalvin> I think you do need the varint since you don't know when the next data starts
+[03:11:32] <adiabat> yeah I'm still reading it, just ignoring it
+[03:11:37] <kcalvinalvin> ah ok
+[03:11:39] <adiabat> _, err := wire.ReadVarInt(r, pver)
+[03:12:05] <adiabat> except... it's always 1 byte, right?
+[03:12:17] <adiabat> are there any 2+ byte varints there for version?
+[03:12:36] <adiabat> it'd be nonstanard I guess but that doesn't mean they don't exist
+[03:12:42] <kcalvinalvin> I'm assuming it's not always 1 byte. But idk for sure
+[03:13:15] <adiabat> hmm.  I guess in compress.go there's tons of panics, but really they should be errors
+[03:14:49] <kcalvinalvin> I think for btcd they have all these checks before sending off to the functions in compress
+[03:15:04] <adiabat> in this case the last io.ReadFull fails
+[03:15:49] <adiabat> anyway we need to be able to reliably go to serving blocks at the end of genproofs, so ignoring errors here is OK
+[03:16:23] <adiabat> like if there's any error in rev blocks we just say "OK we're done!" and finish that loop and go to serving
+[03:17:01] <kcalvinalvin> lots to talk about today I guess heh
+[03:17:02] <adiabat> which is a bit of a hack but rev blocks are weird and we don't really know why they're out of order or not there, etc
+[03:17:05] <kcalvinalvin> Or tomorrow for you guys
+[03:17:25] <adiabat> yeah well that part is just... no panics 
+[03:17:27] <adiabat> I can do it now
+[03:17:42] <adiabat> or you can do it if you want as you're more familiar with the rev stuff
+[03:18:15] <kcalvinalvin> ignore errors?
+[03:18:20] <adiabat> no, return them
+[03:18:32] <kcalvinalvin> ah yeah maybe I can do them today
+[03:18:35] <adiabat> like func decompressScript(compressedPkScript io.Reader) ([]byte, error)
+[03:19:14] <adiabat> then I can catch an error in BlockAndRevReader and just say OK we're done
+[03:19:42] <adiabat> although... well I don't know if that will actually *work*
+[03:19:58] <kcalvinalvin> did you get a chance to look at the buffered offsetfile PR?
+[03:20:04] <adiabat> maybe it's something even weirder, and we really need to understand what the rev files are doing ...
+[03:20:15] <adiabat> but it seems like we pretty much have them OK, it's just the very end
+[03:20:51] <adiabat> yeah, looks good
+[03:20:55] <adiabat> maybe can merge tomorrow
+[03:21:40] <adiabat> oh somewhat related:
+[03:22:10] <adiabat> https://github.com/mit-dci/utreexo/commit/ed70f17fb83ad3a833afef0b600c4e8bb82f2b4a#diff-b0d0afbe26963186b20137292fb23458R581
+[03:22:16] <adiabat> threw me off for like an hour
+[03:23:09] <adiabat> the description of the read function:
+[03:23:11] <adiabat> Read reads up to len(b) bytes from the File.
+[03:23:17] <adiabat> It returns the number of bytes read and any error encountered.
+[03:23:34] <adiabat> apparently there's a semi-secret 1GB read limit...
+[03:24:11] <adiabat> ok I should go to bed for the call
+[03:24:23] <ja> late call tomorrow right?
+[03:24:30] <adiabat> yes, 12:30
+[03:24:39] <ja> all right!
+[03:24:39] <kcalvinalvin> 12:30 edt right?
+[03:24:46] <adiabat> yeah I guess switch back and forth
+[03:25:16] <adiabat> I could start at 12 if that's any better for KST
+[03:26:03] <kcalvinalvin> That'd be helpful
+[03:26:13] <ja> all right! 12!
+[03:27:34] <adiabat> ok 12 works
+[03:27:49] <kcalvinalvin> cool]
+[03:47:08] <aaronc2347> cool ill be there
+[04:46:08] *** Quits: ThomasV_ (~thomasv@unaffiliated/thomasv) (Ping timeout: 272 seconds)
+[07:15:03] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[07:59:37] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 264 seconds)
+[11:20:02] *** Quits: aaronc2347 (uid451246@gateway/web/irccloud.com/x-rhnklawfgzbcjcws) (Quit: Connection closed for inactivity)
+[11:29:29] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[12:09:20] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 256 seconds)
+[13:28:56] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[14:53:40] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 256 seconds)
+[16:00:14] <ja> hello!
+[16:00:31] <adiabat> hi
+[16:02:45] <ja> https://meet.jit.si/utreexo
+[16:07:08] <adiabat> 35.188.186.244:8000
+[16:11:20] <ja> tar cf newarchive.tar *.dat
+[16:39:08] <adiabat> notes: sigCache := txscript.NewSigCache(8192)
+[16:39:14] <adiabat> the 8192 is made up
+[16:39:19] <adiabat> can it be 0?
+[21:16:58] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[21:46:14] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 240 seconds)
+[21:56:17] *** Joins: dergoegge (~dergoegge@37.120.217.196)
+[22:00:38] <dergoegge> i figured something out... CBlockFileIndex has a status field which indicates the validation status for a block. it appears that 157 means fully validated but sometimes i get a block where status is 139 and those blocks don't have a rev position assigned yet, but are still found in /index.
+[22:00:49] <dergoegge> i will look for docs on those status codes
+[22:04:55] <dergoegge> https://github.com/bitcoin/bitcoin/blob/abdfd2d0e3ebec7dbead89317ee9192189a35809/src/chain.h#L92
+[22:11:18] <dergoegge> 157=BLOCK_OPT_WITNESS|BLOCK_HAVE_UNDO|BLOCK_HAVE_DATA|BLOCK_VALID_CHAIN|BLOCK_VALID_RESERVED
+[22:12:34] <dergoegge> 139=BLOCK_OPT_WITNESS|BLOCK_HAVE_DATA|BLOCK_VALID_TREE|BLOCK_VALID_RESERVED
+[22:13:10] <dergoegge> so i guess for us it is important that the BLOCK_HAVE_UNDO bit is set
+[22:47:28] *** Quits: fanquake (sid369002@gateway/web/irccloud.com/x-pnnhyobqmavcnerm) (Ping timeout: 260 seconds)
+[22:50:35] *** Quits: RubenSomsen (sid301948@gateway/web/irccloud.com/x-sqcvwbhnlmistayr) (Ping timeout: 244 seconds)
+[22:50:42] *** Quits: valwal_ (sid334773@gateway/web/irccloud.com/x-qifsswwtchwsflxx) (Ping timeout: 246 seconds)
+[22:51:19] *** Quits: fjahr (sid374480@gateway/web/irccloud.com/x-rttuizyvrxqquuxg) (Ping timeout: 272 seconds)
+[22:51:24] *** Quits: jamesob (sid180710@gateway/web/irccloud.com/x-zqvulwiyybduvnkg) (Ping timeout: 246 seconds)
+[22:51:45] *** Quits: digi_james (sid281632@gateway/web/irccloud.com/x-fjepoohrzcwjyqay) (Ping timeout: 246 seconds)
+[23:35:19] *** Quits: dergoegge (~dergoegge@37.120.217.196) (Quit: leaving)
+[23:44:29] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
