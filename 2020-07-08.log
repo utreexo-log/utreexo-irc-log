@@ -1,0 +1,30 @@
+[06:16:09] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[08:50:34] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 240 seconds)
+[13:46:15] *** Quits: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net) (Quit: ZNC 1.7.4+deb7 - https://znc.in)
+[13:46:31] *** Joins: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net)
+[14:13:36] <adiabat> dergoegge: huh intersting, yeah maybe we should check that bit and if it's not set, say we're finished
+[14:13:53] <adiabat> also I synced btcd to testnet, didn't take *that* long
+[14:14:03] <adiabat> though yeah, several times longer than bitcoind
+[14:52:22] *** Quits: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net) (Ping timeout: 260 seconds)
+[14:52:38] *** Joins: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net)
+[16:49:54] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[16:54:12] <adiabat> bitcoind sync for tesnet gives about 29GB, btcd about 27
+[16:54:23] <adiabat> so whatever btcd's doing it's 2 gigs less
+[16:54:49] <adiabat> the single leveldb folder for btcd is 5GB
+[16:55:44] <adiabat> btcd doesn't have pruning, so maybe the utxo set in leveldb is just pointers into blocks?
+[16:55:55] <adiabat> But I don't think it is actually
+[17:02:24] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[19:29:18] *** Joins: RubenSomsen (sid301948@gateway/web/irccloud.com/x-siipwwkhxjcfolyk)
+[19:35:26] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[19:55:43] *** Joins: fanquake (sid369002@gateway/web/irccloud.com/x-olctokxewerkqszl)
+[20:02:24] *** Joins: dergoegge (uid453889@gateway/web/irccloud.com/x-uodyyuylruvokghe)
+[20:14:44] *** Joins: digi_james (sid281632@gateway/web/irccloud.com/x-acapbubtjyrfcjrf)
+[20:16:25] *** Quits: adiabat (~adiabat@63.209.32.102) (Ping timeout: 264 seconds)
+[20:22:27] *** Joins: valwal_ (sid334773@gateway/web/irccloud.com/x-luuxrqxzkssfsrcv)
+[20:26:49] *** Joins: jamesob (sid180710@gateway/web/irccloud.com/x-msxrcsfqcftqvufi)
+[20:28:39] *** Joins: fjahr (sid374480@gateway/web/irccloud.com/x-uivuzkqvxqkxtfmn)
+[21:23:02] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Read error: Connection reset by peer)
+[21:24:30] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[21:34:08] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Read error: Connection reset by peer)
+[21:35:06] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[21:42:46] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 246 seconds)
