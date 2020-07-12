@@ -1,0 +1,14 @@
+[03:26:52] <kcalvinalvin> I haven't profiled btcd in depth yet so not sure. But csn is a lot faster with proper concurrency in scriptval.go
+[05:12:12] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[05:59:14] *** Quits: valwal_ (sid334773@gateway/web/irccloud.com/x-luuxrqxzkssfsrcv) (Ping timeout: 256 seconds)
+[06:00:09] *** Joins: valwal_ (sid334773@gateway/web/irccloud.com/x-abwsebbkiydvjbvo)
+[08:28:41] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 246 seconds)
+[16:39:20] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[17:04:04] <rjected> Yeah while the script stuff does seem like a bottleneck I'm not sure it actually is in btcd
+[17:38:10] *** Joins: adiabat (~adiabat@63.209.32.102)
+[17:38:23] <adiabat> hey sorry lightning strike and this laptop was offline for a few days!
+[17:38:56] <adiabat> switched AC adapter and it's good to go :)
+[17:51:41] <ja> hear ye, hear ye! lightning author gets struck by lightning :P
+[18:14:01] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 264 seconds)
+[20:20:45] *** Joins: rafalcpp_ (~racalcppp@ip-178-214.ists.pl)
+[21:03:32] *** Quits: rafalcpp_ (~racalcppp@ip-178-214.ists.pl) (Ping timeout: 256 seconds)
