@@ -1,0 +1,14 @@
+[07:26:47] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[09:02:18] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 258 seconds)
+[15:31:09] <kcalvinalvin> So some exciting news is that during my csn benchmarks to block #80,000 on testnet3, I slimed it down from ~2m45s to ~2m2s by tweaking some concurrency stuff
+[15:32:02] <kcalvinalvin> Tons of things still left to improve
+[15:35:38] <kcalvinalvin> problem with btcd code at the moment is that its generating a of goroutines per TXIN so the context switching between the goroutines really add up
+[16:34:41] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[16:35:31] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[17:24:31] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[18:54:04] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 256 seconds)
+[19:46:07] *** Quits: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net) (Ping timeout: 272 seconds)
+[19:49:58] *** Joins: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net)
+[21:37:15] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[23:21:12] *** Joins: rafalcpp (~racalcppp@ip-178-214.ists.pl)
+[23:23:37] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 264 seconds)
