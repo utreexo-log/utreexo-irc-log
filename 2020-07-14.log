@@ -1,0 +1,40 @@
+[04:04:54] <kcalvinalvin> sooo.. urm what time are we doing the call?
+[04:05:18] <kcalvinalvin> oh ok 9:00 EDT
+[08:52:46] <kcalvinalvin> https://github.com/Rjected/btcd/pull/1
+[08:53:08] <kcalvinalvin> rjected I made a PR on our btcd repo
+[09:00:57] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[09:01:15] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[09:05:06] <rjected> cool, taking a look
+[09:26:19] <rjected> I'm a bit confused as to why the scheduler would be choking from these calls, do you think you can explain that part to me?
+[09:28:08] <rjected> kcalvinalvin: is it just something you've noticed during profiling?
+[10:00:55] *** Quits: digi_james (sid281632@gateway/web/irccloud.com/x-qxgppfsjpuhvoxcs) (Ping timeout: 244 seconds)
+[10:01:43] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Ping timeout: 240 seconds)
+[10:02:05] *** Joins: digi_james (sid281632@gateway/web/irccloud.com/x-llyljsqrlzyhgofo)
+[10:04:30] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[11:18:13] <kcalvinalvin> rjected I left a new comment in the PR
+[11:19:35] <rjected> 👍
+[11:20:54] <rjected> yeah that's super helpful
+[11:46:45] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[11:47:32] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[12:28:31] <adiabat> yeah 9:00, in 30 min
+[12:28:53] <adiabat> kcalvinalvin: the per-tx stuff looks cool; is it slower for fewer, larger txs?
+[12:33:25] <adiabat> like bb41a757f405890fb0f5856228e23b715702d714d59bf2b1feb70d8b2b4e3e08
+[12:34:01] <adiabat> there might be a threshold where it makes sense to make per-txin goroutines
+[12:34:37] <adiabat> like if you have 1000 txs with 5 inputs each, it makes sense to do per-tx, as 1000 routines is plenty to keep the cpu busy
+[12:35:12] <adiabat> but if you have 1 tx with 5000 inputs, maybe the scheduler hit of all the routines is worth it, because otherwise the CPU is idle?
+[12:36:42] <adiabat> then again the bb41 tx is quite rare, there are not many txs bigger than 100KB
+[13:45:48] <adiabat> 35.188.186.244
+[16:09:08] <dergoegge> adiabat: i can't reproduce #155, i tried on linux so it does not seem to be linux related. Or maybe it is what distro are you on?
+[16:13:02] <dergoegge> What cache size did you use? 20 like on master or 25?
+[16:55:57] <adiabat> I'm using the 20 in master
+[16:57:09] <adiabat> I trying it again now on the remote server
+[16:57:24] <adiabat> I had it happen twice on my local machine, but haven't tried on a different computer
+[18:15:59] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[18:17:20] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[18:28:02] <adiabat> huh it got through it on the larger server
+[18:28:10] <adiabat> I'll update the issue on github
+[18:31:05] <adiabat> I'll try again on the local machine and just let it run longer
+[18:31:32] <adiabat> I figured after a few minutes it was stuck, but maybe it just takes a really long time
+[19:33:23] <dergoegge> I used a cachesize of 25 so maybe thats why i couldn't reproduce.
+[19:33:54] <dergoegge> We are not using any of the ttl stuff currently right?
+[19:35:12] <dergoegge> I did a 20min run with -cpuprof and 50% of the is used for leveldb funtions
