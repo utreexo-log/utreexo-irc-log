@@ -1,0 +1,22 @@
+[01:17:43] *** Quits: dergoegge (uid453889@gateway/web/irccloud.com/x-uodyyuylruvokghe) (Quit: Connection closed for inactivity)
+[04:19:50] <adiabat> just a note: utreexoserver is using 100% cpu (1 core) when serving to utreexoclient
+[04:20:12] <adiabat> that... seems wrong, as all it's doing is grabbing a file off the disk and throwing it over the network
+[04:20:24] <adiabat> which shouldn't take any cpu
+[04:20:30] <adiabat> so... something to look at
+[04:20:46] <adiabat> I will investigate tomorrow
+[05:19:40] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[07:35:04] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[07:36:13] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[08:46:18] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 260 seconds)
+[10:35:18] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[11:00:41] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Remote host closed the connection)
+[11:01:55] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[11:04:59] *** Joins: ThomasV_ (~thomasv@unaffiliated/thomasv)
+[11:07:46] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 256 seconds)
+[11:24:22] *** Quits: ThomasV_ (~thomasv@unaffiliated/thomasv) (Ping timeout: 256 seconds)
+[16:13:41] *** Joins: ThomasV_ (~thomasv@unaffiliated/thomasv)
+[17:26:11] *** Quits: ThomasV_ (~thomasv@unaffiliated/thomasv) (Ping timeout: 240 seconds)
+[20:51:03] *** Quits: valwal_ (sid334773@gateway/web/irccloud.com/x-abwsebbkiydvjbvo) ()
+[20:51:30] *** Joins: valwal_ (sid334773@gateway/web/irccloud.com/x-ymtzzqcvofbmfonn)
+[23:37:11] *** Joins: ThomasV_ (~thomasv@unaffiliated/thomasv)
+[23:58:38] *** Quits: ThomasV_ (~thomasv@unaffiliated/thomasv) (Ping timeout: 260 seconds)
