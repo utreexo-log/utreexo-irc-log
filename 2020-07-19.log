@@ -1,0 +1,95 @@
+[08:08:19] <kcalvinalvin> ja I'd have to read the code again... why do you ask?
+[08:08:45] <kcalvinalvin> So I'm trying out building proofs for forest and I ran out of disk space
+[08:09:54] <kcalvinalvin> For forest in ram for mainnet, I got to ~500,000 before I ran out. Used up 260GB for proofs and ~20GB of memory
+[09:45:27] <kcalvinalvin> PR #158 is ready to merge
+[09:46:05] <kcalvinalvin> though github actions is failing because variable ```knownTipHeight``` is being passed as 0?
+[09:46:58] <kcalvinalvin> bridge just exits with " done pushing blocks to 127.0.0.1:60888" which doesn't happen until it reaches the height that is was passed
+[09:47:04] <kcalvinalvin> not sure what's going on..
+[11:23:41] *** Joins: dergoegge (uid453889@gateway/web/irccloud.com/x-wqwekxwzcpkzfqdf)
+[11:25:19] <dergoegge> kcalvinalvin: are you having these problems on master? also mainnet or testnet?
+[12:25:21] *** Joins: rjected_ (~dan@pool-71-184-77-198.bstnma.fios.verizon.net)
+[12:27:12] *** Joins: cfields_ (~cfields@unaffiliated/cfields)
+[12:32:56] *** Quits: adiabat (~adiabat@63.209.32.102) (*.net *.split)
+[12:32:56] *** Quits: cfields (~cfields@unaffiliated/cfields) (*.net *.split)
+[12:32:56] *** Quits: rjected (~dan@pool-71-184-77-198.bstnma.fios.verizon.net) (*.net *.split)
+[12:39:09] *** Joins: adiabat (~adiabat@63.209.32.102)
+[13:06:30] <kcalvinalvin> dergoegge No not on master but on my PR. Locally it works fine but not working on github
+[13:06:59] <kcalvinalvin> It's on github so on regtest
+[13:37:30] <dergoegge> kcalvinalvin: i left a review on #158 that should fix it.
+[13:38:14] <dergoegge> also kinda weird that you didn't have the error locally
+[14:37:02] <kcalvinalvin> that fixed it thanks!
+[18:08:26] *** Quits: rjected_ (~dan@pool-71-184-77-198.bstnma.fios.verizon.net) (Quit: ZNC 1.7.5+deb4 - https://znc.in)
+[18:09:06] *** Joins: rjected (~dan@pool-71-184-77-198.bstnma.fios.verizon.net)
+[20:47:14] <adiabat> ja: I can explain swap collapses
+[20:47:58] <adiabat> it's more complex than I'd like, but it does allow the transform to be reversible
+[20:48:24] <ja> adiabat: i got into animations in the last few days, i was thinking of writing a program that animates the operations utreexo does
+[20:49:05] <adiabat> oh that would be super cool
+[20:49:09] <ja> adiabat: stuff like swapping the children are conceptually simple, but working with the array representation, it is 20 lines of code
+[20:49:32] <ja> adiabat: so i have duplicated all algorithms in imperative haskell, now i want to rewrite them using ideomatic haskell
+[20:49:49] <ja> adiabat: but the problem is that i don't actually understand what they are doing, what the invariants are
+[20:49:52] <adiabat> yeah I will say the (f *Forest) ToString() code was in some way the most important
+[20:50:04] <adiabat> because that let me print out what was going on much better
+[20:50:26] <adiabat> "collapses" are swaps that can't immediately take place
+[20:50:35] <adiabat> there can only be one collapse per row
+[20:50:58] <adiabat> and it's the last thing created for that row.  It's either a leaf that's becoming a root or a root that's becoming a leaf
+[20:51:10] <adiabat> or... I think a root that stays a root but moves also counts as a collapse
+[20:51:56] <adiabat> the only difference between swaps and collapses is that swaps can happen immediately as you're going from the bottom row to the top
+[20:52:16] <adiabat> collapses though have to be applied after all the swaps, including swaps on higher rows
+[20:52:35] <ja> ok, can we take an example i generated?
+[20:52:45] <adiabat> but the collapses themselves can be affected by higher up swaps
+[20:52:47] <adiabat> sure
+[20:52:53] <ja> if swaps is [[(35,28),(51,47)],[(152,145)],[(210,204)],[],[],[],[]]
+[20:53:03] <ja> and collapses is [Just (76,94),Just (167,174),Just (216,214),Just (232,234),Just (245,244),Nothing,Nothing]
+[20:53:10] <adiabat> heh that's big, can't write that on paper...
+[20:53:15] <ja> the resulting collapse is [Just (76,76),Just (167,166),Just (216,210),Just (232,232),Just (245,244),Nothing,Nothing]
+[20:53:51] <ja> ah, well i generated the examples randomly, computer doesn't know they should be small
+[20:53:57] <adiabat> right I just mean
+[20:53:59] <ja> maybe it would be better with a smaller example
+[20:54:09] <adiabat> if it's small I can trace it out on paper
+[20:54:23] <adiabat> with those I'm not sure what's going on
+[20:54:48] <ja> ok, well, any way i could understand the intuition would be good
+[20:55:04] <adiabat> ok a smaller one is like
+[20:55:12] <adiabat> printout.txt in the accumulator folder
+[20:55:23] <adiabat> line 21 has the 15 leaves forest
+[20:55:51] <adiabat> so an example would be
+[20:56:01] <adiabat> delete 4,5,6,7,8,9
+[20:56:22] <adiabat> on the bottom row, no swaps
+[20:56:29] <adiabat> but, 14 needs to collapse, it can't stay there
+[20:56:52] <adiabat> we know that 14 will end up at 8, because there were 15 leaves, and we deleted 6
+[20:57:14] <adiabat> but it's a collapse, not a swap
+[20:57:22] <adiabat> we can't swap 14 and 8 right now
+[20:57:42] <adiabat> because other swaps will move those around
+[20:58:09] <adiabat> so for row 0, we say, OK, no swaps, collapse: (14, 8)
+[20:58:26] <adiabat> then row 2, deletions are 18, 19, 20
+[20:58:51] <ja> is this work going on before calling swapCollapses? since you started with the list of nodes to delete
+[20:59:05] <adiabat> this is before yes
+[20:59:19] <adiabat> we get the (14, 8) collapse
+[21:00:25] <ja> aah ok, so this is the result of makeCollapse called in remTrans2?
+[21:00:28] <adiabat> and it will be transformed by swapCollpases into ... 14, 12?
+[21:00:37] <adiabat> 1 sec
+[21:01:06] <adiabat> no no 14, 4
+[21:01:25] <adiabat> in this case swapCollapses will change 14, 8 into 14, 4
+[21:01:48] <adiabat> because of the 25, 26 swap that happens on the 3rd row
+[21:01:50] <adiabat> (row 2)
+[21:02:07] <ja> the swapCollapses will never change the amount of collapses, right?
+[21:02:17] <adiabat> that 25, 26 swap affects the 14, 8 collapse because 8 is under 26
+[21:02:26] <adiabat> right the amount of collapses will not change
+[21:02:38] <adiabat> sometimes it will make collapses become like "null"
+[21:02:44] <adiabat> like can change things into 14, 14
+[21:02:52] <adiabat> or from a 14, 14 to a 14, 12 or something
+[21:02:59] <adiabat> but actual number will not change
+[21:03:17] <adiabat> once swap collapses has happened, we can do everything row by row
+[21:03:22] <adiabat> we know 14 needs to end up at 8
+[21:03:37] <adiabat> but we can't swap 14 and 8 right at the bottom row
+[21:03:51] <adiabat> but if we swap 14 with 4, it will end up at 8 after all the rows of swaps have happened
+[21:04:10] <adiabat> maybe a better way to call it is ... turn collapses into swaps?
+[21:04:33] <adiabat> I don't even think the name "collapse" is that great... it's like a movement that is temporarily on hold
+[21:05:20] <ja> names are hard, but i think i almost got the intuition, that is most important :)
+[21:05:28] <ja> thank you for the walkthrough!
+[21:05:36] <adiabat> sure!
+[21:05:36] <ja> ok, i think i need to read your walkthrough a few times, but i think it will help a lot. i'll report back with questions, gotta run! thank you so much!
+[21:05:45] <adiabat> ok sure see you
+[21:05:52] <adiabat> also I think there will be a "release" in tuesday
+[21:05:57] <adiabat> just have a binary and server up
+[21:06:04] <adiabat> maybe people will be interested :)
+[21:06:48] <ja> no doubt about that :D
