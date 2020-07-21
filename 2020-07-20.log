@@ -1,0 +1,109 @@
+[07:19:04] <kcalvinalvin> One good news is that besides the txvalidation, now the acculmulator is the bottleneck on master
+[07:19:47] <kcalvinalvin> Those sha hashes do really add up once you get around block ~300,000
+[09:02:47] <kcalvinalvin> hmmm I did some more profiling and it's the gc that's taking up 40% of the time when CheckBlock is disabled on CSN
+[14:07:04] <dergoegge>  adiabat: #161 fixes the unexpected EOF crash at the end of genproofs. i know you wanted to this but i already had this in my live blocks PR.
+[14:51:21] <adiabat> dergoegge: cool will check it out
+[14:51:43] <adiabat> kcalvinalvin: 40% does seem kind of high but makes sense with pollard and all the pointers and stuff
+[14:52:02] <adiabat> what I'm trying to figure out now is the server taking so much CPU to serve blocks...
+[14:52:28] <adiabat> it feels like it shouldn't take any, but just reading the blocks off the disk takes 100% of a core
+[14:53:06] <adiabat> I think I need to write a like... send block to network thing, because right now it's running deserialize only to run serialize right after
+[14:53:58] <adiabat> so seems like if we know the length of the block we can just tread it as unknown bytes and send it directly from the disk to network.  will try that
+[15:17:24] <dergoegge> adiabat: additionally you could make so pushBlocks reads multiple blocks at once instead of each block individually. something like GetRawBlocksFromDisk but without Deserialize.
+[15:23:56] <kcalvinalvin> So I did a little benchmark on mainnet without txverify and it's slow...
+[15:24:24] <kcalvinalvin> Just working on optimizing CSN
+[15:30:45] <adiabat> is it GC stuff that gets bigger?  Or hashing
+[15:31:22] <adiabat> one huge performance issue is that it doesn't have any pollard caching right now
+[15:31:37] <adiabat> so it's not just re-transferring recent hashes but also re-computing them
+[15:32:12] <adiabat> and... hm, the main hard part of enabling the pollard caching stuff was synchronization between the server and client
+[15:32:39] <adiabat> but if we keep the server sending the whole thing, but have pollard caching on just to skip re-computing
+[15:32:45] <adiabat> that might make it a lot faster
+[15:33:09] <adiabat> and that seems like something I could change without too much trouble
+[15:33:10] <kcalvinalvin> Hashes do build up. Towards the tip of syncing mainnet, hashes pile up
+[15:33:18] <kcalvinalvin> but in the beginning it's a lot of gc
+[15:33:29] <kcalvinalvin> I guess it'
+[15:33:40] <adiabat> I think both would be alleviated with caching the pollard nodes instead of throwing them all away each time
+[15:33:49] <kcalvinalvin> s just that hashes start becoming bigger while gc is still taking long
+[15:33:56] <adiabat> maybe the GC less so, but it also would go down
+[15:33:57] <kcalvinalvin> *more hashes
+[15:34:52] <adiabat> ok so this afternoon will get server to not deserialize (might be easy) and try to enable some caching / ram useage for client
+[15:35:03] <adiabat> (that part might be harder, but hopefully not bad)
+[15:35:22] <kcalvinalvin> grabPos is one of the slower functions in the accumulator. I guess it's just that it's called a ton and things pile up
+[15:35:30] <adiabat> also I kindof want to get backwards validation running because it's super fun heh
+[15:35:41] <adiabat> yeah grabPos is inefficient as well
+[15:35:59] <kcalvinalvin> client uses a lot of memory too.. Not sure if we're leaking something but it took up 6gbs of ram in my testing to block ~400,000
+[15:36:09] <adiabat> a lot of times you grabPos leaves, and they're right next to each other and you end up descending down the same paths almost to the end
+[15:36:24] <adiabat> client uses 6GB? that's not right...
+[15:36:39] <adiabat> oh i think go's GC just like never actually frees ram or something
+[15:36:52] <kcalvinalvin> Yeah we're probably just pointing to trash
+[15:37:00] <adiabat> like it's never actually "using" much but since there's so much churn
+[15:37:27] <adiabat> I don't understand the intricacies of GC / OS interaction but I think it shows up in 
+[15:37:37] <adiabat> 'top' but won't actually cause OOM errors
+[15:37:49] <adiabat> at least I've seen that in go before
+[15:38:36] <kcalvinalvin> https://github.com/mit-dci/utreexo/blob/d94de1beeda69594ee6bf6977e398131a56dee69/accumulator/pollard.go#L358
+[15:38:50] <kcalvinalvin> Also this is taking 5 seconds according to pprof..?
+[15:39:19] <kcalvinalvin> breakdown shows this `5.53s      5.53s   5407a2:                     XORL $0x1, BX`
+[15:39:40] <kcalvinalvin> Not sure why xor is taking forever
+[15:41:32] <adiabat> wait what's the line 358 thing?
+[15:41:39] <adiabat> if n.niece[lr^1] == nil {
+[15:41:49] <adiabat> is that if statement taking a lot of time?
+[15:42:27] <kcalvinalvin> Well, not even the if just the xor
+[15:42:29] <adiabat> or... yeah causing a ton of GC
+[15:42:45] <adiabat> nah it's gotta be the new(polNode) part
+[15:43:09] <adiabat> an xor can't take any time right?
+[15:43:12] <kcalvinalvin> So I did think that and I tested it by doing the new(podNode) part beforehand
+[15:43:23] <kcalvinalvin> pprof says it's the xor...
+[15:43:30] <adiabat> I assumed the lr^1 is not actually happening more than once, because the compiler optimizes that?
+[15:43:53] <adiabat> it's straightforward optimization but if it doesn't, then sure we can say xlr := lr^1 at the top of that loop
+[15:44:13] <kcalvinalvin> The assembly breakdown shows lr^1 just being done everytime
+[15:44:21] <adiabat> aw man
+[15:44:36] <adiabat> that is disappointing.
+[15:44:46] <adiabat> well, guess the go optimizer is not very good
+[15:45:05] <adiabat> lr := uint8(bits>>h) & 1; lrx := lr^1
+[15:45:39] <kcalvinalvin> One thing I also found out today is that any fmt will be allocated to the heap, even if it doesn't escape
+[15:45:53] <adiabat> or heck, compute all the lrs and lrxs before the loop
+[15:45:53] <kcalvinalvin> So every error fmt is putting on gc pressure
+[15:46:10] <adiabat> huh weird
+[15:46:13] <kcalvinalvin> We should make error bitflag stuff
+[15:46:22] <adiabat> well we can get rid of errors in grabPos then yeah
+[15:46:42] <kcalvinalvin> Yeah there is a github issue about it (made in 2017) but they haven't really implemented anything yet
+[15:46:50] <adiabat> so on the one hand, make grabPos internally faster with not re-xoring
+[15:46:56] <adiabat> a go compiler issue?
+[15:47:18] <kcalvinalvin> not sure
+[15:47:19] <adiabat> about optimizations?  yeah that seems like a super simple optimization, I assumed all compilers did that
+[15:47:32] <adiabat> like if you keep saying f(a+b)
+[15:47:44] <adiabat> if (a+b) > 2, etc etc
+[15:47:49] <adiabat> then... don't add a and b each time
+[15:48:00] <adiabat> just... do it once.  Maybe it thinks lr can change
+[15:48:06] <kcalvinalvin> go compiler is also sort of an oddball in that they have a pesudo go-assembly that is translated into actual assembly. This was done for good reasons that I forgot
+[15:48:21] <adiabat> but even that... nothing changes lr in the loop which is also easy to see
+[15:48:42] <adiabat> anyway we can compute all the lrs and their compliments before even entering the loop
+[15:48:57] <kcalvinalvin> Ok yeah I'll try that
+[15:49:22] <adiabat> the larger issue is that grabPos could be optimized a lot in that it could cache things
+[15:49:37] <adiabat> that's harder... i think I tried doing something like that and gave up a while back
+[15:49:40] <kcalvinalvin> When are we aiming to do the binary release? Still tuesday?
+[15:49:56] <adiabat> yeah I mean if it's slow that just makes performance improvements look better :)
+[15:50:19] <adiabat> v 0.1 takes 4 hours.  2 days later, v0.2 takes 3 hours
+[15:50:35] <adiabat> at this rate, in a few weeks IBD will be instantaneous! :)
+[15:50:46] <kcalvinalvin> gah well I hoped maybe we could release it and have it beat bitcoind by a lot
+[15:51:10] <kcalvinalvin> It's a lot slower than bitcoind at the moment even without sig verification
+[15:51:59] <kcalvinalvin> What's the most urgent thing to do right now?
+[15:54:07] <kcalvinalvin> Ah and also, proofs for bridgenode are sorta big. utree/ takes up 251gb when synced to #500,000. I ran out of space while I was trying to sync to the tip
+[15:54:31] <kcalvinalvin> I'm assuming you need 400gb of free space
+[16:04:16] <adiabat> yeah sounds about right
+[16:04:27] <adiabat> but I don't think we should touch mainnet initially
+[16:05:27] <adiabat> I think it's cool even if slower
+[16:05:51] <adiabat> because... you get this "pollardFile" which is 500 bytes! you can scp it between computers instantly and it starts right back up
+[16:06:00] <adiabat> you can xxd it and it doesn't even scroll
+[16:06:23] <adiabat> maybe we should have pollardFile saved in base64 or something so you can copy and paste it
+[16:06:52] <adiabat> yeah if I do `base64 pollardFile` it's 10 lines
+[16:08:03] <dergoegge> if we are slower than bitcoind without CheckBlock then btcd/blockchain.ValidateTransactionScripts is a lot slower than the bitcoind equivalent right?
+[16:09:03] <kcalvinalvin> No doubt. It's just a way slower implementation in general from the script execution to the elliptical curve stuff
+[16:09:53] <dergoegge> i also think it's ok if it's slower right now. i mean if we point out the benefits e.g the scp thing then the slowness is just something to improve
+[16:10:02] <kcalvinalvin> Ethereum's bindings to libsecp256k1 was really just about the same as btcec since the calls to cgo was taking up half the time
+[16:10:48] <dergoegge> so there is no way to do fast ec in go?
+[16:11:24] <kcalvinalvin> Well you could batch the ec so you don't do one call per operation
+[16:11:37] <kcalvinalvin> But there really isn't any easy way per se
+[16:11:51] <kcalvinalvin> *one call per operation to cgo
+[16:21:02] <dergoegge> why does btcd or ethereum not do that? it should be a lot faster
+[16:27:33] <kcalvinalvin> idk about Ethereum but btcd doesn't really have active contributors nowadays. irc seems to be picking back up and dan is looking at things as well but not sure
+[16:28:20] <kcalvinalvin> There are some things btcec isn't doing that they have in a idle PR too so that would also help
