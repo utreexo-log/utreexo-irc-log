@@ -1,0 +1,202 @@
+[02:56:09] *** Quits: dergoegge (uid453889@gateway/web/irccloud.com/x-wqwekxwzcpkzfqdf) (Quit: Connection closed for inactivity)
+[03:01:03] <adiabat> ok not super well tested but I'm merging the server skip-deserialize change
+[03:01:22] <adiabat> it makes the server take less CPU, but... it still takes a bunch.  it feels like it should take basically none...
+[03:01:29] <adiabat> maybe good enough for now
+[03:08:18] <adiabat> hm yeah I guess it's reasonable.  The server has pretty high CPU in the beginning, but after the blocks get bigger the client slows down
+[03:08:35] <adiabat> then the server only uses 5% of a core or so.  So that's pretty good.
+[03:09:06] <adiabat> I think before the server was actually slower than the client, so now maybe the client goes faster
+[03:15:21] <fanquake> utreexo meeting is the late one tonight isn't ?
+[03:39:29] *** Joins: aaronc2347 (uid451246@gateway/web/irccloud.com/x-bpmwofjwmlinmloy)
+[03:41:05] <adiabat> yes the call will be at 12:00 EDT tomorrow
+[03:41:47] <adiabat> I think tomorrow is the "release".  There's still lots to improve but it does most of the basics
+[03:42:16] <adiabat> I might try to get it to do backwards validation tomorrow before release because that's a bit of a gimmick but fun / show-off-y
+[03:42:36] <adiabat> like if you can fly an airplane upside down it must be a pretty good airplane right?
+[03:43:04] <adiabat> and if you can verify the blockchain backwards, well clearly that's a very important blockchain validation method
+[03:44:53] <fanquake> 👍
+[07:20:27] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[07:24:17] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[11:22:31] *** Quits: aaronc2347 (uid451246@gateway/web/irccloud.com/x-bpmwofjwmlinmloy) (Quit: Connection closed for inactivity)
+[13:02:14] <adiabat> ok utreexo call at 12 EDT but can do a quick call at 9:30 EDT for those in regions that can see the comet now
+[13:02:28] <fanquake> 👀
+[13:02:29] <adiabat> hm wait is the comet visible from southern hemisphere?  maybe not
+[17:13:53] *** Joins: dergoegge (uid453889@gateway/web/irccloud.com/x-tvyewdtkwvbpaffm)
+[17:15:13] <dergoegge> forgot to mention this in the meeting but csn does not print the satoshi amount found at the end. #163 adds that
+[17:18:39] <dergoegge> adiabat: also would be nice if the csn remembers the utxos it found if it pauses and resumes, i will do that so you can concentrate on the backwards validation
+[18:25:09] <kcalvinalvin> adiabat I think we're reading one-by-one on network again
+[18:25:23] <kcalvinalvin> csn is taking 50% of the time on network
+[18:30:23] <kcalvinalvin> Ah yeah commit 2f2b8593c786de335115dbe780bb127f2a2069e6 undoes some of commit fd7287d17e89cb8dccae210ce99db22fa5c1c97f
+[18:32:14] <kcalvinalvin> When we call deserialize(con) every io read is through the wire. So it does a lot of small reads through the wire tons of times
+[19:03:50] <adiabat> dergoegge: yeah a persistent wallet could be cool, just need to serialize outpoints and amounts, so it's all fixed length
+[19:04:01] <adiabat> no pubkeys is nice because those are variable length
+[19:04:37] <adiabat> kcalvinalvin: ah OK so I made the server faster but the client slower.  oops
+[19:05:16] <adiabat> can change that back in #164 which I can merge soon
+[19:32:01] <kcalvinalvin> adiabat I have a fix coming
+[19:32:23] <kcalvinalvin> Unless you're super close of course :)
+[19:48:56] <adiabat> oh, yeah I am heh
+[19:49:04] <adiabat> using io.CopyN(&buf, con, int64(ublen))
+[20:00:27] <kcalvinalvin> oh
+[20:00:41] <kcalvinalvin> Well I'm glad I made them two separate commits now
+[20:01:56] <kcalvinalvin> adiabat I made a PR
+[20:08:08] <adiabat> which does this fix
+[20:08:31] <adiabat> the ublock deserialize is annoying... why is it slower to deserialize from the tcp connection?
+[20:08:57] <adiabat> if that's the case we shouldn't have a func (ub *UBlock) Deserialize() function, I'm making a func (ub *UBlock) FromBytes(argbytes []byte)
+[20:09:12] <adiabat> not sure why it'd be faster though
+[20:10:30] <kcalvinalvin> When the connection is passed as an io.Reader to deserialize, it reads from wire whenever you read from it
+[20:11:13] <adiabat> right but is that slower?  The data from the network goes into a ram buffer either way
+[20:11:27] <kcalvinalvin> It doesn't go in the buffer though
+[20:11:46] <kcalvinalvin> It literally just reads 4 bytes at a time from the tcp connection
+[20:12:29] <kcalvinalvin> like this bit `err = binary.Read(r, binary.BigEndian, &uDataLen)` is read directly from the wire without buffers
+[20:14:39] <adiabat> anyway OK I have it with ub.FromBytes now, it works
+[20:14:46] <adiabat> hmm conflicts with your PR though
+[20:15:00] <adiabat> but I think only in the utils.go UblockNetworkReader part?
+[20:15:34] <adiabat> your PR is bigger so how about I merge mine first?
+[20:16:04] <kcalvinalvin> Oh wait do you mean like the tcp itself buffering?
+[20:16:20] <kcalvinalvin> Yeah sure you can merge first
+[20:16:34] <adiabat> yeah I assume the OS reads it into a buffer
+[20:16:39] <adiabat> if it's faster this way though cool
+[20:17:28] <kcalvinalvin> I'm guessing it's just efficiencies coming from reading a big chunk at once?
+[20:18:40] <adiabat> ok should I merge mine then you change yours?  I think the conflicts are mostly comments and stuff
+[20:26:34] <kcalvinalvin> adiabat sure. ja did have a review on a comment (which I did address) but haven't heard back. It is a comment so can improve on it later though
+[20:27:00] <adiabat> the return // give up and don't make hashable node part?
+[20:27:04] <adiabat> that might be an error
+[20:27:05] <kcalvinalvin> yeah
+[20:27:08] <adiabat> I'm not sure that ever happens
+[20:27:18] <adiabat> it feels like there should be a hn=nil there
+[20:28:14] <kcalvinalvin> Is there a case where both children could be nil during rem2
+[20:28:54] <adiabat> well it doesn't do anything so the comment is wrong
+[20:29:04] <adiabat> the whole if nsib == nil || n == nil {} is useless
+[20:29:08] <adiabat> since it just returns anyway
+[20:33:05] <kcalvinalvin> adiabat removed that bit
+[20:34:12] <adiabat> ok
+[20:34:29] <adiabat> the integration tests download bitcoind every time
+[20:34:33] <adiabat> and it takes most of the time
+[20:34:40] <adiabat> hmm maybe we can cache it or something...?
+[20:37:57] <adiabat> I don't know why the integration tests are failing
+[20:38:04] <adiabat> it just says ##[error]The operation was canceled.
+[20:38:15] <adiabat> but... that's the only error
+[20:39:32] <kcalvinalvin> Is this is free tier 5 min thingy
+[20:39:50] <adiabat> maybe]
+[20:40:02] <adiabat> it's also probably something with the knownTipHeight thing
+[20:40:22] <adiabat> there's no other way to test though, can't rebuild each time so have to do it shorter
+[20:41:09] <kcalvinalvin> Oh you have multiple commits so I think github might be treating that whole thing as one github actions run
+[20:41:21] <kcalvinalvin> or not... idk how actions work
+[20:43:06] <adiabat> yeah it spends the majority of the time wgetting the bitcoin tar file
+[20:43:28] <adiabat> maybe we can just make a repo on github with that tar file then it will go faster?
+[20:44:16] <ja> that would work, but is ugly since binaries are never pruned unless you force push
+[20:44:31] <adiabat> yeah 2m25s to download at 200KB/sec, 2m 38s total time
+[20:44:34] <ja> i will try to set up some nix based CI like i wanted to earlier...
+[20:44:35] <adiabat> maybe a separate repo
+[20:44:46] <adiabat> as long as it's somewhere on github, maybe it will download faster
+[20:44:55] <adiabat> or gist or something
+[20:45:04] <adiabat> just so it's in their data center somewhere
+[20:45:20] <ja> the correct way using github actions would probably be to provide an setup-* environment, like the way we get go
+[20:45:30] <ja> those surely must be cached
+[20:45:52] <adiabat> anyway whatever I'm merging it
+[20:45:59] <adiabat> tests still running but whatever
+[20:46:44] <ja> the issue with doing it properly with actions is that it is a closed ecosystem
+[20:47:07] <ja> and if i remember correctly, we are only using actions because they provide free CI time and it is integrated, not because it is the best
+[20:47:23] <adiabat> yeah
+[20:47:49] <adiabat> one side or the other is limiting download speed because it's always right at 200K/sec
+[20:48:13] <adiabat> can try putting the binary somewhere on github and see if that speeds it up
+[20:53:05] <adiabat> hm.  I dunno, it still says 
+[20:53:16] <adiabat> 2020-07-21 20:49:21 running idbsim... ##[error]The operation was canceled.
+[20:54:07] <adiabat> kcalvinalvin: I can change the conflicts in #165 or you can
+[20:54:57] <kcalvinalvin> adiabat already ahead of you
+[20:55:09] <kcalvinalvin> Pushed the merge :)
+[20:55:25] <adiabat> ah ok
+[20:55:32] <kcalvinalvin> oh oops
+[20:55:38] <kcalvinalvin> wait I didn't commit the change
+[20:56:59] <dergoegge> sorry guys i went for dinner and took longer than expected. i will have a look at the integration tests. looks like ibdsim never exits and than it runs for 5+ minutes and gets canceled.
+[20:59:34] <adiabat> it's OK, I'm pretty sure it's still working fine
+[21:00:06] <adiabat> not a big deal, but it at some point we should try to get the tar file closer to where it's running
+[21:04:07] <dergoegge> i have that 200k limit on my mac as well i think bitcoin.org does some ratelimiting
+[21:08:48] <dergoegge> i know whats going on, the csn does not quit if it got to the last height. you removed the EOF check and channel close thing i put in there.
+[21:10:00] <adiabat> ahh shoot
+[21:10:01] <adiabat> oops
+[21:12:52] <kcalvinalvin> Well I'll be pushing changes so I think it's fine?
+[21:15:48] <adiabat> I have a 2 line change to master to close the channel and let ibd finish
+[21:15:55] <adiabat> can do it after merging yours or before
+[21:18:38] <adiabat> ok pushed that fix to master
+[21:19:09] <adiabat> wait no I didn't
+[21:25:41] <adiabat> ok now works
+[21:26:12] <adiabat> kcalvinalvin: is #165 OK to merge?
+[21:26:36] <dergoegge> could not really test #166 because i need to reIBD
+[21:26:57] <kcalvinalvin> adiabat no everything broke and I lost the commit so I have to rewrite the code
+[21:27:12] <adiabat> yeah I have the commented out // knownTipHeight = 260500
+[21:27:22] <adiabat> that lets you genproof and IBD fast
+[21:27:43] <adiabat> kcalvinalvin: aw that's annoying
+[21:27:47] <adiabat> good ol git :)
+[21:28:18] <kcalvinalvin> Could we do 1 commit per feature from going forward? These multicommits really bog down rebasing
+[21:28:32] <adiabat> squash everything?
+[21:28:40] <adiabat> yeah we can do the squash merge thing
+[21:29:02] <dergoegge> hm but do you have an address for me with utxos before height 260000? 
+[21:30:07] <adiabat> oh shoot no
+[21:30:15] <adiabat> because it only does bech32...
+[21:30:47] <kcalvinalvin> I made a new PR with only the pollard changes
+[21:34:02] <dergoegge> adiabat: do you have a pollardFile at height ~1500000? then i could tweak it to start from there. 
+[21:34:10] <adiabat> I do!
+[21:34:17] <adiabat> can almost post it on IRC
+[21:34:32] <dergoegge> utreexo being useful already!
+[21:34:48] <adiabat> ok this is dumb but lets do it on IRC
+[21:35:00] <adiabat> here's height 1443111, base64 encoded
+[21:35:04] <adiabat> ABYFJwAAAAABN6MIbmBJ/IomZ2f7uxn4jEUDTJgyMvjUTL4RjnMou0kjD/sSiwrk87AQf/O5gTm2
+[21:35:06] <adiabat> 7kMKtK0hKs3m61OKaSa68eCMYyp3yR4f6lh6HbguPMaLkyZDWDvjCZfvs4HY6FCkAzzA4Ewj+JYN
+[21:35:08] <adiabat> PNrB4HpXCV51kAbgbhQtwI3Hl1uR6ENM987TzoPeW/au4ayHz2vMemNFQ0mdP7k4adzguZctkSAo
+[21:35:10] <adiabat> r0WPgu1XrR59h5NIWGW313XViQsMSNMuLzGJWmfWXIFJMpJga7nO4CMVJ7J9PxiRIK2F7Say4+xd
+[21:35:12] <adiabat> t4AygLvConA9N0QCYqZ76icE+ctNZ7jHtNK+TR2od86+vO2mQ7/nSnAWjrcPencaGLl6Uwc68lr9
+[21:35:14] <adiabat> Q/PGtVKKazvNKWlILqVdO5MyhinQ12PZB4Ul1HZcplxlhAO3DSE7HU9bNIcgN3HJ6AwNyzxF60lw
+[21:35:16] <adiabat> 0H+iKVotJCfUzRB/qnxtBBZ9kwGYzozNcTNfBKEODtPoy+PRoxFqJaNNG0BEAKznGejAOrkmzMzb
+[21:35:18] <adiabat> 7kZARKE501397VdTVNxD54GGGI1JQTMzI7SLij1bSNAsvgUUaZ+6ST9YogV9EljyYGc8ILkr4cma
+[21:35:20] <adiabat> yhwA8KyISKIZKYhYhvFwsKp8FAeYFBuHefp6MtuwIUapgwCW2/aMhLlu4V8nd37HeGNqr9qna1E8
+[21:35:22] <adiabat> bDTEzJp18gR1R4r95/C2XxRHMav9HzVrj72F9fMM5KwlQE3BO911/xpkbA==
+[21:35:40] <dergoegge> haha ok :D the height is already in there right?
+[21:35:47] <adiabat> yup it should know on its own
+[21:36:11] <adiabat> the start is 0016 0527 0000 0000 0137 a308
+[21:36:52] <adiabat> 0016 0527 is height 1443111, then 0000 0000 0137 a308 is 20423432 leaves
+[21:37:48] <adiabat> 20423432 has a bunch of roots; maybe have a function that looks for "small" root sets, where there are only 3 or 4 roots
+[21:38:03] <adiabat> then encoded it would only be like 4 lines
+[21:46:05] <dergoegge> nice now i just need to sync to block 1719999. if you have a even closer pollardFile to that height let me know. but it should not take long from here i think
+[21:50:55] *** Joins: rjected[m] (rjectedmat@gateway/shell/matrix.org/x-kedvajnlvydrfmtf)
+[21:51:44] <dergoegge> btw. with #166 the pollardFile holds more stuff: number of utxos found + the utxos(-PKScripts)
+[21:52:17] <dergoegge> so if you need your old pollardFiles to work you can prepend 4 zero bytes and it will work
+[21:55:17] <adiabat> ah ok
+[21:55:36] <adiabat> I mean if this were a real thing probaly wallet and pollard should be separate but whatever :)
+[21:55:57] <adiabat> wow it's so much slower when not connecting to localhost
+[21:56:05] <adiabat> but that makes sense as my internet is slow
+[21:57:28] <adiabat> but wonder if there's latency problems, like it's not queuing properly
+[21:57:41] <adiabat> I can merge it as it works, but maybe the network code is slow
+[22:01:43] <adiabat> hmmm yeah latency is a problem, especially with small blocks in the beginning, since it's requesting 1 block at a time
+[22:02:32] <adiabat> worth fixing now...?  could request a bunch of blocks at once.. hm
+[22:03:25] <dergoegge> is it a lot slower than before?
+[22:03:41] <adiabat> not for localhost
+[22:03:49] <adiabat> there was no connecting to remote servers before
+[22:04:14] <adiabat> so localhost is still fine, but now that it can actually connect over the internet, I'm realizing for small blocks it's slow
+[22:04:39] <adiabat> once the blocks get to large size it's doesn't matter, but with testnet there are lots of empty blocks
+[22:04:52] <ja> is it making a new connection for every block?
+[22:05:01] <adiabat> no, same connection
+[22:05:10] <adiabat> just it doesn't request block n+1 until it gets block n
+[22:05:33] <adiabat> so max blocks / second is your ping time
+[22:05:50] <adiabat> uh 1/ping time 
+[22:07:10] <adiabat> hmm... I might try backwards then fix the network latency
+[22:07:21] <ja> would it make sense to request ranges of blocks?
+[22:07:30] <adiabat> ja: yeah that would be better
+[22:07:52] <adiabat> like the client sends 2 bytes for number of blocks, then 4 bytes each for the block height requested
+[22:08:02] <ja> i'm not gonna do it, thought, i am working on the CI now
+[22:08:05] <adiabat> then the server grabs em all and sends it onto the network in order
+[22:08:34] <adiabat> not hard to fix but maybe do it tomorrow after "release"
+[22:08:43] <adiabat> then v0.2 can be much faster than v0.1 heh
+[22:24:24] <dergoegge> i think there was still a small bug in #165. i should have a fix in 5min
+[22:28:53] <dergoegge> #169 is the fix. i tested it should work now
+[22:29:40] <adiabat> ah ok
+[22:31:04] <dergoegge> ops the bug was in my pr #166 not #165
+[22:45:18] <adiabat> wait 169 is OK though right?
+[22:46:46] <dergoegge> yes
+[22:50:03] <dergoegge> are you working on requesting ranges of blocks? otherwise i could look into it
+[22:51:43] <adiabat> I'm working on backwards now
+[22:52:17] <dergoegge> OK i will look into ranges
+[22:52:23] <adiabat> which touches some of the same code, so may be a little tricky to merge but should be doable
+[22:52:28] <adiabat> ok
+[22:54:12] <adiabat> I have the backwards PR open if looking at that helps
+[22:56:46] <dergoegge> ok i will rebase once you are done, should not create a complex conflict
+[23:44:21] <dergoegge> i took a slightly different approach with the ranges than you outlined above. the csn sends two int32s, height a and height b. if a < b the bridge sends blocks a+1, a+2, ... b if b < a the bridge sends blocks a, a-1, a-2, .... b.
+[23:46:48] <adiabat> ah OK that makes sense
