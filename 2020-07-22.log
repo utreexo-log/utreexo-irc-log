@@ -1,0 +1,37 @@
+[02:00:26] <adiabat> hmmm I don't know if I can do backwards tonight
+[02:00:31] <adiabat> there's a bunch of things that need to change
+[11:49:25] <kcalvinalvin> I think there is real value to maybe trying out github.com/minio/sha256-simd
+[11:49:54] <kcalvinalvin> I'll make a PR but the accumulator is so much faster with it
+[12:40:35] *** Quits: rjected[m] (rjectedmat@gateway/shell/matrix.org/x-kedvajnlvydrfmtf) (Remote host closed the connection)
+[12:48:35] *** Joins: rjected[m] (rjectedmat@gateway/shell/matrix.org/x-riszxsisactzwcbh)
+[13:59:46] <adiabat> cool
+[13:59:55] <adiabat> Ok there's "release" 0.1 up
+[14:00:05] <adiabat> and already people are attacking the server heh
+[14:00:54] <adiabat> hopefull the go network code can tolerate random things connecting to the utreexoserver port and trying to buffer overflow it
+[14:12:23] <dergoegge> just check in with the server every now and then to make sure its still running :D
+[14:14:38] <adiabat> oh now have the first actual user
+[14:14:45] <adiabat> hm maybe should have better server logs
+[14:15:10] <adiabat> first non attacker user was vodafone-ip.de
+[14:15:31] <dergoegge> that was probably me i wanted to see if it is running
+[14:54:07] *** Joins: felixweis (sid154231@gateway/web/irccloud.com/x-rwtspefaioxloplv)
+[14:55:34] <adiabat> hah OK well then there don't seem to have been any real users yet then
+[14:56:37] <dergoegge> have you posted the blog post/on reddit yet?
+[14:59:18] <adiabat> dergoegge: no I could post it on reddit
+[14:59:23] <adiabat> ok maybe kcalvinalvin can?
+[14:59:27] <adiabat> *or
+[14:59:52] <adiabat> is reddit like you're not supposed to post your own stuff?  or that's not a rule
+[15:01:51] <dergoegge> i found a reddit post: https://www.reddit.com/r/Bitcoin/comments/hvumoz/utreexo_demo_release_is_here/
+[15:02:14] <dergoegge> u/scyshc is calvin i guess?
+[15:03:56] <adiabat> I think so
+[15:22:13] <kcalvinalvin> yup that's me
+[15:24:42] <adiabat> OK hopefully people start writing things there
+[15:25:07] <adiabat> good luck on the bitmex interview, hopefully they see some of this :)
+[15:59:42] *** Joins: mdrollette (~matt@cpe-70-123-125-237.tx.res.rr.com)
+[16:14:59] *** Quits: mdrollette (~matt@cpe-70-123-125-237.tx.res.rr.com) (Quit: bye)
+[16:15:29] *** Joins: mdrollette (~matt@cpe-70-123-125-237.tx.res.rr.com)
+[16:49:42] *** Joins: belcher (~belcher@unaffiliated/belcher)
+[17:25:03] <instagibbs> congrats on the release! 
+[17:25:09] <instagibbs> (BitMEX is aware)
+[17:35:27] <rjected[m]> 🚀🚀🚀🚀🚀🚀
+[17:41:22] <adiabat> instagibbs: thanks! connections to the default server are starting to come in so looks like people are trying it :)
+[21:47:52] *** Joins: slivera (~slivera@103.231.88.27)
