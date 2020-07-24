@@ -1,0 +1,52 @@
+[00:14:44] *** Quits: slivera (~slivera@103.231.88.27) (Remote host closed the connection)
+[08:03:54] *** Joins: slivera (~slivera@103.231.88.10)
+[08:36:32] <kcalvinalvin> PR #173 looks good
+[08:37:07] <kcalvinalvin> Maybe we should also be thinking of contributing guidelines...
+[10:53:40] *** Joins: belcher_ (~belcher@unaffiliated/belcher)
+[10:56:59] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 240 seconds)
+[12:48:31] <dergoegge> there is style.md which has some guidelines, maybe we polish that and add some more stuff and we could also create issue/PR templates
+[12:50:33] <dergoegge> we should also update the readme, it still has the ibdsim/genproofs command syntax.
+[14:24:01] *** Quits: slivera (~slivera@103.231.88.10) (Remote host closed the connection)
+[18:23:28] *** Joins: jules__ (~jules__@206.217.205.92)
+[18:41:17] *** Joins: prusnak (sid403625@gateway/web/irccloud.com/x-gcivvuybaramuwjp)
+[18:41:37] <prusnak> hi all!
+[18:44:57] <prusnak> Ever since I saw the talk about RSA Accumulators by Benedikt Bunz I was wondering when this will come to Bitcoin. It seems the time has come, thank you! :-)
+[18:46:08] <ja> prusnak: have you tried syncing?
+[18:51:18] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[18:52:13] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[18:53:13] <prusnak> not yet
+[19:48:51] <mdrollette> I tried to run the server with an old spinning disk but it fell apart from bad disk sectors after a couple hours. At least I know this code path works https://github.com/mit-dci/utreexo/blob/master/accumulator/types.go#L60
+[19:50:10] <ja> mdrollette: hmm i wonder if you are more likely to get zeroes from a bad disk?
+[20:53:54] <adiabat> mdrollette: the server is quite disk io heavy, the client does almost none
+[20:54:17] <adiabat> so if you have a slow / bad disk, the client should still work OK
+[20:55:38] <adiabat> also, interesting that you got 0000 hashes.  That panic code is in there because most of the design bugs would start with some kind of use of uninitialized data, so that caught them early
+[21:12:23] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Ping timeout: 240 seconds)
+[21:12:45] *** Joins: jules___ (~jules__@pool-68-134-219-181.bltmmd.fios.verizon.net)
+[21:15:43] *** Quits: jules__ (~jules__@206.217.205.92) (Ping timeout: 256 seconds)
+[21:16:31] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[21:56:49] *** Joins: slivera (~slivera@103.231.88.27)
+[22:04:37] <mdrollette> makes sense - I think the drive flat-out died and remounted itself as read-only. disk and server logs are here if there's anything interesting https://gist.github.com/MDrollette/a2c4e97b1a65f22a6f30f5b8d75afc06
+[22:07:37] *** Quits: jules___ (~jules__@pool-68-134-219-181.bltmmd.fios.verizon.net) ()
+[22:19:01] *** Joins: flr09 (2e726817@46.114.104.23)
+[22:19:14] *** Quits: flr09 (2e726817@46.114.104.23) (Remote host closed the connection)
+[22:19:50] *** Joins: flr09 (2e726817@46.114.104.23)
+[22:28:16] <dergoegge> mdrollette: If a read/write fails we don't handle it and just print a warning, thats were all the "WARNING!! ..." lines come from. On a failed read you get an empty hash back and it panics. I guess the question is if the disk died because of us and if we can prevent it...
+[22:30:08] *** Quits: flr09 (2e726817@46.114.104.23) (Remote host closed the connection)
+[22:38:00] <dergoegge> also if you have 16GB you can keep the entire forest in RAM with the `-inram` flag. 
+[22:41:44] *** Joins: vertion (617429dd@97-116-41-221.mpls.qwest.net)
+[22:43:28] <vertion> Hey all, first of all I noticed there was no cmd binary but the folder had utreexoclient and utreexoserver binaries to be build.  I ran `./utreexoclient genproofs -net=testnet` and it errored out eventually:
+[22:43:31] <vertion> `got to height 1779000Block 1780000 add 85993370 del 61998450 pol nl 23994920 roots 10 he 85990760 re 0 ow 67750908  plus 0.00 total 14026.18 got to height 1780000read error from connection 35.188.186.244:8338 EOFBlock 1780787 add 86139130 del 62165794 pol nl 23973336 roots 15 he 86136584 re 0 ow 67910296  plus 0.00 total 14052.36 User exit signal
+[22:43:31] <vertion> received. Exiting...Pollard leaves: 23973336Found 0 satoshis in 0 utxosDone Writing`
+[22:43:47] <vertion> got to height 1779000Block 1780000 add 85993370 del 61998450 pol nl 23994920 roots 10 he 85990760 re 0 ow 67750908  plus 0.00 total 14026.18 got to height 1780000read error from connection 35.188.186.244:8338 EOFBlock 1780787 add 86139130 del 62165794 pol nl 23973336 roots 15 he 86136584 re 0 ow 67910296  plus 0.00 total 14052.36 User exit signal
+[22:43:48] <vertion> received. Exiting...Pollard leaves: 23973336Found 0 satoshis in 0 utxosDone Writing
+[22:43:52] <vertion> I don't IRC
+[22:47:40] <adiabat> vertion: thanks for checking it out.  I don't think that's an "error" exactly, but a bad message for when it's finished
+[22:48:50] <adiabat> block 1780786 is the last block on the server so it disconnects after that.  We should put in better messages that clearly say "OK done!"
+[22:57:04] <vertion> Ah okay. I don't see a proofs.dat file in the directory in which I ran genproofs
+[23:01:17] <adiabat> it goes into a subfolder
+[23:01:19] <adiabat> utree/
+[23:01:59] <adiabat> the proofs for testnet are aout 14GB
+[23:07:30] <dergoegge> but vertion ran the client and the client does not store the proofs. i think there is some confusion because the readme still has the old command syntax.
+[23:08:40] <dergoegge> adiabat: i have a PR open that updates the readme
+[23:09:20] <adiabat> dergoegge: Ah cool i see it
+[23:10:08] <adiabat> looks good, thanks.  Yeah I think the 2 binaries are easier to understand, but not if the docs still refer to only one! :)
