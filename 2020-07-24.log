@@ -1,0 +1,25 @@
+[01:12:56] *** Quits: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net) (Ping timeout: 272 seconds)
+[01:15:18] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[01:16:09] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[01:20:11] *** Joins: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net)
+[02:28:03] <vertion> Haha, yeah.  I never got the utree/ subfolder.  I'll check out the updated readme!
+[04:42:09] *** Quits: vertion (617429dd@97-116-41-221.mpls.qwest.net) (Remote host closed the connection)
+[05:35:56] <mdrollette> interestingly, I plugged in a different disk and ran the same command, but with `-inram` this time, and this disk also seems to have been corrupted after some time. different I/O errors and write failures from the first disk though. 
+[05:47:21] *** Quits: slivera (~slivera@103.231.88.27) (Remote host closed the connection)
+[10:07:20] *** Joins: slivera (~slivera@103.231.88.27)
+[10:53:41] *** Quits: belcher_ (~belcher@unaffiliated/belcher) (Read error: Connection reset by peer)
+[10:53:47] *** Joins: reallll (~belcher@unaffiliated/belcher)
+[11:50:49] *** reallll is now known as belcher_
+[12:19:05] *** Joins: GH (ad46bc83@gateway/web/cgi-irc/kiwiirc.com/ip.173.70.188.131)
+[12:33:59] <dergoegge> mdrollette: hm that is interesting, i suspect the writes fail somewhere in here: https://github.com/mit-dci/utreexo/blob/1ec540cc5d08692eded88673635dee96aecbd8c7/bridgenode/offsetfile.go#L142 could you publish the`utreexoserver` output?
+[12:35:52] *** Quits: GH (ad46bc83@gateway/web/cgi-irc/kiwiirc.com/ip.173.70.188.131) (Quit: Connection closed)
+[12:36:08] <dergoegge> you mentioned the first disk is old, is the second one also old? as far as i know we did not encounter anything like this before. could the disks be broken?
+[13:45:47] *** Quits: slivera (~slivera@103.231.88.27) (Ping timeout: 240 seconds)
+[14:28:48] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[14:31:43] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[15:47:00] <ja> dergoegge: they are definitely broken, mdrollette started out saying that and how else would you explain all the error messages in dmesg?
+[15:47:39] <mdrollette> They are both older disks, it definitely could be coincidence. I've synced bitcoin and electrumx on them in the past, so was surprised to see them both fail now.
+[15:47:39] <ja> mdrollette: maybe it is actually your disk controller??
+[18:25:56] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[18:26:45] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[21:45:34] *** Joins: slivera (~slivera@103.231.88.10)
