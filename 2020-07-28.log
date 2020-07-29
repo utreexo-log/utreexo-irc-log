@@ -1,0 +1,28 @@
+[00:35:54] *** Quits: slivera (~slivera@103.231.88.27) (Ping timeout: 256 seconds)
+[00:52:27] *** Quits: valwal_ (sid334773@gateway/web/irccloud.com/x-skdjatjtpmrtqhqb) (Ping timeout: 240 seconds)
+[00:54:35] *** Joins: valwal_ (sid334773@gateway/web/irccloud.com/x-klnweyxemextthwx)
+[05:52:57] *** Joins: ThomasV_ (~thomasv@unaffiliated/thomasv)
+[07:32:50] <kcalvinalvin> godocs have finally found our repo it seems :)
+[07:32:51] <kcalvinalvin> https://pkg.go.dev/github.com/mit-dci/utreexo/accumulator?tab=doc
+[07:33:15] <kcalvinalvin> Probably should fix forest so it's prettier on godoc
+[07:54:00] *** Quits: ThomasV_ (~thomasv@unaffiliated/thomasv) (Ping timeout: 256 seconds)
+[09:02:49] *** Joins: ThomasV_ (~thomasv@unaffiliated/thomasv)
+[09:44:17] *** Joins: dergoegge (uid453889@gateway/web/irccloud.com/x-ymfhufpzogcbgweq)
+[10:54:15] *** Joins: reallll (~belcher@unaffiliated/belcher)
+[10:57:10] *** reallll is now known as belcher
+[10:58:14] *** Quits: belcher_ (~belcher@unaffiliated/belcher) (Ping timeout: 260 seconds)
+[12:54:56] <adiabat> hi all, can do call at 9:30 today (in 35 min)
+[13:34:55] <adiabat> (1 sec)
+[13:56:33] *** Quits: ThomasV_ (~thomasv@unaffiliated/thomasv) (Ping timeout: 272 seconds)
+[15:05:53] *** Joins: ThomasV_ (~thomasv@unaffiliated/thomasv)
+[16:10:17] <dergoegge> kcalvinalvin: there is also a ton of hashing going on in the ttl db. https://github.com/mit-dci/utreexo/blob/1ec540cc5d08692eded88673635dee96aecbd8c7/bridgenode/ttl.go#L33
+[16:10:55] <dergoegge> basically 1 sha256 for every txin that ever existed.
+[16:29:35] <dergoegge> but only for the bridge node, so not that important
+[16:38:01] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[16:54:31] *** Quits: ThomasV_ (~thomasv@unaffiliated/thomasv) (Ping timeout: 272 seconds)
+[16:55:51] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[20:05:53] *** Quits: icota[m] (icotamatri@gateway/shell/matrix.org/x-cgwmnkskqxfhuzyp) (Ping timeout: 260 seconds)
+[20:08:33] *** Joins: icota[m] (icotamatri@gateway/shell/matrix.org/x-tmghnorsuulogbjh)
+[21:32:46] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[22:13:11] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 244 seconds)
+[22:42:30] *** Joins: slivera (~slivera@103.231.88.27)
