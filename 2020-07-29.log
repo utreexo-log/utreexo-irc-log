@@ -1,0 +1,41 @@
+[00:57:55] *** Quits: RubenSomsen (sid301948@gateway/web/irccloud.com/x-gasdhhiyorhasrtn) (*.net *.split)
+[00:57:56] *** Quits: fanquake (sid369002@gateway/web/irccloud.com/x-olctokxewerkqszl) (*.net *.split)
+[01:01:53] *** Joins: RubenSomsen (sid301948@gateway/web/irccloud.com/x-gasdhhiyorhasrtn)
+[01:01:53] *** Joins: fanquake (sid369002@gateway/web/irccloud.com/x-olctokxewerkqszl)
+[01:03:37] *** Quits: rjected[m] (rjectedmat@gateway/shell/matrix.org/x-yahhmcmhqsiaggzp) (Remote host closed the connection)
+[01:03:46] *** Quits: icota[m] (icotamatri@gateway/shell/matrix.org/x-tmghnorsuulogbjh) (Remote host closed the connection)
+[01:09:37] *** Joins: icota[m] (icotamatri@gateway/shell/matrix.org/x-toywuawfkiqcrduy)
+[01:34:10] *** Joins: rjected[m] (rjectedmat@gateway/shell/matrix.org/x-dikhyfrvoihrwkoc)
+[04:28:51] <kcalvinalvin> dergoegge hrm.. I forgot what that was about... I think we had it so that the csn nodes read off of the ttldb directly with sha256(txid+index) as a key before the whole network thing
+[04:30:02] <kcalvinalvin> Well now you just send it over to the client so that bit of code could be overhauled
+[04:30:33] <kcalvinalvin> append it to the proofs or something..? any ideas adiabat
+[05:04:58] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[06:23:47] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Ping timeout: 240 seconds)
+[07:40:39] *** Quits: slivera (~slivera@103.231.88.27) (Remote host closed the connection)
+[07:43:44] *** Joins: ThomasV (~thomasv@unaffiliated/thomasv)
+[08:20:04] *** Quits: ThomasV (~thomasv@unaffiliated/thomasv) (Quit: Leaving)
+[09:00:51] *** Quits: belcher (~belcher@unaffiliated/belcher) (Quit: Leaving)
+[11:17:57] <dergoegge> i have already started to work on this in #177. my first idea was to append the ttls to the proofs but the ttls are not there yet when writing to proofs.dat. currently i fetch the ttls in serveBlocksWorker from the leveldb and send them to the client. might be slow because of all the leveldb calls, but leveldb has a cache so if two client ask for the same blocks the ttls only get fetched once from disk.
+[12:41:45] *** Joins: slivera (~slivera@103.231.88.27)
+[13:15:20] *** Quits: slivera (~slivera@103.231.88.27) (Remote host closed the connection)
+[16:03:00] <adiabat> Hm yeah it would be nice to have them in the proofs instead of db
+[16:03:19] <adiabat> maskes reading much easier at the cost of writing being harder
+[16:04:13] <adiabat> could have byte offsets saved within leveldb, which wouldn't be too hard; right now there's just one giant proof file
+[17:57:24] <dergoegge> adiabat how does the remembering in the pollard work? maybe i dont understand the code but do leaf siblings point to each other via `niece[0]` to "remember" each other?
+[17:58:06] <dergoegge> its weird because the new leaf points to itself via niece[0] here: https://github.com/mit-dci/utreexo/blob/1ec540cc5d08692eded88673635dee96aecbd8c7/accumulator/pollard.go#L105
+[17:58:24] <dergoegge> but then the nieces get swapped here: https://github.com/mit-dci/utreexo/blob/1ec540cc5d08692eded88673635dee96aecbd8c7/accumulator/pollard.go#L119
+[18:13:54] <dergoegge> after looking at  accumulator/todo.txt i think my assumption is correct. maybe niece should be called relative, because they can be children, nieces or siblings?
+[18:17:22] <adiabat> yeah niece[0] pointing to itself means "remember"
+[18:17:49] <adiabat> I figured it was better than adding a "memorable" bool into the polNode struct because that would push up the size of it by 8 bytes
+[18:18:26] <adiabat> and the leaves are the only things you need to remember, and leaves don't have nieces, so the niece[] pointers don't do anything otherwise
+[18:19:22] <adiabat> from a root node though yes, niece is weird and more like child
+[18:19:46] <adiabat> because roots don't have siblings, so child-of-sibling doesn't make sense...
+[18:20:09] <adiabat> though I think throughout the code, we treat a root as it's own sibling, and everything works out that way
+[18:24:05] <adiabat> yeah I don't have a better name for niece.  It's basically a niece except for the roots, but the roots are confusing I guess
+[18:24:35] <adiabat> I think it's better this way than having root's be a different struct that's not a polNode which has child[2] instead of neice[2]
+[18:25:08] <adiabat> that would be possible though.  And maybe not that bad since you're mostly explicitly dealing with roots in different ways than nodes
+[18:42:02] <dergoegge> yeah it's better than a bool, but with the current way you also remember the sibling. i think the main problem for me is that the whole datastructure is a little unintuitive. 
+[18:42:49] <dergoegge> the main reason for remembering is to reduce the proof size right? there is nothing to be gained by just remembering some leaves but leaving the proofs as big as they currently are?
+[18:43:24] <dergoegge> because i think #177 does what you suggested in the meeting but it doesn't speed anything up...
+[22:07:44] *** Joins: slivera (~slivera@103.231.88.27)
+[23:11:42] *** Quits: slivera (~slivera@103.231.88.27) (Ping timeout: 260 seconds)
