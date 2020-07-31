@@ -1,0 +1,13 @@
+[02:11:40] *** Joins: slivera (~slivera@103.231.88.10)
+[02:15:38] <adiabat> I think it needs to be in combination with #176 to see a speedup.
+[02:16:04] <adiabat> because it's still hashing all the way up to the root instead of stopping when it gets to a populated node
+[02:16:20] <adiabat> also I need to test and merge all these things since they work together! :)
+[04:28:54] *** Quits: slivera (~slivera@103.231.88.10) (Remote host closed the connection)
+[08:43:58] *** Joins: slivera (~slivera@103.231.88.10)
+[13:40:46] *** Quits: slivera (~slivera@103.231.88.10) (Remote host closed the connection)
+[14:28:08] <adiabat> should have some time to review & merge later today - sorry about the holdup
+[17:24:03] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Quit: jb55)
+[17:29:10] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[17:59:28] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[21:12:37] *** Joins: slivera (~slivera@103.231.88.27)
+[22:41:15] <dergoegge> adiabat: could swaps on the bottom row be oneway moves instead? because why move the value of the leaf we want to forget anyway. i don't know if that would be worth it but maybe for the disk forest.
