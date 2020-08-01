@@ -1,0 +1,17 @@
+[00:08:19] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Quit: Leaving)
+[01:44:46] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[03:14:30] *** Quits: slivera (~slivera@103.231.88.27) (Remote host closed the connection)
+[04:35:25] *** Joins: slivera (~slivera@103.231.88.10)
+[07:23:03] *** Quits: slivera (~slivera@103.231.88.10) (Remote host closed the connection)
+[08:39:27] *** Joins: belcher (~belcher@unaffiliated/belcher)
+[09:21:04] *** Quits: belcher (~belcher@unaffiliated/belcher) (Read error: Connection reset by peer)
+[09:21:18] *** Joins: belcher (~belcher@unaffiliated/belcher)
+[09:50:03] *** Joins: slivera (~slivera@103.231.88.10)
+[13:05:50] <fanquake> running utreexoclient
+[13:26:38] *** Quits: slivera (~slivera@103.231.88.10) (Remote host closed the connection)
+[14:18:19] <adiabat> dergoegge: Swaps could be 1-way moves except then it's not reversible for undo.  But in lots of cases yeah we don't need to write the left value back since it gets chopped off anyway
+[14:19:06] <adiabat> so that could be an optimization, where if we know we're writing to a place that's past the right border of the nextNumLeaves
+[14:19:45] <adiabat> then don't bother writing it.  Not sure how much of a speedup that will give, but may help and should be doable
+[14:19:49] <adiabat> fanquake: heh :)
+[17:49:41] *** Quits: dergoegge (uid453889@gateway/web/irccloud.com/x-ymfhufpzogcbgweq) (Quit: Connection closed for inactivity)
+[21:38:22] *** Joins: slivera (~slivera@103.231.88.10)
