@@ -1,0 +1,21 @@
+[00:13:20] *** Quits: slivera (~slivera@103.231.88.27) (Remote host closed the connection)
+[04:35:32] *** Joins: slivera (~slivera@103.231.88.10)
+[04:57:33] *** Quits: dergoegge (uid453889@gateway/web/irccloud.com/x-vydvmlhgpbnlqibn) (Quit: Connection closed for inactivity)
+[05:06:40] <kcalvinalvin> dergoegge thanks!
+[07:43:44] *** Joins: slivera_ (~slivera@116.206.228.243)
+[07:46:05] *** Quits: slivera (~slivera@103.231.88.10) (Ping timeout: 240 seconds)
+[08:47:29] <kcalvinalvin> adiabat You said btcd storage was a bit bigger right?
+[08:48:33] <kcalvinalvin> I'm looking at why btcd is taking so long with the database operations and part of it is how they handle reorgs. They just throw everything into the database
+[08:49:44] <kcalvinalvin> maybe this method uses up more space as well?
+[09:21:14] *** Joins: reallll (~belcher@unaffiliated/belcher)
+[09:24:35] *** Quits: belcher_ (~belcher@unaffiliated/belcher) (Ping timeout: 246 seconds)
+[13:20:18] *** Quits: slivera_ (~slivera@116.206.228.243) (Remote host closed the connection)
+[14:27:07] *** reallll is now known as belcher
+[17:30:33] <ja> kcalvinalvin: what is the alternative to "throwing everything into the database"?
+[18:25:20] *** Quits: cfields_ (~cfields@unaffiliated/cfields) (Ping timeout: 256 seconds)
+[18:40:04] *** Joins: cfields (~cfields@unaffiliated/cfields)
+[22:01:01] *** Joins: dergoegge (uid453889@gateway/web/irccloud.com/x-dohtfvjemvsjxcbi)
+[22:04:26] <dergoegge> btw. there is a blocksonly mode in btcd. https://github.com/Rjected/btcd/blob/33ad1b268519c18fd6364829a4744aa8e78346c0/config.go#L108
+[23:37:48] *** Joins: slivera (~slivera@103.231.88.30)
+[23:48:04] *** Joins: cfields_ (~cfields@unaffiliated/cfields)
+[23:48:20] *** Quits: cfields (~cfields@unaffiliated/cfields) (Ping timeout: 256 seconds)
