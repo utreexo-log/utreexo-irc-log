@@ -1,0 +1,41 @@
+[02:00:58] <kcalvinalvin> ja Well, there is how bitcoind does it in that there are rev files
+[02:01:55] <kcalvinalvin> I think that's actually better since you don't really expect reorgs of thousands of blocks
+[02:02:07] <kcalvinalvin> And if there are reorgs of thousands of blocks, we got more things to worry about
+[03:12:12] *** Quits: cfields_ (~cfields@unaffiliated/cfields) (Quit: cfields_)
+[03:12:22] *** Joins: cfields (~cfields@unaffiliated/cfields)
+[03:14:08] *** Quits: cfields (~cfields@unaffiliated/cfields) (Client Quit)
+[03:15:03] *** Joins: cfields (~cfields@unaffiliated/cfields)
+[03:15:45] *** Quits: cfields (~cfields@unaffiliated/cfields) (Client Quit)
+[03:21:29] *** Joins: slivera_ (~slivera@103.231.88.30)
+[03:23:59] *** Quits: slivera (~slivera@103.231.88.30) (Ping timeout: 246 seconds)
+[09:21:32] *** Joins: belcher_ (~belcher@unaffiliated/belcher)
+[09:24:45] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 240 seconds)
+[09:25:43] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Ping timeout: 240 seconds)
+[09:39:37] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[10:16:05] *** Quits: belcher_ (~belcher@unaffiliated/belcher) (Read error: Connection reset by peer)
+[12:20:43] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Ping timeout: 240 seconds)
+[12:21:40] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[13:21:54] *** Quits: slivera_ (~slivera@103.231.88.30) (Remote host closed the connection)
+[14:33:15] *** Joins: rafalcpp (~racalcppp@ip-178-214.ists.pl)
+[15:00:13] *** Quits: rafalcpp (~racalcppp@ip-178-214.ists.pl) (Ping timeout: 264 seconds)
+[15:28:54] *** Joins: rafalcpp (~racalcppp@ip-178-214.ists.pl)
+[16:23:41] <adiabat> kcalvinalvin: I think btcd is smaller overall
+[16:23:47] <adiabat> or that's what I saw for testnet
+[16:30:51] <adiabat> dergoegge: oh huh there is blocksonly, not much code there too.  So yeah could make sense to try to get a utreexo db working with blocksonly
+[17:07:28] <adiabat> also the other thing about re-orgs... I actually think most of the rev files are useless, even in current bitcoin core
+[17:07:52] <adiabat> and I don't mean useless as in "there's no way you can reorg 8 years so it won't happen"
+[17:08:17] <adiabat> I mean that even if you try to make a 400,000 block, 200GB reorg, like in regtest or something...
+[17:08:30] <adiabat> it won't work and bitcoind just crashes; basically it goes oom
+[17:09:59] <adiabat> at least that's what i've heard from some people.  and it makes sense, nobody would bother to fix that since it never happens
+[18:41:10] *** Quits: mdrollette (~matt@cpe-70-123-125-237.tx.res.rr.com) (Quit: bye)
+[18:44:44] *** Joins: mdrollette (~mdrollett@cpe-70-123-125-237.tx.res.rr.com)
+[20:03:03] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Ping timeout: 240 seconds)
+[20:16:15] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[21:05:06] *** Joins: cfields (~cfields@unaffiliated/cfields)
+[21:07:46] *** Joins: slivera (~slivera@103.231.88.10)
+[22:20:27] <dergoegge> adiabat: just did some testing with the latest master and #177. ibd is waaay slower, because the server spends all its time fetching the ttls from the db. so maybe hold of merging and i will add the things you mentioned in the comments https://github.com/mit-dci/utreexo/pull/177#issuecomment-667567339
+[22:37:34] *** Joins: aaronc2347 (uid451246@gateway/web/irccloud.com/x-hscdphfifnmlqwto)
+[22:49:26] <adiabat> dergoegge: OK, makes sense.  Yeah having a db lookup for every utxo when you're serving it will be slow
+[22:50:14] <adiabat> we can put them in the proof data and then remove from levelDB, shouldn't be too bad, and then the ttl DB stays small
+[23:43:36] *** Quits: mdrollette (~mdrollett@cpe-70-123-125-237.tx.res.rr.com) (Quit: bye)
+[23:43:55] *** Joins: mdrollette (~mdrollett@cpe-70-123-125-237.tx.res.rr.com)
