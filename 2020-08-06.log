@@ -1,0 +1,21 @@
+[00:01:45] *** Joins: slivera (~slivera@103.231.88.10)
+[00:06:02] *** Joins: slivera_ (~slivera@14-201-44-251.tpgi.com.au)
+[00:09:14] *** Quits: slivera (~slivera@103.231.88.10) (Ping timeout: 264 seconds)
+[06:03:57] *** Joins: slivera__ (~slivera@217.138.204.138)
+[06:06:25] *** Quits: slivera_ (~slivera@14-201-44-251.tpgi.com.au) (Ping timeout: 240 seconds)
+[09:15:55] *** Quits: slivera__ (~slivera@217.138.204.138) (Quit: Leaving)
+[10:34:55] <kcalvinalvin> adiabat So the direction is to have the accumulator/ directory as a pure accumulator right?
+[10:35:42] <kcalvinalvin> I'm moving stuff around since right now imports to btcd is kinda difficult. I guess I'll make a new directory for all the bitcoin specific stuff?
+[12:14:25] *** Joins: belcher_ (~belcher@unaffiliated/belcher)
+[12:17:47] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 240 seconds)
+[14:51:38] <adiabat> kcalvinalvin: yeah I think there is nothing bitcoin specific in the accumulator folder now
+[14:52:25] <adiabat> we sortof have it set up right with bridgenode / csn / util folders
+[14:52:51] <adiabat> maybe we don't have to call it "bridgenode" and can just call that stuff bridge
+[14:53:09] <adiabat> but keeping it separate that way and having btcd import from there could work
+[17:18:15] <rjected> kcalvinalvin: cool stuff with the benchmarks and speed improvements, I saw #182 and thought u should take a look at benchstat, it helps get statistics for how much faster something is
+[17:19:07] <rjected> makes it really easy to get number for "this thing is x% faster"
+[17:22:05] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Quit: jb55)
+[17:30:34] *** Quits: dergoegge (uid453889@gateway/web/irccloud.com/x-wzkrblegpyjfbhkf) (Quit: Connection closed for inactivity)
+[18:12:30] <kcalvinalvin> rjected oh cool I'll check it out. Thanks!
+[18:24:02] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[22:52:19] *** Joins: slivera (~slivera@217.138.204.138)
