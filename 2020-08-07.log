@@ -1,0 +1,57 @@
+[01:46:50] *** Quits: mdrollette (~mdrollett@cpe-70-123-125-237.tx.res.rr.com) (Quit: bye)
+[01:47:10] *** Joins: mdrollette (~mdrollett@cpe-70-123-125-237.tx.res.rr.com)
+[02:20:10] *** Joins: mattdrollette (~mdrollett@cpe-70-123-125-237.tx.res.rr.com)
+[02:21:26] *** Quits: mdrollette (~mdrollett@cpe-70-123-125-237.tx.res.rr.com) (Ping timeout: 256 seconds)
+[06:53:14] <kcalvinalvin> adiabat what would be the best way to go about separating the code specifically for the node vs the accumulator stuff
+[06:54:08] <kcalvinalvin> maybe have the bridge and csn be purely for the bitcoin specific accumulator stuff and make a node/ package or something
+[06:57:29] <kcalvinalvin> Also I guess undo.go is a pretty bitcoin specific thing inside accumulator/
+[07:01:20] <kcalvinalvin> Or maybe not..? I guess some database stuff could use a rollback
+[07:03:16] <icota[m]> hi all. how would a already-synced CSN deal with keys import? i imagine it would have to IBD again?
+[07:08:03] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[07:20:22] <kcalvinalvin> icota[m] Hello! That would be one way of going about it. In a scenario where you're coming from a wallet with Utreexo support, you would just import the Utreexo proofs with everything else. If you're coming from a non-Utreexo supporting wallet, you can ask a bridgenode for the proofs for your utxos
+[07:23:35] <kcalvinalvin> Though I guess chainanalysis companies will then be all over the bridgenodes. You could re-ibd by only doing the accumulator operations. Then at your saved tip, check if that matches the one you previously stored.
+[07:25:18] <icota[m]> does the bridge node support such operations at the moment?
+[07:26:09] <kcalvinalvin> It does not. With the current released binary, you'd have to resync
+[07:26:46] <kcalvinalvin> adiabat We should put this feature on github projects
+[07:30:10] <icota[m]> thanks kcalvinalvin . it didn't occur to me that a utreexo client can export the proofs along with the keys
+[07:36:53] <kcalvinalvin> One thing I should mention is that because the proof for a given utxo changes every block, the CSN client has to keep updating them. So it isn't possible to save a proof as you would with a key
+[07:37:29] <kcalvinalvin> Well, I guess you can. One would have to do ibd from the height of which that proof was stored
+[07:38:04] <icota[m]> yeah as long the height is stored somewhere it's okay. but the files can get a bit stale :)
+[08:23:25] *** Joins: ghost43_ (~daer@gateway/tor-sasl/daer)
+[08:24:03] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Ping timeout: 240 seconds)
+[12:14:32] *** Joins: reallll (~belcher@unaffiliated/belcher)
+[12:17:40] *** Quits: belcher_ (~belcher@unaffiliated/belcher) (Ping timeout: 246 seconds)
+[12:18:00] *** reallll is now known as belcher
+[13:04:23] *** Quits: ghost43_ (~daer@gateway/tor-sasl/daer) (Ping timeout: 240 seconds)
+[13:05:29] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[14:36:02] *** Quits: slivera (~slivera@217.138.204.138) (Remote host closed the connection)
+[14:37:25] *** Joins: dergoegge (uid453889@gateway/web/irccloud.com/x-lhrltkwqzknesmzr)
+[15:48:36] <adiabat> icota[m] : yeah it's not supported yet, right now need to resync, but CSN nodes don't actually need proofs for their own utxos
+[15:49:06] <adiabat> as long as there's a bridge node somewhere out there, they can broadcast the transaction to the non-utreexo network and it'll come back with proofs attached by bridges
+[15:49:31] <adiabat> so you could even do a neutrino filter type search for your own coins
+[15:50:40] <adiabat> another option would be asking a bridge node for the whole leaf set, which is pretty big but much smaller than re-syncing
+[15:51:03] <adiabat> also the verification is minial in that you just have to make sure it matches your accumulator roots
+[15:52:02] <adiabat> kcalvinalvin: the mainnet sync is crawling huh.  mostly signature checking I guess..?
+[15:52:43] <adiabat> 2 days and it's at height 526465... getting there I guess
+[16:33:47] *** Joins: Guest95604 (uid458593@gateway/web/irccloud.com/x-wmqexezvfmpyppgg)
+[16:36:07] *** Guest95604 is now known as sam
+[16:36:37] *** sam is now known as Guest98205
+[17:00:04] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[17:00:52] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[17:18:07] *** mattdrollette is now known as MDrollette
+[17:25:00] <kcalvinalvin> adiabat That's the mainnet sync for forest. There's only 16GB of memory on the server so I put in on disk. No signature checking
+[17:25:31] <kcalvinalvin> I'm current overhauling how forest is put on disk... painfully slow at the moment
+[17:26:22] <kcalvinalvin> And it's been there for 6 days now I think?
+[17:26:47] <kcalvinalvin> spinning disk is probably hurting it like crazy too
+[17:28:19] <kcalvinalvin> adiabat wouldn't the leafset from the forest have to be the entire bottom row on forest?
+[17:29:31] <kcalvinalvin> There's ~67,000,000 utxos so with 32 bytes per leaf it'd be around 2GBs
+[17:29:45] <kcalvinalvin> I guess it's doable
+[18:29:32] <adiabat> yeah probably ends up being more than 2GB, but that's still a lot less than a re-sync
+[18:29:46] <adiabat> yeah I guess it's on mechanical disk which is very slow
+[18:30:04] <adiabat> thing is, GCE SSDs are also very slow, at least when I've tried them
+[18:30:22] <adiabat> I think in all cases, the disks are in a separate machine somewhere else in the data center
+[18:30:57] <adiabat> so your latency for disk access is 1ms or so, even for SSD
+[18:31:26] <adiabat> oh... "De Bruijn sequences" in PR 182... I assume it work
+[18:31:41] <adiabat> I mean the tests show it works so ... I guess I don't have to know exactly why :)
+[18:52:20] *** Parts: Guest98205 (uid458593@gateway/web/irccloud.com/x-wmqexezvfmpyppgg) ()
+[21:34:44] *** Joins: slivera (~slivera@217.138.204.153)
