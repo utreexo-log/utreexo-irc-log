@@ -1,0 +1,31 @@
+[00:22:11] *** Quits: slivera (~slivera@217.138.204.153) (Ping timeout: 246 seconds)
+[02:29:08] *** Quits: fanquake (sid369002@gateway/web/irccloud.com/x-olctokxewerkqszl) (Ping timeout: 244 seconds)
+[02:34:44] *** Joins: Guest91961 (sid369002@gateway/web/irccloud.com/x-zekgqkmvbqqcurtw)
+[02:35:19] *** Quits: Guest91961 (sid369002@gateway/web/irccloud.com/x-zekgqkmvbqqcurtw) (Client Quit)
+[02:35:48] *** Joins: Guest91961 (sid369002@gateway/web/irccloud.com/x-ahfvlybjfkwblmbw)
+[02:54:57] *** Quits: Guest91961 (sid369002@gateway/web/irccloud.com/x-ahfvlybjfkwblmbw) (Ping timeout: 260 seconds)
+[02:57:43] *** Joins: Guest91961 (sid369002@gateway/web/irccloud.com/x-pvvhjyneczendkuj)
+[02:58:14] *** Quits: Guest91961 (sid369002@gateway/web/irccloud.com/x-pvvhjyneczendkuj) (Client Quit)
+[04:48:20] *** Joins: Guest91961 (sid369002@gateway/web/irccloud.com/x-ryqjzqmihwjotfar)
+[05:23:32] *** Quits: Guest91961 (sid369002@gateway/web/irccloud.com/x-ryqjzqmihwjotfar) ()
+[06:15:25] <icota[m]> @ad
+[06:18:48] <icota[m]> adiabat kcalvinalvin would CSN keeping the utxo leafset reduce the p2p overhead?
+[06:22:37] <icota[m]> i mean in cases other than the key import scenario we were talking about
+[06:24:41] <icota[m]> and how does keeping it compare to the utxo set, storage wise? serialized utxo is 4GB i think, about double?
+[06:39:12] *** Joins: slivera (~slivera@217.138.204.153)
+[08:12:08] *** Joins: Guest91961 (sid369002@gateway/web/irccloud.com/x-gpxrzbfsaaaqtvac)
+[08:12:09] *** Quits: Guest91961 (sid369002@gateway/web/irccloud.com/x-gpxrzbfsaaaqtvac) (Client Quit)
+[08:17:32] *** Quits: slivera (~slivera@217.138.204.153) (Remote host closed the connection)
+[08:53:36] *** Joins: slivera (~slivera@217.138.204.122)
+[09:50:53] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 265 seconds)
+[10:02:25] *** Joins: belcher (~belcher@unaffiliated/belcher)
+[10:57:04] *** Quits: dergoegge (uid453889@gateway/web/irccloud.com/x-lhrltkwqzknesmzr) (Quit: Connection closed for inactivity)
+[12:03:39] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[12:04:33] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[13:04:48] *** Quits: slivera (~slivera@217.138.204.122) (Remote host closed the connection)
+[14:21:38] *** Quits: adiabat (~adiabat@63.209.32.102) (Ping timeout: 256 seconds)
+[14:23:24] *** Joins: adiabat (~adiabat@63.209.32.102)
+[16:10:13] <adiabat> icota[m]: CSN keeping the whole leaf set means it's not really a CSN anymore.  But yes it would reduce network traffic a lot
+[16:11:18] <adiabat> it's around the same size as having the utxo set in leveldb.  The hashes are 32 bytes each, but you need twice as many hashes as leaves so it's about 64 bytes per utxo
+[16:12:13] <adiabat> if you have that data though, you're pretty much a bridge node, and can create proofs and don't need any
+[23:40:43] *** Joins: Guest91961 (sid369002@gateway/web/irccloud.com/x-vjspzyrbcpyrzujv)
