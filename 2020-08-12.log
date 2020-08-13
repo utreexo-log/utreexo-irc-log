@@ -1,0 +1,24 @@
+[00:59:13] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[01:00:04] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[02:10:39] *** Quits: dergoegge (uid453889@gateway/web/irccloud.com/x-ycibajbgftqugikw) (Quit: Connection closed for inactivity)
+[05:42:47] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Quit: jb55)
+[06:12:38] <kcalvinalvin> Just curious but what version of go is everyone on?
+[09:05:39] *** Quits: icota[m] (icotamatri@gateway/shell/matrix.org/x-toywuawfkiqcrduy) (Quit: killed)
+[09:05:45] *** Quits: rjected[m] (rjectedmat@gateway/shell/matrix.org/x-dikhyfrvoihrwkoc) (Quit: killed)
+[09:13:23] *** Joins: rjected[m] (rjectedmat@gateway/shell/matrix.org/x-dxgsqesnagwnriqk)
+[09:39:16] *** Joins: icota[m] (icotamatri@gateway/shell/matrix.org/x-xpkyziydjunbcssq)
+[09:49:25] *** Joins: reallll (~belcher@unaffiliated/belcher)
+[09:53:11] *** Quits: belcher_ (~belcher@unaffiliated/belcher) (Ping timeout: 265 seconds)
+[10:06:45] *** Joins: dergoegge (uid453889@gateway/web/irccloud.com/x-mzknfnwlewxltcow)
+[10:08:28] <dergoegge> kcalvinalvin: 1.14.3
+[13:45:33] <adiabat> huh go1.10.4 on this computer, guess I didn't upgrade this one.  The other was 1.11 so I could do the modules thing...
+[13:45:59] <adiabat> but I guess without the modules thing is still works now since the rjected btcd and the regular one both have the same stuff now
+[13:52:29] <adiabat> I need to upgrade, like, evvvverything.  On lubuntu 18.04 and lubuntu like doesn't even exist anymore, at least lxde doesn't
+[13:57:02] <adiabat> hm should probably get a new computer if I'm going to re-install the OS.  This CPU is from 2012... maybe they've made things a bit faster since then
+[15:53:57] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[17:18:47] *** Joins: s_am (uid458593@gateway/web/irccloud.com/x-hbkjecnvuwocvnvb)
+[18:21:39] *** Quits: icota[m] (icotamatri@gateway/shell/matrix.org/x-xpkyziydjunbcssq) (Remote host closed the connection)
+[18:21:43] *** Quits: rjected[m] (rjectedmat@gateway/shell/matrix.org/x-dxgsqesnagwnriqk) (Remote host closed the connection)
+[18:27:52] *** Joins: rjected[m] (rjectedmat@gateway/shell/matrix.org/x-gzimxscdltpysija)
+[18:54:15] *** Joins: icota[m] (icotamatri@gateway/shell/matrix.org/x-eqhxcimgttyalrtz)
+[23:00:52] *** reallll is now known as belcher
