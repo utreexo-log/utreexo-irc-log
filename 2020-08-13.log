@@ -1,0 +1,15 @@
+[01:21:08] *** Quits: stevenroose (~steven@irc.roose.io) (Ping timeout: 260 seconds)
+[01:25:05] *** Joins: stevenroose (~steven@2001:19f0:6801:83a:d583:6c25:2f07:e17a)
+[05:54:07] <kcalvinalvin> adiabat If the cpu is from Intel you're probably not too far off the latest tech :)
+[07:50:03] *** Quits: ghost43_ (~daer@gateway/tor-sasl/daer) (Ping timeout: 240 seconds)
+[07:51:08] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[09:48:55] *** Quits: belcher (~belcher@unaffiliated/belcher) (Read error: Connection reset by peer)
+[09:49:01] *** Joins: belcher_ (~belcher@unaffiliated/belcher)
+[11:32:52] <dergoegge> i am pretty sure i did the ttl thing wrong. it currently sends the ttls of the inputs/targets but it needs to send the ttls of the outputs/new leaves. i think i was confused because the udata struct has the UtxoData slice which is the txo data for the inputs not the outputs. i will make a pr later today to fix this.
+[13:09:05] *** Quits: MDrollette (~mdrollett@cpe-70-123-125-237.tx.res.rr.com) (Ping timeout: 240 seconds)
+[13:14:18] *** Joins: mdrollette (~mdrollett@cpe-70-123-125-237.tx.res.rr.com)
+[14:51:22] *** Quits: s_am (uid458593@gateway/web/irccloud.com/x-hbkjecnvuwocvnvb) (Quit: Connection closed for inactivity)
+[15:55:39] <dergoegge> #184 should fix it
+[15:56:30] <dergoegge> adiabat: or you do this with the PR that moves the ttls to flat files, i don't know how far you have gotten with that
+[18:20:39] <ja> i was told after my talk that utreexo that it is similar to bamboo: https://github.com/AljoschaMeyer/bamboo , but it's hard to me to translate all the concepts
+[18:20:44] <ja> but i thought i'd drop that link in here
