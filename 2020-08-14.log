@@ -1,0 +1,15 @@
+[02:20:59] <adiabat> dergoegge: ah, yeah the TTL value we want is for the newly created utxo.  For utxos being spent we already have that data
+[02:21:51] <adiabat> dergoegge: I can fix with the flat file PR since they're touching the same code.  I'm first separating the proof building and serving into separate code
+[02:25:14] <adiabat> ja: I looked at "bamboo" and I guess it's like merkle trees, but no way to delete anything
+[02:53:51] *** Quits: pigeons (~pigeons@androzani.sysevolve.com) (*.net *.split)
+[02:53:51] *** Quits: kakobrekla (~kako@unaffiliated/kakobrekla) (*.net *.split)
+[02:59:45] *** Joins: kakobrekla (~kako@unaffiliated/kakobrekla)
+[02:59:45] *** Joins: pigeons (~pigeons@androzani.sysevolve.com)
+[05:43:47] *** Quits: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net) (Ping timeout: 240 seconds)
+[05:45:05] *** Joins: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net)
+[08:18:11] <ja> but they do mention "local deletion". in utreexo you also decide yourself what parts of the forest to forget, so in a way it is local
+[09:49:09] *** Joins: reallll (~belcher@unaffiliated/belcher)
+[09:52:36] *** Quits: belcher_ (~belcher@unaffiliated/belcher) (Ping timeout: 256 seconds)
+[15:10:03] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Ping timeout: 240 seconds)
+[15:16:27] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[18:20:37] *** reallll is now known as belcher
