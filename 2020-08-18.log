@@ -1,0 +1,58 @@
+[03:29:25] *** Quits: icota[m] (icotamatri@gateway/shell/matrix.org/x-eqhxcimgttyalrtz) (Remote host closed the connection)
+[03:29:25] *** Quits: rjected[m] (rjectedmat@gateway/shell/matrix.org/x-gzimxscdltpysija) (Remote host closed the connection)
+[03:35:54] *** Joins: rjected[m] (rjectedmat@gateway/shell/matrix.org/x-qusliyjuirqvgxwv)
+[04:03:09] *** Joins: icota[m] (icotamatri@gateway/shell/matrix.org/x-tvxcvljznjihazey)
+[04:48:09] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Read error: Connection reset by peer)
+[04:48:09] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Write error: Connection reset by peer)
+[04:50:03] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[04:50:26] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[05:59:34] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[05:59:34] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Write error: Connection reset by peer)
+[06:03:45] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[06:15:59] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[08:12:30] *** Quits: rjected[m] (rjectedmat@gateway/shell/matrix.org/x-qusliyjuirqvgxwv) (Quit: killed)
+[08:12:38] *** Quits: icota[m] (icotamatri@gateway/shell/matrix.org/x-tvxcvljznjihazey) (Quit: killed)
+[08:20:55] *** Joins: icota[m] (icotamatri@gateway/shell/matrix.org/x-wocbhgwztdpxeqmi)
+[08:48:56] *** Joins: rjected[m] (rjectedmat@gateway/shell/matrix.org/x-isznbatiwjkosmxf)
+[08:52:02] *** Joins: belcher (~belcher@unaffiliated/belcher)
+[09:49:31] *** Joins: belcher_ (~belcher@unaffiliated/belcher)
+[09:52:47] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 240 seconds)
+[11:44:38] *** Joins: dergoegge (uid453889@gateway/web/irccloud.com/x-ncxvfwxizoirngdr)
+[11:47:07] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[11:47:56] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[12:43:30] <adiabat> Hi - this week is later call, but can do at 11:30am EDT if that works. 
+[12:43:58] <adiabat> Also not much to cover, I only had a little time to code this past week, so maybe a quick meeting
+[12:44:15] * fanquake doesn't think he'll make it to 11:30pm
+[12:44:28] <fanquake> All good though, if there's not much to discuss
+[12:44:39] <adiabat> yeah I was mostly doing meetings and stuff
+[12:44:51] <fanquake> #exciting
+[12:44:51] <adiabat> we announced the whole fed thing though so that's mostly done with :)
+[12:45:11] <adiabat> next step: utreexo into central bank digital currency
+[12:45:15] <fanquake> 🚀
+[12:45:41] <adiabat> Hmmm not sure about rocket / moon though since CBDCs can't really go up or down in price :)
+[12:46:13] <fanquake> heh. I'll have to trade in the rocket emoji for something more appropriate
+[12:46:28] <fanquake> 🔮
+[13:03:23] <dergoegge> adiabat: i came up with an idea for the cache simulation we talked about last time. haven't tested it yet but if you want to look at that before the meeting: https://github.com/mit-dci/utreexo/blob/69b63564720bccd31e5aa8d09a050aa092880475/accumulator/pollardproof.go#L117
+[13:03:47] <dergoegge> 11:30 works for me
+[14:16:35] <kcalvinalvin> 11:30 is good
+[14:16:42] <kcalvinalvin> is that in 14 minutes?
+[14:17:40] <fanquake> In 1 hour and 13 minutes
+[14:21:56] *** Quits: belcher_ (~belcher@unaffiliated/belcher) (Ping timeout: 256 seconds)
+[14:25:09] <kcalvinalvin> ah ok :)
+[14:34:47] *** Joins: belcher_ (~belcher@unaffiliated/belcher)
+[14:57:23] *** Quits: belcher_ (~belcher@unaffiliated/belcher) (Ping timeout: 240 seconds)
+[15:10:11] *** Joins: belcher_ (~belcher@unaffiliated/belcher)
+[15:30:02] <adiabat> ok meet.jit.si/utreexo
+[15:31:01] <adiabat> maybe quicker meeting this time
+[16:11:23] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Ping timeout: 240 seconds)
+[16:13:45] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[16:58:43] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Ping timeout: 240 seconds)
+[17:28:55] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[19:01:52] *** Quits: digi_james (sid281632@gateway/web/irccloud.com/x-nbhbgbttjkqeljzc) (Ping timeout: 256 seconds)
+[19:02:12] *** Quits: fjahr (sid374480@gateway/web/irccloud.com/x-oiefvwkqhrcxgrux) (Read error: Connection reset by peer)
+[19:06:08] *** Joins: digi_james (sid281632@gateway/web/irccloud.com/x-hcwvchwalnuwrzmg)
+[19:09:50] *** Joins: fjahr (sid374480@gateway/web/irccloud.com/x-xlyisjkszbcgrhrd)
+[19:15:33] *** Quits: adiabat (~adiabat@63.209.32.102) (Remote host closed the connection)
+[19:26:07] *** Joins: adiabat (~adiabat@63.209.32.102)
+[22:42:56] *** Quits: felixweis (sid154231@gateway/web/irccloud.com/x-rwtspefaioxloplv) (Read error: Connection reset by peer)
+[22:54:33] *** Joins: felixweis (sid154231@gateway/web/irccloud.com/x-tjakxxqoraoowpeh)
