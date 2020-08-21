@@ -1,0 +1,23 @@
+[00:42:43] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Ping timeout: 240 seconds)
+[00:43:27] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[02:25:52] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[02:25:53] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[02:26:12] *** Joins: ghost43 (~daer@unaffiliated/daer)
+[02:26:40] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[04:06:28] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[04:07:17] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[07:41:58] *** Quits: valwal_ (sid334773@gateway/web/irccloud.com/x-klnweyxemextthwx) (Ping timeout: 244 seconds)
+[07:50:36] *** Joins: valwal_ (sid334773@gateway/web/irccloud.com/session)
+[08:30:03] *** Quits: ghost43 (~daer@unaffiliated/daer) (Changing host)
+[08:30:03] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[08:30:05] *** Quits: valwal_ (sid334773@gateway/web/irccloud.com/session) (Changing host)
+[08:30:05] *** Joins: valwal_ (sid334773@gateway/web/irccloud.com/x-wpdtkxyyinilwsfr)
+[15:09:24] *** Joins: belcher_ (~belcher@unaffiliated/belcher)
+[15:13:02] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 260 seconds)
+[18:17:01] <dergoegge> i did some profiling on slices vs. maps and the amount of gc that is going on did not change. now either using slices doesn't improve anything (or my implementation is bad) or the maps aren't the problem. 
+[18:17:52] <dergoegge> shouldn't most of the gc be done for the blocks and proofs that we through away?
+[18:20:48] <dergoegge> also it looks like the gc never blocks anything. so is it even that bad?
+[18:21:43] <dergoegge> *throw away
+[18:39:23] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Ping timeout: 240 seconds)
+[18:40:54] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[21:52:10] <dergoegge> there is a lot of appending to slices going on, we should probably preallocate when possible.
