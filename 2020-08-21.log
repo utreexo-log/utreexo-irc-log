@@ -1,0 +1,20 @@
+[00:09:16] *** Quits: fjahr (sid374480@gateway/web/irccloud.com/x-xlyisjkszbcgrhrd) (Read error: Connection reset by peer)
+[00:09:32] *** Joins: fjahr (sid374480@gateway/web/irccloud.com/x-ffjhrsnfxmfkhzfa)
+[00:10:09] *** Quits: cfields (~cfields@unaffiliated/cfields) (Remote host closed the connection)
+[00:11:18] *** Joins: cfields (~cfields@unaffiliated/cfields)
+[00:11:26] *** Quits: gnusha (~gnusha@unaffiliated/kanzure/bot/gnusha) (Ping timeout: 246 seconds)
+[02:14:48] *** Quits: dergoegge (uid453889@gateway/web/irccloud.com/x-xlhofqvmmqwkybrf) (Quit: Connection closed for inactivity)
+[08:15:51] <kcalvinalvin> dergoegge the ones in the accumulator side was a bit harder to get rid of the last time I looked at it. But yeah there should be plenty in the node side of things
+[08:44:28] *** Quits: digi_james (sid281632@gateway/web/irccloud.com/x-hcwvchwalnuwrzmg) (Read error: Connection reset by peer)
+[08:44:41] *** Quits: fjahr (sid374480@gateway/web/irccloud.com/x-ffjhrsnfxmfkhzfa) (Ping timeout: 272 seconds)
+[08:45:28] *** Joins: digi_james (sid281632@gateway/web/irccloud.com/x-ejqvvmceorpgsrwy)
+[08:45:43] *** Joins: fjahr (sid374480@gateway/web/irccloud.com/x-fkccgjyyhbxwqmut)
+[10:24:42] *** Joins: dergoegge (uid453889@gateway/web/irccloud.com/x-efoprlttnssjbbin)
+[10:36:40] <dergoegge> so i tried out preallocating slices and the biggest improvement was for preallocating polNodes in IngestBatchProof. GC went from 26% to 14% 🚀
+[10:37:47] <dergoegge> i am probably allocating to much in some cases because i wasn't sure what the upper bound on some of the slices is
+[15:09:29] *** Joins: reallll (~belcher@unaffiliated/belcher)
+[15:12:58] *** Quits: belcher_ (~belcher@unaffiliated/belcher) (Ping timeout: 256 seconds)
+[16:31:46] <adiabat> dergoegge: yeah in this case the maps vs slices probably doesn't make a big difference, but it's still nicer to have slices, and more portable to other languages
+[17:23:22] *** Quits: reallll (~belcher@unaffiliated/belcher) (Ping timeout: 258 seconds)
+[17:30:28] *** Joins: reallll (~belcher@unaffiliated/belcher)
+[18:46:49] *** reallll is now known as belcher
