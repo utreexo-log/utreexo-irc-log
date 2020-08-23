@@ -1,0 +1,17 @@
+[02:20:11] *** Quits: dergoegge (uid453889@gateway/web/irccloud.com/x-efoprlttnssjbbin) (Quit: Connection closed for inactivity)
+[02:30:35] *** Quits: fanquake (sid369002@gateway/web/irccloud.com/x-gmsxsfstdzsulgeg) (Ping timeout: 272 seconds)
+[02:34:53] *** Joins: fanquake (sid369002@gateway/web/irccloud.com/x-zgkshntuzwgmxpna)
+[03:05:45] *** Quits: digi_james (sid281632@gateway/web/irccloud.com/x-ejqvvmceorpgsrwy) (Ping timeout: 240 seconds)
+[03:07:57] *** Joins: digi_james (sid281632@gateway/web/irccloud.com/x-dhknmjntolazodjv)
+[08:26:12] *** Quits: belcher (~belcher@unaffiliated/belcher) (Quit: Leaving)
+[08:50:33] <kcalvinalvin> dergoegge I'm going through the PRs you've made. A lot to grasp so it'll take me a bit but really cool PRs :)
+[11:21:13] <kcalvinalvin> adiabat dergoegge ja I've been brainstorming for a few weeks now on how to re-implement forest on disk. I've made a basic structure on issue #191
+[11:22:26] <kcalvinalvin> Looking for some thoughts
+[11:58:19] *** Quits: stevenroose (~steven@irc.roose.io) (Ping timeout: 244 seconds)
+[11:59:12] *** Joins: stevenroose (~steven@irc.roose.io)
+[12:08:14] *** Joins: dergoegge (uid453889@gateway/web/irccloud.com/x-dxprdbgghyhxzrvj)
+[12:17:15] <dergoegge> kanzure: i think the log bot is offline, the logs aren't updating
+[18:51:28] *** Joins: gnusha (~gnusha@unaffiliated/kanzure/bot/gnusha)
+[18:51:36] <kanzure> dergoegge: yep, looks like it was offline
+[18:51:41] <kanzure> dergoegge: it's back
+[20:43:11] <dergoegge> kanzure: cool, thanks
