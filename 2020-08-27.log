@@ -1,0 +1,12 @@
+[00:40:52] *** Quits: dergoegge (uid453889@gateway/web/irccloud.com/x-dxprdbgghyhxzrvj) (Quit: Connection closed for inactivity)
+[14:16:23] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Ping timeout: 240 seconds)
+[14:19:55] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[14:48:32] *** Joins: dergoegge (sid453889@gateway/web/irccloud.com/x-kkwvhggdkzeaxpvx)
+[17:30:32] *** Joins: reallll (~belcher@unaffiliated/belcher)
+[17:33:58] *** Quits: belcher_ (~belcher@unaffiliated/belcher) (Ping timeout: 265 seconds)
+[21:00:46] <dergoegge> there is a paper on a dynamic hash based accumulator from 2008 https://users.dcc.uchile.cl/~pcamacho/papers/strongacc08.pdf
+[21:00:56] <dergoegge> has anyone seen this?
+[21:01:32] <dergoegge> it's kinda cool because they only keep one root and it can also do non-inclusion proofs
+[21:05:24] <dergoegge> only skimmed the paper so i can't say if it's better or worse than utreexo but it feels a bit more complex...
+[21:05:55] <dergoegge> would non-inclusion proofs even be useful for the utxo set?
+[21:34:50] *** reallll is now known as belcher
