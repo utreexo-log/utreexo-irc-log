@@ -1,0 +1,7 @@
+[17:30:38] *** Joins: belcher_ (~belcher@unaffiliated/belcher)
+[17:33:47] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 240 seconds)
+[18:50:40] *** Quits: belcher_ (~belcher@unaffiliated/belcher) (Quit: Leaving)
+[19:40:35] <adiabat> I don't think non-inclusion is that useful for bitcoin.  Unless it was an stxo accumulator, then in combination with an SPV proof it shows the txo can be spent
+[19:49:28] <adiabat> I need to read that paper more closely, but I think a difference is that in order to remove an element from that accumulator, you need to have the whole thing
+[19:50:18] <adiabat> whereas in utreexo, if all you have is the roots, and someone gives you an inclusion proof, that's enough to delete the element proven
+[19:50:55] <adiabat> in this paper it looks like if you want to delete something, you need to know more than just an inclusion proof for that thing
