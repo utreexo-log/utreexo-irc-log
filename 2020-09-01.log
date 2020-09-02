@@ -1,0 +1,15 @@
+[04:45:58] <kcalvinalvin> Is today earlier or later?
+[04:46:08] <kcalvinalvin> for the call
+[09:37:07] <dergoegge> Today should be the later one
+[11:52:41] <adiabat> yeah later today, can do 11:30 if that works
+[11:53:02] <adiabat> so in 3h35m
+[12:02:19] <dergoegge> 11:30 works for me
+[15:32:14] <adiabat> (will be there in a min...)
+[15:32:22] <adiabat> (still in different meeting)
+[16:17:53] <ja> oh , you finished quickly today
+[19:46:23] <adiabat> yeah, 40min or so
+[19:46:35] <adiabat> can do another call if there's things you want to discuss
+[19:46:43] <adiabat> or talk about on IRC :)
+[19:48:26] <ja> ah it's fine, i am just curious, nothing important. still working on explainer animations, very slowly...
+[19:50:10] <adiabat> ok sounds good.  I am going to try to get all the disk reads and writes batched together for each Modify() call
+[19:50:39] <adiabat> right now there are thousands of calls to SwapNodes which does a blocking read and then write, so it's really hard on disks, hopefully can make that faster
