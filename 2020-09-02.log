@@ -1,0 +1,41 @@
+[01:48:43] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Ping timeout: 240 seconds)
+[02:04:19] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[06:00:47] *** Quits: fjahr (sid374480@gateway/web/irccloud.com/x-bmmgceumnrjoxebt) (Ping timeout: 240 seconds)
+[06:02:56] *** Quits: digi_james (sid281632@gateway/web/irccloud.com/x-sdmniruwkbrwrymz) (Ping timeout: 240 seconds)
+[06:03:13] *** Joins: fjahr (sid374480@gateway/web/irccloud.com/x-vddusacsufeecjsf)
+[06:03:21] *** Joins: digi_james (sid281632@gateway/web/irccloud.com/x-sylyhzpfflhldnib)
+[07:33:22] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[07:34:12] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[21:04:10] *** Joins: belcher (~belcher@unaffiliated/belcher)
+[21:55:24] <adiabat> a problem with changing forest.Transform to "read everything first, compute, then write everything back"
+[21:56:02] <adiabat> is that sometimes there are huge moves, where you're swapping two large subtrees, and so you don't calculate anything but you have to read and write a lot of data
+[21:57:42] <adiabat> so you end up calling swapHashRange and on the bottom that can be millions of hashes to move
+[21:59:37] <adiabat> and there isn't really a bound for how big a swap can be; if you have 1 big perfect tree and delete a signle element on the left side
+[22:00:04] <adiabat> then you end up moving the whole right side to the left side, which means you're re-writing the whole thing
+[22:00:33] <adiabat> so "read everything first" sometimes means read the whole forest into ram, do stuff, then write the whole thing back to disk
+[22:00:43] <adiabat> that's not going to work
+[22:01:03] <adiabat> an idea is... a pollard-like disk representation
+[22:02:24] <adiabat> where you have, say 40 byte chunks, the first 32 bytes being the hash, and the next 8 being 2 "pointers"
+[22:02:51] <adiabat> the pointers being byte offsets in the file
+[22:03:09] <adiabat> (well pointer*40 is the byte offset)
+[22:03:38] <adiabat> this might be a kind of 2-birds-1-stone thing since it would also give an on-disk persistent pollard
+[22:04:07] <adiabat> the hard part is fragmentation
+[22:04:38] <adiabat> basically you'd have to do your own garbage collection / memory management
+[22:05:15] <adiabat> as when a node is deleted, we need to mark that that disk location is empty and overwrite it
+[22:05:25] <adiabat> or stash it for overwriting later
+[22:06:26] <adiabat> I don't know if it's an improvement though... it would completely get rid of giant swaps on disk
+[22:07:10] <adiabat> but then you also get the problem pollard has with descendToPos
+[22:07:28] <adiabat> where you have to read the location, get the pointer, seek, read next location, all the way down
+[22:09:01] <adiabat> I think it would be faster but I guess we need to know more about what makes forest / genproofs slow
+[22:09:38] <adiabat> or what the distribution of sizes of swaps is, maybe big swaps don't happen much
+[22:10:59] <adiabat> there are probably also ways to tweak the remove algorithm to reduce the size / row height of the swaps but that seems like a bad idea
+[22:13:09] <adiabat> ... maybe the fragmentation / GC of an on-disk pollard wouldn't be that bad
+[22:13:49] <adiabat> since in most cases you can overwrite instead of mark for deletion, you probably only need to keep track of deleted nodes when numleaves goes down
+[22:14:30] <adiabat> usually it doesn't go down too much, and just keeping a 4 byte record of each wouldn't be that much
+[22:15:15] <adiabat> ... that only applies for a full representation (forest) though; for pollard usage deletions would work differently
+[22:15:52] <adiabat> but even there, you can replace a lot, so still only need to track (currentNodes - maxEverNodes)
+[22:16:37] <adiabat> ok well I'm leaning towards trying to implement this; I don't think changing Modify() to cache or have different read/write patterns will work or help
+[22:17:48] <adiabat> anyway kcalvinalvin you've been looking at ... not exactly similar but a different way to change up how forest writes to disk
+[22:18:46] <adiabat> I'm leaning towards this because it feels like it could help unify pollard & forest which would be nice, right now there's a bunch of code doing... almost but not quite the same thing
+[22:19:43] <adiabat> having a ForestData style interface that handled the descendToPos stuff would be nice
+[22:20:23] <adiabat> this also might be a bad idea but maybe have to start working on it to see.  or if someone has a reason why it will be a bad idea could save me time :)
