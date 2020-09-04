@@ -1,0 +1,47 @@
+[00:03:18] *** Quits: achow101 (~achow101@unaffiliated/achow101) (Read error: Connection reset by peer)
+[00:03:30] *** Joins: achow101_ (~achow101@unaffiliated/achow101)
+[00:16:58] *** Quits: achow101_ (~achow101@unaffiliated/achow101) (Ping timeout: 256 seconds)
+[00:17:42] *** Joins: achow101 (~achow101@unaffiliated/achow101)
+[01:56:48] <kcalvinalvin> adiabat heh PR #192 sounds awful lot like what you're describing here
+[01:58:15] <kcalvinalvin> I could go over this on the next call. Or maybe I think I can finish the implementation this week
+[02:19:20] <adiabat> from what I understand of #192 it's pretty different though
+[02:19:44] <adiabat> for example, if you want to swap something at row 10
+[02:20:08] <adiabat> in pollard, you change two pointers and you're done
+[02:20:42] <adiabat> for forest, you have to move 2047 hashes
+[02:25:43] <adiabat> I guess the cowtree wouldn't need to move the bottom 4K structures, just the pointers above?
+[02:28:15] <adiabat> but the cowtree design doesn't seem to lend itself to sparse representations, which would be nice because then pollard could use the same storage as forest...
+[03:36:15] <kcalvinalvin> adiabat If it's actually sparse, then you're wasting a lot of disk space
+[03:37:28] <kcalvinalvin> Since you do want to group the bottom hashes, you're gonna have to have a smallest representation, which would be the 127 node tree (forestRows = 6)
+[03:38:21] <kcalvinalvin> There would need to be a lot of empty nodes here for a sparse representation right?
+[03:38:39] <kcalvinalvin> I'm not sure if there is a clean design for both forest and pollard...
+[14:35:14] <adiabat> maybe I'm not explaining the design well... there wouldn't be any wasted space with a sparse forest
+[14:35:41] <adiabat> it's basically like how pollard works, but instead of a pointer, it's a byte offset
+[14:36:20] <adiabat> I think I'll try to write it, maybe it won't be that complicated
+[17:24:53] <adiabat> huh, not really sure where this is going: https://github.com/suryanarayana-sankagiri/utreexo
+[17:25:36] <adiabat> maybe they're working on a better / faster hash tree..?
+[17:36:39] <dergoegge> hm this comment suggests they are working on proof sizes: https://github.com/BoltonBailey/utreexo/blob/87d6b07709c2f53e2959d62ccb9448783af2d10a/patriciaaccumulator/forest.go#L63
+[17:43:30] <dergoegge> there is also some copied rust code in there and names like `AccountState` or `account_data`. maybe they are eth people?
+[17:50:52] <adiabat> maybe... I'm skeptical of merkle patricia trees but that's just because I only know of ethereum's one
+[17:51:44] <adiabat> back of the envelope, since hashes are uniform, you're going to end up with the same path length for a prefix tree or a regular merkle tree...
+[17:52:22] <adiabat> anyway if it does reduce proofs sizes, cool
+[19:41:51] *** Joins: belcher_ (~belcher@unaffiliated/belcher)
+[19:44:56] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 240 seconds)
+[21:25:45] <ja> dergoegge: efficiency is less important than correctness, so if it is an explicit uint64, there is no problem. but int is dependent on word size, so that is why i brought it up
+[21:26:08] <ja> i don't know if 32-bit support is a goal, but if it is, int should be avoided, i guess?
+[21:26:54] <ja> but this thread of course is an issue even if on 64-bit, because of the unsigned->signed conversion, of course, which is why calvin brought it up
+[21:32:25] <ja> dergoegge: actually, i wonder why the function takes a signed int at all, since it casts to an unsigned on all uses anyway: https://golang.org/src/math/big/int.go?s=26365:26394#L1022
+[21:33:06] <dergoegge> Yeah i am not sure if 32-bit support is a goal but why not? in this case `big.Int.Bit` only takes an int. The whole big.Int thing is a bit of a hack because i use it as a bit set. A custom bit set implementation could just use uint64
+[21:33:16] <dergoegge> but it does check if i < 0 so it has to be signed
+[21:33:27] <ja> if nobody tests on 32-bit, there is no reason to even attempt to support it
+[21:34:00] <ja> since the go stdlib uses machine dependent ints haphazardly like here, we are forced to use them too
+[21:34:48] <ja> why not support 32-bit? because we don't use it and it distracts just to worry about it
+[21:35:16] <ja> if the stdlib had not machine dependent ints, support would be easy. but as the stdlib is now, it is inheritly fragile imho
+[21:36:29] <ja> 32-bit arm machines could be desirable of course? especially if utreexo is supposed to be the only viable mobile full-node
+[21:39:19] <ja> dergoegge: but it only panics if i<0. so why even accept this type if you panic on it anyway? surely a library function that cannot panic is desirable over one that can, assuming they provide the same functionality.
+[21:39:25] <dergoegge> i think i have an old raspberry pi that could be 32-bit maybe i should try to run it on there and see what happens :D
+[21:40:35] <ja> yeah why not? i keep reading about people running bitcoind on raspberries, and it takes them a week to sync, or more. so it sounds like a sensible target for utreexo
+[21:41:27] <dergoegge> setting a bit with a negative index doesn't make sense they should have just used an unsigned int for the param
+[21:42:24] <ja> yeah, that is my point with the "why even accept this type" comment. that is also why i call the stdlib "hapharardly" typed above
+[21:43:36] <ja> even haskell has the same issue, you can only shift by machine sized signed ints. and then it crashes on negative shifts! not what you'd expect from haskell ;)
+[21:48:13] *** Quits: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net) (Ping timeout: 264 seconds)
+[21:51:00] *** Joins: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net)
