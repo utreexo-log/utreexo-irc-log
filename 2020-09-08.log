@@ -1,0 +1,39 @@
+[00:36:55] *** Quits: kanzure (~kanzure@unaffiliated/kanzure) (Ping timeout: 240 seconds)
+[00:37:17] *** Joins: kanzure (~kanzure@unaffiliated/kanzure)
+[07:28:06] *** Joins: reallll (~belcher@unaffiliated/belcher)
+[07:31:52] *** Quits: belcher_ (~belcher@unaffiliated/belcher) (Ping timeout: 265 seconds)
+[08:21:45] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[08:22:34] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[12:15:04] <dergoegge> Early meeting today right?
+[12:28:33] <fanquake> I think so
+[12:31:54] *** reallll is now known as belcher
+[12:32:31] <adiabat> yeah early today, in 30 min
+[13:00:18] <kcalvinalvin> ok cool
+[13:00:20] <kcalvinalvin> Wasn't able to get the new tree stuff working in time though :/
+[13:02:03] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Ping timeout: 240 seconds)
+[13:16:38] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[16:57:39] <dergoegge> adiabat: maybe i am wrong but i think `polSwap` does not work properly with remembering leaves. If you have 4 leaves A,B,C,D and A points to B (A->B), B->A, C->D, D->C then if you swap A and D via polSwap the nieces of B and C get swapped which results in B and C pointing to cousins and that feels like it could get messy if further swaps occur. 
+[16:58:41] <dergoegge> the remembering stuff is very hard to think about with swaps happening 🤯
+[17:09:47] <dergoegge> https://github.com/mit-dci/utreexo/pull/180#issuecomment-671339858
+[17:10:16] <dergoegge> maybe worth it to try out what you suggested there. seems easier to wrap my head around...
+[19:31:57] <adiabat> so far it does work with pollard (I think!)
+[19:32:21] <adiabat> the basic rule is trim any 'dead end' that has no nieces 
+[19:32:47] <adiabat> and leaves with a fake "remember pointer" don't count as dead-ends
+[19:33:40] <adiabat> in this case A doesn't point to B, for the leaves their niece pointers become bools
+[19:34:13] <adiabat> those pointers are never followed since they're already at the bottom and there's never ambiguity about which row we're on
+[19:35:12] <adiabat> so the only thing a leaf's neice pointers are used for is the deadEnd() call
+[21:05:27] <dergoegge> hm ok a different example: again 4 leaves, remember A and B, don't remember C and D, now swap A and D. you end up remembering D and C after the swap. is that ok?
+[22:25:33] <dergoegge> don't merge #185 just yet, i think it still needs some more thought (and tests). i left a comment on the PR explaining why
+[23:38:19] <adiabat> I think that's OK as remembering is slightly contagious
+[23:39:55] <adiabat> you want to remeber both the node itself and its proof, which includes its sibling
+[23:40:03] <adiabat> that should only happen at the bottom though
+[23:40:43] <adiabat> in fact, slight inefficiency there - if there's A, B, C, D  on the bottom... or 0 1 2 3
+[23:42:29] <adiabat> and then there's 4, 5 above that and 6 is the root
+[23:42:39] <adiabat> if 3 is memorable and nothing else
+[23:43:12] <adiabat> you actually *don't* want to keep 3 in ram, you *only* want to keep 2, 4, 6
+[23:45:06] <adiabat> you don't actually want to keep 3 since you're getting the preimage of it anyway as the utxo data
+[23:45:37] <adiabat> hmmmm maybe there is a way...?
+[23:47:34] <adiabat> tag it so that 2 having the non-null pointer actually means "my sibling is marked as memorable"
+[23:49:07] <adiabat> then if 2 moves, it loses its memorable pointer and whatever comes in gains it
+[23:51:37] <adiabat> it's not a huge deal because it's just 1 extra hash on the bottom to keep track of
+[23:52:48] <adiabat> but something to think about; you're getting the utxo preimage data no matter what, so don't need to keep the hash
