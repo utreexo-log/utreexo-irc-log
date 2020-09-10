@@ -1,0 +1,44 @@
+[07:28:02] *** Joins: belcher_ (~belcher@unaffiliated/belcher)
+[07:31:13] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 246 seconds)
+[11:24:10] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[11:24:39] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[14:19:09] <dergoegge> so the reason i was thinking about this was the cache simulation. what i am currently doing there is storing each leave as a bit where 1 means cached and 0 not cached and when a swap occurs i just swap those bits
+[14:19:39] <dergoegge> my assumption was that leaves only get flagged as memorable in `addOne` 
+[14:21:07] <dergoegge> but actually they might become memorable through `polSwap` as well which i find weird because those leaves where not added with remember=true
+[14:21:48] <dergoegge> does that not break the benefit of using the ttl values?
+[18:34:47] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[18:35:37] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[19:18:06] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[19:52:21] <adiabat> If it's working the way I think it is (which I'm not 100% sure it does) -
+[19:52:51] <adiabat> then leaves will only be set to memorable by addOne (giving it a non-nil pointer_
+[19:53:40] <adiabat> BUT, nodes can be retained without being set to memorable: any sibling of a memorable node and al nodes up to the root
+[19:53:49] <adiabat> (the sibling being the first node of the proof
+[19:54:45] <adiabat> so the tricky part is that memorable and cached are not the same thing
+[19:55:09] <adiabat> for example, looking at printout.txt the last tree (line 39-45)
+[19:55:31] <adiabat> if 02 is marked memorable (it has a non nil pointer) and nothing else
+[19:55:50] <adiabat> then 02, 03, 08, 13, 14 should all be cached
+[19:58:39] <adiabat> ... ok no that's what I want it to do but that's not what it's doing
+[20:00:36] <adiabat> the only time anything memorable-related is called from pollard.rem2() is nt.chop()
+[20:03:53] <adiabat> the problem seems to be:
+[20:04:40] <adiabat> leaves aren't erroneously marked memorable; that part looks OK, where leaves can get non-nil nieces during addOne() so they don't get n.prune() 'd
+[20:05:38] <adiabat> but, n.prune() ony happens in addOne(); prune() needs to be called from rem2() somewhere
+[20:06:12] <adiabat> for example in the forest on line 21 of printout.txt
+[20:06:39] <adiabat> say 02 is marked memorable (non-nil pointer) but everything else is forgettable
+[20:07:06] <adiabat> so you'd have 02, 03, 16, 25, 28, 26, 22, 14
+[20:07:33] <adiabat> if 02 is deleted, then that means everything should be forgotten except roots
+[20:07:44] <adiabat> instead, 14 moves to 02
+[20:08:01] <adiabat> and now 14 is not memorable (has nil nieces) which is good, but
+[20:09:17] <adiabat> nothing calls prune() on 16, so both 02 and 03 stay, as well as 16, 25
+[20:10:54] <adiabat> this might be a 1-line fix (that'd be nice)
+[20:12:27] <adiabat> right after pollard.go line 241: hn.dest.data = hn.sib.auntOp()
+[20:12:43] <adiabat> just add hn.sib.prune() 
+[20:12:48] <adiabat> and... that's OK...?
+[20:13:45] <adiabat> prune() should only be called at row 1 and above, but hn's only exist up there so that's OK I think
+[20:15:33] <adiabat> dergoegge - I'll leave that for you to check?  Since you're dealing with caching now, OK?  
+[20:16:04] <adiabat> I could try to test / fix chaching but you've got a PR already in that area
+[20:17:07] <adiabat> also I am not sure that just 1 line there will fix it :)  There might be other places, but I think it's not much
+[21:29:13] <dergoegge> OK yeah i will have a look
+[21:34:01] <dergoegge> i will write some tests to verify that nodes are cached correctly
+[22:15:07] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[22:50:22] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[22:51:14] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
