@@ -1,0 +1,10 @@
+[00:37:32] <adiabat> It's quite possible that putting the hn.sib.prune() line will break other things.  Hopefully not! :)
+[07:28:10] *** Joins: reallll (~belcher@unaffiliated/belcher)
+[07:32:03] *** Quits: belcher_ (~belcher@unaffiliated/belcher) (Ping timeout: 265 seconds)
+[07:48:03] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Ping timeout: 240 seconds)
+[08:21:12] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[08:31:53] *** reallll is now known as belcher
+[09:34:04] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[09:34:57] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[14:46:48] <kcalvinalvin> You guys should put this on github issues so it's more accessible :0
+[14:46:49] <kcalvinalvin> :)
