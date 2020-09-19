@@ -1,0 +1,23 @@
+[00:53:17] <kcalvinalvin> dergoegge ahh ok makes sense
+[00:53:29] <kcalvinalvin> I'll try with the hashes reverted
+[06:39:18] *** Joins: belcher_ (~belcher@unaffiliated/belcher)
+[06:42:44] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 246 seconds)
+[06:46:37] <kcalvinalvin> Ok yeah I think it's the hash
+[06:53:07] *** Quits: prusnak (sid403625@gateway/web/irccloud.com/x-nficguliffcrpcdy) (Ping timeout: 240 seconds)
+[06:53:18] *** Quits: dergoegge (sid453889@gateway/web/irccloud.com/x-kkwvhggdkzeaxpvx) (Ping timeout: 260 seconds)
+[06:53:26] *** Quits: digi_james (sid281632@gateway/web/irccloud.com/x-cziqtxzbhovrsgzp) (Ping timeout: 240 seconds)
+[06:53:28] *** Joins: dergoegge (sid453889@gateway/web/irccloud.com/x-moqnytbtaisiruva)
+[06:53:53] *** Quits: jamesob (sid180710@gateway/web/irccloud.com/x-msxrcsfqcftqvufi) (Ping timeout: 260 seconds)
+[06:55:15] *** Joins: prusnak (sid403625@gateway/web/irccloud.com/x-fxisbvxyftpvqwzu)
+[06:56:32] *** Joins: digi_james (sid281632@gateway/web/irccloud.com/x-onkyiigagbyecwyz)
+[07:09:12] *** Joins: jamesob (sid180710@gateway/web/irccloud.com/x-jkrjxdqaspqhedhy)
+[08:52:55] *** Quits: rjected[m] (rjectedmat@gateway/shell/matrix.org/x-tcirrjbfofwhswfc) (Quit: killed)
+[08:53:05] *** Quits: icota[m] (icotamatri@gateway/shell/matrix.org/x-uxmiuemqnuserojw) (Quit: killed)
+[09:17:17] *** Joins: rjected[m] (rjectedmat@gateway/shell/matrix.org/x-bfwoatkxgyjlbhho)
+[09:19:19] *** Quits: rjected[m] (rjectedmat@gateway/shell/matrix.org/x-bfwoatkxgyjlbhho) (Remote host closed the connection)
+[09:25:30] *** Joins: rjected[m] (rjectedmat@gateway/shell/matrix.org/x-aygbvtfibxsvffbg)
+[09:49:32] *** Joins: icota[m] (icotamatri@gateway/shell/matrix.org/x-gbvfwkusvwddsrdd)
+[17:33:27] <adiabat> hm yeah I guess the "default server" should stay current with the release, not master?
+[17:33:53] <adiabat> maybe the default hard-coded server should only even exist in a release, for master it's changing enough that we can't change the server
+[17:34:34] <adiabat> don't want to worry about breaking backwards compatibility at this point
+[19:12:04] *** belcher_ is now known as belcher
