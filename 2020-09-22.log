@@ -1,0 +1,34 @@
+[04:07:59] *** Quits: takinbo_ (~takinbo@2a01:4f8:160:60aa:fee::10) (Quit: No Ping reply in 180 seconds.)
+[04:09:15] *** Joins: takinbo (~takinbo@2a01:4f8:160:60aa:fee::10)
+[04:09:15] *** Quits: takinbo (~takinbo@2a01:4f8:160:60aa:fee::10) (Changing host)
+[04:09:15] *** Joins: takinbo (~takinbo@unaffiliated/takinbo)
+[06:39:59] *** Joins: reallll (~belcher@unaffiliated/belcher)
+[06:43:25] *** Quits: belcher_ (~belcher@unaffiliated/belcher) (Ping timeout: 264 seconds)
+[06:59:23] *** reallll is now known as belcher
+[09:00:14] <kcalvinalvin> Was there a change to some leveldb call? I'm experience really heavy slowdowns and pprof is telling me it's leveldb
+[12:01:14] <stevenroose> I have this archaic UTreeXO call reminder since last year or so. do these calls still happen? I'm curious for an update, but otherwise I'm going to remove the reminder :)
+[12:20:45] <fanquake> stevenroose: yea they do
+[12:21:10] <fanquake> I think there's one in about 40 minutes tonight. Generally happen this day every week,
+[12:59:22] <stevenroose> fanquake: yeah that's what I have in my calendar :) I don't have a link or anything, though
+[13:01:24] <kcalvinalvin> stevenroose https://meet.jit.si/utreexo
+[13:01:29] <fanquake> stevenroose: https://meet.jit.si/utreexo is the link. When adiabat is around he can confirm anything else
+[13:02:11] <adiabat> hey yeah doing call now
+[13:28:03] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Ping timeout: 240 seconds)
+[13:31:38] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[13:59:28] <stevenroose> calvin here? 
+[13:59:45] <stevenroose> just wanted to say that if you get to implementing things for this in Rust, feel free to ping me about it
+[14:00:04] <stevenroose> either for discussion before, for collaboration or for review
+[14:00:24] <fanquake> yea calvin is kcalvinalvin
+[14:17:25] <kcalvinalvin> stevenroose ok cool. I'll ping you when an initial implementation is ready for reviews which is later...
+[16:25:24] *** Quits: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net) (Ping timeout: 260 seconds)
+[16:25:48] *** Joins: instagibbs (~instagibb@pool-71-178-191-230.washdc.fios.verizon.net)
+[17:27:19] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 258 seconds)
+[17:41:56] *** Joins: belcher (~belcher@unaffiliated/belcher)
+[20:44:36] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[20:44:52] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[22:04:07] *** Quits: RubenSomsen (sid301948@gateway/web/irccloud.com/x-lgebcwdtscmlevxn) (Ping timeout: 240 seconds)
+[22:04:31] *** Quits: dergoegge (sid453889@gateway/web/irccloud.com/x-moqnytbtaisiruva) (Read error: Connection reset by peer)
+[22:04:49] *** Joins: dergoegge (sid453889@gateway/web/irccloud.com/x-qcyhrfrvemkspetz)
+[22:05:19] *** Joins: RubenSomsen (sid301948@gateway/web/irccloud.com/x-ocdalhxrivpycxzh)
+[23:52:03] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Ping timeout: 240 seconds)
+[23:54:31] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
