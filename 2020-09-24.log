@@ -1,0 +1,7 @@
+[07:08:16] <kcalvinalvin> adiabat issue #202 is data gathered on how many swapNodes are called on each row
+[17:10:47] <adiabat> kcalvinalvin: cool!
+[17:11:00] <adiabat> that's pretty good, nothing too scary
+[17:11:34] <adiabat> there are 2 at 21... those probably freeze everything for a few seconds, but that's only twice
+[17:12:08] <adiabat> also testnet might be pretty different from mainnet; unfortunately mainnet might have a bunch of 20+ swaps...
+[19:48:11] *** Quits: belcher (~belcher@unaffiliated/belcher) (Quit: Leaving)
+[22:00:32] <dergoegge> kcalvinalvin: btw did mainnet genproofs with the cow forest work?
