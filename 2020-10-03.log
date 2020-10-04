@@ -1,0 +1,8 @@
+[02:09:08] <adiabat> hey, I think kcalvinalvin you said you would try to split up the proof file - hold off on that for this weekend
+[02:09:24] <adiabat> I should be able to merge #206, then it will be easier to split up the flat files
+[02:10:11] <adiabat> #206 moves lots of things around in the bridgenode package so it will be a pain to rebase or merge if you start on current master & I merge #206
+[06:04:32] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[06:05:26] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[08:39:59] *** Quits: digi_james (sid281632@gateway/web/irccloud.com/x-ybgmrpzqidouzgpo) (Ping timeout: 272 seconds)
+[08:40:16] *** Joins: digi_james (sid281632@gateway/web/irccloud.com/x-nwtegsatakxbqcim)
+[16:05:49] <kcalvinalvin> adiabat ok cool. Thanks for the heads up
