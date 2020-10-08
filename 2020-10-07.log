@@ -1,0 +1,38 @@
+[04:17:57] <adiabat> ok got proof building to work (probably anyway, no bugs yet) so now just have to change server & client side 
+[04:18:09] <adiabat> which should be easy
+[06:14:18] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Write error: Connection reset by peer)
+[06:14:19] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Write error: Connection reset by peer)
+[06:15:09] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[06:18:35] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[08:35:54] *** Joins: belcher_ (~belcher@unaffiliated/belcher)
+[08:39:38] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 272 seconds)
+[10:03:37] *** Quits: belcher_ (~belcher@unaffiliated/belcher) (Read error: Connection reset by peer)
+[10:06:07] *** Joins: belcher_ (~belcher@unaffiliated/belcher)
+[10:09:25] *** belcher_ is now known as belcher
+[12:01:47] <kcalvinalvin> So my new beefy computer was able to sync up to tip on mainnet in a couple of hours. ttldb is 60GB, proofdata is 451GB, the forest is 8.1GB
+[12:02:34] <kcalvinalvin> hmmm now I really wanna work on the "save proof only for odd blocks" thingy...
+[12:33:55] *** Quits: rjected[m] (rjectedmat@gateway/shell/matrix.org/x-aygbvtfibxsvffbg) (Quit: killed)
+[12:34:00] *** Quits: icota[m]1 (icotamatri@gateway/shell/matrix.org/x-sxcivdfavteepvuu) (Quit: killed)
+[12:42:02] *** Joins: icota[m] (icotamatri@gateway/shell/matrix.org/x-zjoqpgpgseeabplt)
+[13:03:32] *** Joins: rjected[m] (rjectedmat@gateway/shell/matrix.org/x-krdpzeqxdzpptsvj)
+[13:04:00] *** Quits: dergoegge (sid453889@gateway/web/irccloud.com/x-jzdktyxxskljzfdk) (*.net *.split)
+[13:04:00] *** Quits: kallewoof (~quassel@240d:1a:759:6000:a7b1:451a:8874:e1ac) (*.net *.split)
+[13:09:22] *** Joins: dergoegge (sid453889@gateway/web/irccloud.com/x-jzdktyxxskljzfdk)
+[13:09:22] *** Joins: kallewoof (~quassel@240d:1a:759:6000:a7b1:451a:8874:e1ac)
+[14:14:50] *** Parts: icota[m] (icotamatri@gateway/shell/matrix.org/x-zjoqpgpgseeabplt) ("Kicked by @appservice-irc:matrix.org  : Idle for 30+ days")
+[15:44:47] <adiabat> kcalvinalvin: wait so this is utreexo current master?  huh
+[15:45:10] <adiabat> so really the only problem was the disk i/o... and google servers have horrible disks
+[15:46:14] <adiabat> so could just have forest in ram and probably keep ttl db in ram, then don't need disk io / ssd... but need 16GB or 32GB of ram
+[16:01:36] <dergoegge> i actually ran into some trouble but i was using an external ssd so maybe thats why
+[16:01:47] <dergoegge> when quiting it reached the 60sec timeout
+[16:02:51] <dergoegge> i have a pprof trace, i will add a comment to #207
+[16:03:21] <dergoegge> there is a lot of time spent on the cow forest commit
+[16:05:42] <dergoegge> hm looks like i can't attach the pprof file on a github comment
+[16:06:52] <dergoegge> also even with cow it was using ~10GB of ram
+[16:10:03] <kcalvinalvin> dergoegge ok some tweaking to do with cow...
+[16:10:11] <kcalvinalvin> adiabat yea this is on current master
+[16:12:58] <dergoegge> kcalvinalvin: all the commit time comes from flushing the cache, so a different cache strategy should already improve this by a lot. although when quitting you will have to flush it all...
+[16:23:24] <kcalvinalvin> ok yeah I'll take a looksie
+[16:23:45] <kcalvinalvin> adjusting the treeBlocks and treeTables might also hlep
+[21:14:04] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[21:14:50] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
