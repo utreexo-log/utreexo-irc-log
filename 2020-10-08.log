@@ -1,0 +1,25 @@
+[04:20:12] *** Quits: rjected_ (~dan@pool-71-184-77-198.bstnma.fios.verizon.net) (Ping timeout: 258 seconds)
+[06:35:30] *** Quits: rjected[m] (rjectedmat@gateway/shell/matrix.org/x-krdpzeqxdzpptsvj) (Quit: killed)
+[06:43:18] *** Joins: rjected[m] (rjectedmat@gateway/shell/matrix.org/x-yuzjxmwpthwlifmg)
+[07:33:00] *** Quits: rjected[m] (rjectedmat@gateway/shell/matrix.org/x-yuzjxmwpthwlifmg) (*.net *.split)
+[07:33:00] *** Quits: dergoegge (sid453889@gateway/web/irccloud.com/x-jzdktyxxskljzfdk) (*.net *.split)
+[07:33:00] *** Quits: kallewoof (~quassel@240d:1a:759:6000:a7b1:451a:8874:e1ac) (*.net *.split)
+[07:36:50] *** Joins: rjected[m] (rjectedmat@gateway/shell/matrix.org/x-yxaxknxqzjxnvszx)
+[07:38:32] *** Joins: dergoegge (sid453889@gateway/web/irccloud.com/x-jzdktyxxskljzfdk)
+[07:38:32] *** Joins: kallewoof (~quassel@240d:1a:759:6000:a7b1:451a:8874:e1ac)
+[09:15:15] *** Quits: belcher (~belcher@unaffiliated/belcher) (Quit: Leaving)
+[09:24:27] *** Joins: belcher (~belcher@unaffiliated/belcher)
+[09:27:43] *** Joins: belcher_ (~belcher@unaffiliated/belcher)
+[09:28:18] *** Quits: belcher (~belcher@unaffiliated/belcher) (Client Quit)
+[10:06:26] *** Joins: belcher (~belcher@unaffiliated/belcher)
+[10:09:08] *** Quits: belcher_ (~belcher@unaffiliated/belcher) (Ping timeout: 272 seconds)
+[10:35:17] *** Quits: kallewoof (~quassel@240d:1a:759:6000:a7b1:451a:8874:e1ac) (Read error: Connection reset by peer)
+[10:35:24] *** Joins: kallewoof (~quassel@240d:1a:759:6000:a7b1:451a:8874:e1ac)
+[10:36:47] *** Quits: kallewoof (~quassel@240d:1a:759:6000:a7b1:451a:8874:e1ac) (Read error: Connection reset by peer)
+[10:36:50] *** Joins: kallewoof_ (~quassel@240d:1a:759:6000:a7b1:451a:8874:e1ac)
+[13:00:16] *** kallewoof_ is now known as kallewoof
+[14:59:34] <dergoegge> kcalvinalvin: reMap is not needed for the cow forest, right? or am i missing something. i think the reMap just does nothing here because all the hashes should stay in the same tree blocks.
+[15:50:07] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Read error: Connection reset by peer)
+[15:50:26] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[16:34:41] <kcalvinalvin> dergoegge not directly. It can work without it (you'd just have to allocate a new treeTable whenever needed) but I made new treeTable allocations only during a reMap to fit with the current interface/behavior
+[16:35:13] <kcalvinalvin> treeBlocks within the treeTable are nil until they are needed
