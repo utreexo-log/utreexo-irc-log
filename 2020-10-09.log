@@ -1,0 +1,25 @@
+[06:08:20] <kcalvinalvin> adiabat what was `makeCollpase()` in transform.go supposed to do?
+[06:08:36] <kcalvinalvin> Err I mean *swapCollapses()*
+[10:05:41] *** Joins: belcher_ (~belcher@unaffiliated/belcher)
+[10:08:07] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 240 seconds)
+[11:02:35] *** Quits: rjected[m] (rjectedmat@gateway/shell/matrix.org/x-yxaxknxqzjxnvszx) (Quit: killed)
+[11:10:28] *** Joins: rjected[m] (rjectedmat@gateway/shell/matrix.org/x-ymmvswkikplweobu)
+[11:34:25] *** Quits: dergoegge (sid453889@gateway/web/irccloud.com/x-jzdktyxxskljzfdk) (*.net *.split)
+[11:40:12] *** Joins: dergoegge (sid453889@gateway/web/irccloud.com/x-jzdktyxxskljzfdk)
+[15:42:25] <ja> kcalvinalvin: did you see https://github.com/utreexo-log/utreexo-irc-log/blob/53c8913548d178d80e740932f9973e0e52ecd0b5/2020-07-19.log#L64
+[15:43:39] <ja> in short, it moves the destination positions based on swaps that happen on higher levels, afaik
+[15:55:15] <kcalvinalvin> ja wait ok so it is supposed to be doing something
+[15:55:34] <kcalvinalvin> https://github.com/mit-dci/utreexo/blob/92d6ee46da74f1304dd15a62c57c3ceb221b357c/accumulator/transform.go#L54
+[15:56:30] <kcalvinalvin> We're not passing a pointer so it does nothing
+[15:57:29] <kcalvinalvin> oh wait it does do something... hmm go is weird
+[16:05:33] <kcalvinalvin> https://play.golang.org/p/C8DMNup8F5u
+[16:05:39] <kcalvinalvin> odd behavior
+[16:07:41] <dergoegge> thats normal, you have been looking too much at rust :D
+[16:08:12] <kcalvinalvin> I may have...
+[16:14:55] <kcalvinalvin> wait ok I love rust now
+[16:15:04] <kcalvinalvin> https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist=35ce9fb51cc7a09dca42e518d6bf8204
+[16:15:08] <kcalvinalvin> More explicit
+[16:30:07] <ja> then you'll love haskell, it lets you put IO actions in the type system ;)
+[16:34:00] <ja> kcalvinalvin: slices are always references, the go example you posted has a function taking a slice
+[16:34:25] <ja> kcalvinalvin: people say "go doesn't have reference passing", but since it has slices and slices are always references, i found that to be confusing
+[16:37:38] <kcalvinalvin> computers are tricky
