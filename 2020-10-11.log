@@ -1,0 +1,6 @@
+[04:52:07] *** Joins: fanquake_ (sid369002@gateway/web/irccloud.com/x-hhjwpoqkkctrgveh)
+[04:54:54] *** Quits: fanquake (sid369002@gateway/web/irccloud.com/x-mlmfxisownwkerez) (Ping timeout: 240 seconds)
+[04:54:56] *** fanquake_ is now known as fanquake
+[14:38:50] *** Quits: jamesob (sid180710@gateway/web/irccloud.com/x-qmddwxzkygwjtpel) (*.net *.split)
+[14:39:10] *** Joins: jamesob (sid180710@gateway/web/irccloud.com/x-qmddwxzkygwjtpel)
+[16:25:19] <dergoegge> adiabat: i made some progress with caching (#198). the solution was to not have hashable nodes above the new roots.
