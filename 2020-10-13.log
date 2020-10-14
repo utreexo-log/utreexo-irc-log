@@ -1,0 +1,19 @@
+[07:58:45] *** Joins: icota[m] (icotamatri@gateway/shell/matrix.org/x-cptnydtqzhiuimee)
+[11:39:45] <adiabat> hey so call today at 9 ( in 1h20m )
+[11:40:00] <adiabat> I'm trying to get a PR done by then but ... hmm
+[12:03:48] *** Quits: fjahr (sid374480@gateway/web/irccloud.com/x-aziopllegdxggubc) (Ping timeout: 258 seconds)
+[12:04:05] *** Joins: fjahr_ (sid374480@gateway/web/irccloud.com/x-wsewwojoxlxjupvu)
+[16:25:03] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Ping timeout: 240 seconds)
+[16:26:29] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[18:05:14] <adiabat> well the OOM bug I mentioned on the call is just a broken deserialization which was trying to read ~4gigs into ram
+[19:19:38] *** Joins: reallll (~belcher@unaffiliated/belcher)
+[19:22:44] *** Quits: belcher_ (~belcher@unaffiliated/belcher) (Ping timeout: 260 seconds)
+[19:29:07] *** reallll is now known as belcher
+[21:36:58] *** Quits: ja (janus@anubis.0x90.dk) (Quit: SIGXCPU)
+[22:03:29] *** Joins: ja_ (janus@anubis.0x90.dk)
+[22:09:13] *** ja_ is now known as Ysangkok
+[22:09:19] *** Ysangkok is now known as ja
+[23:24:14] *** Quits: kanzure (~kanzure@unaffiliated/kanzure) (Ping timeout: 260 seconds)
+[23:25:09] *** Quits: ja (janus@anubis.0x90.dk) (Ping timeout: 260 seconds)
+[23:25:11] *** Joins: kanzure (~kanzure@unaffiliated/kanzure)
+[23:25:15] *** Joins: ja (janus@anubis.0x90.dk)
