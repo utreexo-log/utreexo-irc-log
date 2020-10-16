@@ -1,0 +1,24 @@
+[04:05:50] <adiabat> yes.  It's a fun combination of 2 off-by-1 errors
+[04:05:56] <adiabat> because blocks start at 1
+[04:08:21] <adiabat> and offset files always start at 0, or like, the first entry in any offset file is useless
+[04:24:36] <adiabat> also file.Seek() doesn't do what it says it does... blarg.
+[04:28:06] <adiabat> ok well there's some other error but finally got that one... ugh
+[04:29:10] <adiabat> file.Seek(offset int64, whence int)... supposedly returns (ret int64, err error)
+[04:29:44] <adiabat> say there's a file that's 32 bytes long.  And you say to seek to byte 64
+[04:29:56] <adiabat> it will return 64, and no error, and seek to byte 32
+[04:30:22] <adiabat> why no error?  Wouldn't "hey you tried to seek past the end of the file" be an error?  blah anyway that's how it does it
+[09:12:48] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 256 seconds)
+[09:21:32] *** Joins: belcher (~belcher@unaffiliated/belcher)
+[13:19:39] <adiabat> huh weird the stuff I pushed last night gives a green check on github.  pretty sure it doesn't work though
+[13:21:09] <adiabat> so that's odd.  Maybe something in my setup is broken
+[13:22:57] <dergoegge> i looked at the logs. seems like genproofs worked fine but while serving the blocks there was a EOF which does not currently cause a panic.
+[13:23:13] <dergoegge> the tests only fail if there is a non zero exit code
+[13:24:04] <dergoegge> the csn only got to block 3 but there are ~210 blocks in theory
+[13:26:41] <adiabat> hm ok so guess it's more a test script problem, can try to make sure the test fails, then fix the actual thing for a green check
+[13:31:04] <dergoegge> https://github.com/mit-dci/utreexo/blob/e37f73e8b3f5c4edc1cadd41edcd2f050dbbc327/bridgenode/server.go#L167
+[13:31:26] <dergoegge> there is an EOF here even though `toHeight` was not reached
+[13:32:16] <dergoegge> so maybe panic there if that happens
+[13:32:48] <dergoegge> although a panic in the serve code is dangerous :D
+[19:18:36] *** Quits: belcher (~belcher@unaffiliated/belcher) (Read error: Connection reset by peer)
+[19:19:27] *** Joins: belcher (~belcher@unaffiliated/belcher)
+[23:40:27] *** fjahr_ is now known as fjahr
