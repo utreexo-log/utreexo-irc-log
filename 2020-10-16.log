@@ -1,0 +1,50 @@
+[00:15:24] *** Quits: instagibbs (~instagibb@pool-100-15-139-5.washdc.fios.verizon.net) (Ping timeout: 272 seconds)
+[19:19:16] *** Joins: belcher_ (~belcher@unaffiliated/belcher)
+[19:22:54] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 260 seconds)
+[19:40:34] <adiabat> argh so it looks like a file sync thing
+[19:40:52] <adiabat> where if you write some bytes to a file, then seek backwards, then write some more...
+[19:41:19] <adiabat> it just skips the seek part and just keeps writing ahead
+[19:41:47] <adiabat> but if you write, sync, seek, write, it goes to the place you said to
+[19:42:28] <adiabat> to me that's a bug in go std lib... I mean if you say n, err := file.WriteAt(bytes, 20)
+[19:42:50] <adiabat> and instead of putting it at location 20, it puts it at location 5735
+[19:43:14] <adiabat> then err should not be nil!
+[19:44:29] <adiabat> also just don't write anything instead of writing it to the wrong place.
+[19:45:24] <adiabat> "WriteAt" feels like the "At" is just as important as the "Write", not "Write, (oh and if you get a chance, at this location)"
+[19:46:19] <adiabat> blarg anyway just frustrated that I spent so long figuring this problem out because I did not think the file io could do such a weird thing
+[19:49:32] <adiabat> ... aha, some fine print!
+[19:49:36] <adiabat> "The behavior of Seek on a file opened with O_APPEND is not specified"
+[19:49:49] <adiabat> well good to know, maybe also return an error then?
+[19:50:18] <adiabat> "If file was opened with the O_APPEND flag, WriteAt returns an error." nope, that one definitely does not happen
+[19:50:37] <adiabat> so, that's maybe a bug in go stdlib, or at least a documentation bug
+[20:12:35] <ja> one could argue that if you WriteAt after you Seek (which was undefined behaviour), all bets are off
+[20:42:16] <adiabat> I didn't mix them though
+[20:42:27] <adiabat> I tried switching from seek / write to writeAt
+[20:42:48] <adiabat> there's sortof an issue but they closed it
+[20:42:50] <adiabat>  https://github.com/golang/go/issues/30716
+[20:43:51] *** belcher_ is now known as belcher
+[20:44:37] <ja> ah, did you see the commit that resolves it, that is the commit recarding O_APPEND/WriteAt erroring: https://github.com/golang/go/commit/c7f7f59368c3a964b8214018dc5100806b243938
+[20:45:22] <ja> now that we know which code is supposed to trigger the error, it would be easier to find out why it doesn't trigger on your machine
+[20:46:09] <ja> ooooh, it is only in go 1.13 and up! which version are you at?
+[20:46:11] <adiabat> ah shoot it's fixed in go 1.15.3
+[20:46:13] <adiabat> yeah
+[20:46:17] <adiabat> I'm on 1.12 or something
+[20:46:24] <adiabat> ok shoot I need to update then
+[20:46:33] <ja> now, go 1.15.3 is the latest it is in, the earliest is at the right
+[20:46:39] <adiabat> well in this case I just got rid of O_APPEND
+[20:46:40] <ja> *no
+[20:47:34] <adiabat> yeah 1.12 so no backport
+[20:47:36] <adiabat> hah
+[20:48:41] <adiabat> what does O_APPEND even do..?  Everything works fine with it taken out
+[20:48:52] <adiabat> it still expands the file if you try to write past the end the same way
+[20:49:40] <ja> i always thought it would seek to the end of the file after opening, and that's it
+[20:50:07] <adiabat> oh.  that's not too useful.  especially when it messes up other stuff :)
+[20:50:34] <ja> but you can see the actual glibc docs using "man 2 open"
+[20:50:35] <adiabat> hm yeah in this case I'm explicitly seeking to the beginning after opening anyway
+[20:50:47] <ja> oh, no, those are linux doc pages
+[20:51:19] <adiabat> huh " Before each write(2), the file offset is positioned at the end of the file" yeah that's not what I want
+[20:51:31] <adiabat> I guess I need to read the linux stuff as well
+[20:52:01] <adiabat> I assumed O_APPEND meant it would expand the size of the file when you try to write past the end, like with Truncate()
+[20:52:34] <adiabat> yeah "always write to the end no matter where you say to write" is definitely not going to work for the TTL values :)
+[20:52:51] <adiabat> ok well now it works
+[20:53:02] <ja> yeah it seems my assumptions were broken also :O i mean, if it seeks to the end before every write, then seek becomes totally useless? that is weird
+[20:53:11] <adiabat> or there's some other bug I guess but hopefully the rest are just little things
