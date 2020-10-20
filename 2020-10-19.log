@@ -1,0 +1,10 @@
+[04:20:29] <kcalvinalvin> Well, now we know the minimum supported version is go 1.13
+[07:17:52] *** Joins: belcher (~belcher@unaffiliated/belcher)
+[08:32:03] *** Joins: belcher_ (~belcher@unaffiliated/belcher)
+[08:32:12] *** Quits: belcher (~belcher@unaffiliated/belcher) (Read error: Connection reset by peer)
+[12:08:31] *** Joins: ghost43_ (~daer@gateway/tor-sasl/daer)
+[12:09:43] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Ping timeout: 240 seconds)
+[13:19:12] <adiabat> heh well not quite; 1.13 would have thrown an error (at run time or compile time?) for trying to use WriteAt
+[13:19:28] <adiabat> so 1.13 just tells you "you can't do that"
+[13:20:09] <adiabat> no actual fixes.  So the code should probably still work in whatever version
+[22:53:36] *** Joins: mdrollette (~mdrollett@cpe-70-123-125-237.tx.res.rr.com)
