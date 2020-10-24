@@ -1,0 +1,22 @@
+[08:31:36] *** Joins: belcher_ (~belcher@unaffiliated/belcher)
+[08:35:06] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 256 seconds)
+[10:24:30] *** Quits: icota[m] (icotamatri@gateway/shell/matrix.org/x-znsexcvbrpqeuydj) (Quit: killed)
+[10:33:30] *** Joins: icota[m] (icotamatri@gateway/shell/matrix.org/x-bexixapckmdedwln)
+[10:54:34] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[10:54:48] *** Joins: ghost43_ (~daer@gateway/tor-sasl/daer)
+[14:30:17] <adiabat> I have a newfound appreciation for JSON
+[14:30:46] <adiabat> sending structs from one computer to another is... super annoying
+[15:31:27] <ja> if the schema is fixed, why send the key names and encode everything in ascii? it sounds like the real advantage is automatically deriving the serialization, not necessarily putting it in JSON?
+[15:46:14] <adiabat> No I mean I'm joking a little bit, JSON isn't good for this
+[15:46:35] <adiabat> I just understand why people like it because it's simple and usually works, even if it's super inefficient
+[15:46:47] <adiabat> just because I'm dealing with annoying serialization stuff
+[16:57:32] *** Quits: icota[m] (icotamatri@gateway/shell/matrix.org/x-bexixapckmdedwln) (*.net *.split)
+[16:57:34] *** Quits: ghost43_ (~daer@gateway/tor-sasl/daer) (*.net *.split)
+[16:57:34] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (*.net *.split)
+[17:13:33] *** Joins: icota[m] (icotamatri@gateway/shell/matrix.org/x-psjyqsyrkhlykggg)
+[17:36:34] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[17:47:23] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[20:07:32] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[20:07:57] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[20:36:03] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Ping timeout: 240 seconds)
+[20:40:32] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
