@@ -1,0 +1,19 @@
+[08:28:52] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[08:29:36] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[08:32:22] *** Joins: reallll (~belcher@unaffiliated/belcher)
+[08:35:04] *** Quits: belcher_ (~belcher@unaffiliated/belcher) (Ping timeout: 260 seconds)
+[08:38:29] *** Quits: digi_james (sid281632@gateway/web/irccloud.com/x-zhvokaiycnpsbyyh) (Ping timeout: 272 seconds)
+[08:39:06] *** Joins: digi_james (sid281632@gateway/web/irccloud.com/x-oluymwplbdeghppb)
+[08:39:45] *** Quits: valwal_ (sid334773@gateway/web/irccloud.com/x-quzwnfdrpkglflcc) (Ping timeout: 272 seconds)
+[08:42:05] *** Joins: valwal_ (sid334773@gateway/web/irccloud.com/x-pxseioohccmgrxvz)
+[08:42:17] *** Quits: fanquake (sid369002@gateway/web/irccloud.com/x-hhjwpoqkkctrgveh) (Ping timeout: 272 seconds)
+[08:45:41] *** Joins: fanquake (sid369002@gateway/web/irccloud.com/x-pugsgmagvfjoiqaa)
+[09:09:08] *** reallll is now known as belcher
+[14:06:12] <dergoegge> turns out the Sum512_256 checksum that go computes is not the same as the first 32 bytes of a normal sha512. 
+[14:06:37] <dergoegge> taking the first 32 bytes would be safe though right?
+[14:06:46] <dergoegge> why do they make it this complicated
+[14:08:47] <dergoegge> they use different init values for the different checksum sizes: https://github.com/golang/go/blob/master/src/crypto/sha512/sha512.go#L45
+[14:09:16] <dergoegge> but still copy the first 32 bytes: https://github.com/golang/go/blob/9ec0a46a15d98db9241bca7606bb0a90a3c77b01/src/crypto/sha512/sha512.go#L365
+[14:09:21] <ja> they also have different padding according to https://crypto.stackexchange.com/a/31422/12089
+[20:32:52] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 260 seconds)
+[20:50:17] *** Joins: belcher (~belcher@unaffiliated/belcher)
