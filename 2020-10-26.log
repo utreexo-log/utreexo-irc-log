@@ -1,0 +1,28 @@
+[02:44:40] *** Quits: fogof (49a23865@c-73-162-56-101.hsd1.ca.comcast.net) (Ping timeout: 245 seconds)
+[02:56:35] <adiabat> fogof: yes, large / high up swaps are costly for the forest-on-disk implementaion, which has everything written in-order
+[02:56:57] <adiabat> there are other representations that use pointers that don't have this problem, but those can have other trade-offs
+[02:57:59] <adiabat> kcalvinalvin got some data on the distributuion of swaps here: https://github.com/mit-dci/utreexo/issues/202
+[03:04:49] <adiabat> the distribution looks like 2^-x or so, which makes sense
+[03:05:14] <adiabat> so my guess is it's not actually that costly since the large ones don't happen very often.
+[03:06:14] <adiabat> But that's most of a guess; we don't yet have great data about which parts are slowing things down.  If the large swaps are a bottleneck we can use other designs to avoid the disk read/write
+[03:20:09] <kcalvinalvin> fwiw the cowForest thing doesn't do the whole schooching thing
+[03:20:43] <kcalvinalvin> The name sucks though because it's really a redirect-on-write but rowForest makes everything more confusing
+[03:22:44] <adiabat> haha "rowForest" would be great.  could just call it height forest instead :)
+[03:23:37] <kcalvinalvin> I wish I gave better names to things
+[03:35:04] <adiabat> yeah names are annoying
+[03:35:18] <adiabat> almost as annoying as getting structs from one computer to another...
+[04:49:29] <adiabat> ... well the client gets to height 429 now.  So that's better than the 381 it was stuck on
+[07:49:47] <kcalvinalvin> 492 is an odd number
+[07:50:46] <kcalvinalvin> Lol 381 is special because it's the first block in testnet3 with a spend
+[07:51:23] <kcalvinalvin> 383 is the first with multiple spends
+[08:31:52] *** Joins: belcher_ (~belcher@unaffiliated/belcher)
+[08:35:12] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 272 seconds)
+[08:46:12] *** belcher_ is now known as belcher
+[14:14:49] *** Joins: ghost43_ (~daer@gateway/tor-sasl/daer)
+[14:15:24] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Ping timeout: 240 seconds)
+[14:22:55] <adiabat> 429 probably has some other "first", like first 0-duration spend
+[14:23:06] <adiabat> no that's 383 actually
+[14:23:27] <adiabat> i'm sure 429 has a first something, if I see what it is that will lead to the bug
+[19:39:21] *** Quits: mdrollette (~mdrollett@cpe-70-123-125-237.tx.res.rr.com) (Quit: bye)
+[20:04:40] *** Joins: mdrollette (~mdrollett@cpe-70-123-125-237.tx.res.rr.com)
+[20:05:07] *** Quits: mdrollette (~mdrollett@cpe-70-123-125-237.tx.res.rr.com) (Client Quit)
