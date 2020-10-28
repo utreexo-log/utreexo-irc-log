@@ -1,0 +1,38 @@
+[01:31:12] <adiabat> hm nope never mind it's non-deterministic.
+[01:31:40] <adiabat> so it's nothing in the block.  probably some TCP code that hangs up then stops once the buffer is done
+[01:37:13] <adiabat> oh man this PR... so many weird bugs.  I don't think I'm very good at network code
+[01:37:43] <adiabat> it's some non-deterministic network deserialization thing... sometimes it gets to block 800...
+[02:15:31] <adiabat> ... and if I put in printfs to see what's going wrong, it fixed the problem.  seriously.
+[02:15:57] <adiabat> but only because it's slowing it down a lot 
+[02:16:17] <adiabat> TCP means all the bytes get there in order, right?  And nothing gets dropped..?
+[02:39:34] <adiabat> haha now I took the printfs out and the bug isn't showing up anymore...
+[02:54:32] <adiabat> ok.  Bet I know how to fix this.
+[02:54:49] <adiabat> In btcd, they never have an io.reader r and call r.Read().  Ever.
+[02:55:05] <adiabat> they use io.ReadFull(r, dest)
+[02:55:35] <adiabat> so... clearly r.Read(dest) doesn't work and io.ReadFull(r, dest) works.  because it reads the whole thing instead of part.
+[02:56:10] <adiabat> gotta find everywhere I say r.Read and change it.  bet that fixes it.
+[03:01:06] <adiabat> yup that was it.  sigh.
+[03:07:23] <ja> nice, congrats :)
+[03:14:03] <adiabat> well now there's some other bug at height 4110
+[03:14:17] <adiabat> which is the first really big block that's 999238 bytes
+[03:14:31] <adiabat> so... testnet3 is good for testing because mainnet doesn't have a block like that for years
+[08:31:58] *** Joins: belcher_ (~belcher@unaffiliated/belcher)
+[08:35:16] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 256 seconds)
+[11:51:25] *** Quits: belcher_ (~belcher@unaffiliated/belcher) (Ping timeout: 258 seconds)
+[12:03:47] *** Joins: belcher_ (~belcher@unaffiliated/belcher)
+[12:10:55] *** belcher_ is now known as belcher
+[12:45:06] <kcalvinalvin> Some might say it's for testing
+[12:47:32] <kcalvinalvin> Are we on at the same time
+[12:55:53] <adiabat> yeah 9:00
+[12:56:01] <adiabat> which is like ... in 5 min
+[12:56:24] <adiabat> can't do an hour though, have to leave a bit earlier today
+[12:56:31] <adiabat> also next week there are time changes I think
+[12:56:40] <adiabat> but yeah I'll go on jitsi in a couple min
+[14:16:05] <dergoegge> i missed the meeting because DST hasnt ended in the usa yet but in europe it has
+[14:20:26] <dergoegge> i was mostly working on the C++ stuff last week: https://github.com/dergoegge/libutreexo
+[14:23:30] <dergoegge> kcalvinalvin: i am using coc and clangd with vim for c++ and so far i am happy with it
+[14:24:04] <dergoegge> gives me auto completion and compiler errors/warnings  
+[15:45:23] *** Quits: ghost43_ (~daer@gateway/tor-sasl/daer) (Ping timeout: 240 seconds)
+[15:47:40] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[20:58:40] *** Quits: dergoegge (sid453889@gateway/web/irccloud.com/x-jzdktyxxskljzfdk) (*.net *.split)
+[20:58:59] *** Joins: dergoegge (sid453889@gateway/web/irccloud.com/x-lzgocuawerarugse)
