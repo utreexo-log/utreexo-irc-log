@@ -1,0 +1,61 @@
+[00:10:45] *** Joins: mdrollette (~mdrollett@cpe-70-123-125-237.tx.res.rr.com)
+[01:04:40] *** Quits: Madars (~null@unaffiliated/madars) (Ping timeout: 256 seconds)
+[01:09:20] *** Joins: Madars (~null@unaffiliated/madars)
+[01:57:30] <adiabat> dergoegge: hah no prob, here we switch next week.  I'm not sure about the call next week, maybe can do at 9am EST.  But also that's voting day
+[01:57:44] <adiabat> where I get to contribute my 0.25 bits per year of data
+[01:58:17] <adiabat> hopefully I don't have to wait in line too long to put the 1 bit into a buffer
+[02:00:18] <adiabat> hmmm when you think about it like that voting seems unimpressive that it's at all hard to do
+[02:00:52] <adiabat> even if you have to do the whole thing in 8 hours, and if you had 200M voters, it's well under 1KB/sec of data
+[02:02:10] <adiabat> integrated over 4 years, that's 0.00001 bytes per second flowing from the population to the government.
+[02:02:21] <adiabat> Feels like we could maybe raise the blocksize there huh
+[02:02:39] <adiabat> anyway.
+[02:02:59] <adiabat> the PR still doesn't work as it chokes on the first op_return for some reason.  I think I know why
+[03:21:56] *** Quits: fjahr (sid374480@gateway/web/irccloud.com/x-wsewwojoxlxjupvu) (Ping timeout: 240 seconds)
+[03:22:13] *** Quits: digi_james (sid281632@gateway/web/irccloud.com/x-oluymwplbdeghppb) (Ping timeout: 260 seconds)
+[03:23:43] *** Joins: digi_james (sid281632@gateway/web/irccloud.com/x-naztjsjdxirpmkbb)
+[03:23:46] *** Joins: fjahr (sid374480@gateway/web/irccloud.com/x-mndsjluvnskfolcs)
+[04:08:11] <adiabat> well... can't find it.
+[04:08:50] <adiabat> it's pretending the op_return outputs don't exist everywhere I can see.  But obviously somewhere it's not skipping over them
+[04:09:23] <adiabat> so the op_return is getting counted someplace, but not others, so you end up 4 bytes off and that wrecks everything
+[04:09:35] <adiabat> well.  Will look for where tormorrow
+[06:32:52] <kcalvinalvin> https://github.com/mit-dci/utreexo/pull/214
+[06:33:30] <kcalvinalvin> I did some fiddling around with the underflow we talked at the meeting. (forestRows + 1 - h) indeed fixes it
+[06:34:28] <kcalvinalvin> I guess to quickly summarize the meeting: 1. flat_ttl almost complete. There is a problem when you sigint in the middle of writing to the ttl file
+[06:35:22] <kcalvinalvin> 2. Start moving over network stuff from btcd to the current repo. Make bridgenode speak btcd protocol, then the client. And then slowly transition to making PRs to btcd repo
+[06:37:51] <kcalvinalvin> 3. Look at changing the ordering of how CSN nodes validate. Right now, csns check the signature (the more expensive one) before verifying the accumulator proofs. This does expose some ddos attack vector and flipping it around is better overall
+[06:40:57] <kcalvinalvin> 4. Rustreexo is coming along. I still think I can make the first commit to the mit-dci/rustreexo repo but I can't really test the deletes until I make it speak the current server-client language or implement forest in rust as well
+[06:41:20] <kcalvinalvin> *make the first commit at the end of october*
+[09:35:36] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[09:35:53] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[11:51:28] *** Joins: belcher_ (~belcher@unaffiliated/belcher)
+[11:54:33] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 265 seconds)
+[14:55:54] *** belcher_ is now known as belcher
+[15:51:11] <ja> adiabat: is there no libetarian option in your state? :O that should make it more than one bit :P
+[18:16:59] <adiabat> OK true there's actually a couple bits of data
+[18:17:29] <adiabat> actually one of the things to vote on is ranked choice voting, so that will increase the bits per year of the process if that wins
+[19:21:32] <ja> adiabat: as far as i can see, ranked-choice voting is already in effect in maine. i don't think the public gets to decide on that specifically, in this election. and i wrong?
+[19:22:11] <ja> *am
+[19:35:41] <adiabat> In Massachusetts, one of the ballot options is for ranked choice in future elections
+[19:36:07] <adiabat> so we can catch up to Maine
+[19:39:38] <ja> aah great! exciting!
+[19:49:40] <adiabat> yeah also there's a "right to repair" one that makes cars have to have more open firmware stuff so that's nice
+[19:50:13] <adiabat> new perplexing problem: block 104573 somehow doesn't get written to the proofs...
+[19:52:39] <adiabat> no wait 104572 gets skipped
+[19:52:53] <adiabat> anyway I don't see anything weird about the blocks... so why...
+[20:07:25] <adiabat> ... that too is intermittent.  Sometimes works ok, sometimes skips a block...
+[20:12:52] <adiabat> hmmm... I can't get the bug to happen again.  Does that mean the bug is fixed?
+[20:13:23] <adiabat> fixed enough to merge maybe... :)
+[20:15:49] <adiabat> I think it makes sense to merge, because if it takes hours of cpu time to trigger a bug, that's a version we should be running on test servers
+[20:16:34] <adiabat> also maybe I did something wrong.  I kind of doubt it though, maybe there's just some weird bug where genproofs rarely skips a block
+[20:16:57] <adiabat> & maybe it depends on the block & rev files which are strange anyway
+[20:17:12] <ja> is it PR 206?
+[20:19:26] <adiabat> yeah 206
+[20:19:42] <adiabat> I just want to finally be done with it, have spent way too much time on it
+[20:20:08] <adiabat> I'll try one or two more times but can't get it to fail now
+[20:35:23] <ja> adiabat: i left a comment
+[21:00:01] <dergoegge> we dont add op_return outputs to the accumulator because they cant be spend right? but would it not make sense to include them anyway for the case that somebody wants to prove that they included some data with op_return at a specific height?
+[21:00:29] <dergoegge> i guess the bridges would have more to store then...
+[21:01:32] <dergoegge> but it would enable pruned nodes to check op_return commitments
+[21:49:56] <adiabat> I don't think it's worth it to throw op_returns into the accumulator...
+[21:50:18] <adiabat> if they want a proof of whatever the op_return means they can use SPV proofs the way they do now
+[21:50:46] <adiabat> I can't think of any advantage a utreexo proof would give over the current SPV ones
