@@ -1,0 +1,118 @@
+[02:00:32] *** Quits: valwal_ (sid334773@gateway/web/irccloud.com/x-pxseioohccmgrxvz) (Ping timeout: 260 seconds)
+[02:03:10] *** Joins: valwal_ (sid334773@gateway/web/irccloud.com/x-ovtfecsoawfrexqq)
+[03:20:23] <adiabat> When I merge in the mapless batchproof code I can't get it to work...
+[03:42:29] <adiabat> hey dergoegge or kcalvinalvin - could you help check the flatttl branch - there's some interaction with the newer batchproof stuff
+[03:42:31] <adiabat> I think
+[03:43:23] <adiabat> I didn't change much about the accumulator stuff so it's probably some tiny thing; I changed mainly the serialization of the batchproof but I don't think that broke anything
+[03:43:46] <adiabat> what I did change that's maybe conflicting is that the batchProof is now always unsorted
+[03:44:17] <adiabat> so bp.Targets is always in block order, not sorted accumulator order
+[03:45:30] <adiabat> hm actually I'm pretty sure it's that
+[03:45:38] <adiabat> bp gets handed around everywhere
+[03:46:07] <adiabat> if something is sorting bp.Targets or doing bp.Targets = bp.Targets[1:] or things like that
+[03:46:43] <adiabat> I could instead go to the CSN side and make a deep copy of the AccProof and hand that to the accumulator functions
+[03:47:08] <adiabat> might do that for now to merge it, but really that's not a user friendly library
+[03:47:40] <adiabat> Because CSNs have to call several accumulator functions in a rom with the same bp
+[03:48:09] <adiabat> They call Verify, which calls (bp *BatchProof) Reconstruct()
+[03:48:48] <adiabat> Then they call (p *Pollard) IngestBatchProof(), which calls verifyBatchProof() on it
+[03:49:24] <adiabat> then they call pollard.Modify() though by then it's basically over, so as long as the targets make it intact to there should be OK
+[04:20:18] <adiabat> yeah it's not sorting targets I don't think.... it's something else
+[04:20:25] <adiabat> forest and pollard don't agree at all
+[04:23:53] <adiabat> I get different swaps for them... even though they're getting the same dels
+[04:29:37] <adiabat> ugh never mind
+[04:29:55] <adiabat> the internal sorting wasn't in pollard after merge
+[04:46:37] <adiabat> anyway it sortof works
+[04:46:54] <adiabat> not sure if merge-able but I do really want to merge it because I hate dealing with git
+[04:47:23] <adiabat> it usually gets a couple hundred thousand blocks into testnet.  Whcih is pretty good.  Sometimes there's a weird error though where it skips a block
+[04:47:31] <adiabat> and that's on the genproofs side it seems
+[04:56:00] <adiabat> anyway, kcalvinalvin - if you want to test it beforehand cool but I think I'll merge it tomorrow
+[04:56:25] <adiabat> it's not like master works perfectly either; this does seem to introduce a bug but it's a hard one to track down
+[05:37:15] <kcalvinalvin> Unit test are broken with 206
+[05:39:22] <kcalvinalvin> I'll make a PR to your PR
+[05:46:27] <kcalvinalvin> Ok it's def faster haha
+[07:07:00] <kcalvinalvin> I've made a comment. ud.Deserialize() is broken so the server doesn't work
+[11:51:27] *** Joins: belcher_ (~belcher@unaffiliated/belcher)
+[11:54:49] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 264 seconds)
+[14:22:06] <adiabat> oh man!  forgetting a & ...!
+[14:22:30] <adiabat> riiight usually it complains but since it was a slice element it wouldn't there
+[14:23:33] <adiabat> I don't get it though; how would that result in an error that turns up randomly a few times per million blocks...?
+[14:31:46] <dergoegge> yeah that i dont understand either but for me it happened everytime i started serving...
+[14:34:13] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[14:34:31] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[15:13:47] <kcalvinalvin> You guys can serve? It crashes for me
+[15:58:29] <adiabat> what does the error say?
+[15:59:03] <adiabat> my setup is run ./utreexoserver, then ctrl-c, then ./utreexoserver -serve
+[16:14:08] <kcalvinalvin> https://github.com/kcalvinalvin/utreexo/runs/1325060531
+[16:14:12] <kcalvinalvin> same as this CI error
+[16:16:40] <adiabat> hm EOF
+[16:16:54] <adiabat> I took an EOF check out yesterday
+[16:21:45] <kcalvinalvin> :/ no squashing of the commits? Or can you do that during the merge?
+[16:21:54] <adiabat> I'm going to squash
+[16:22:00] <kcalvinalvin> :)
+[16:22:00] <adiabat> one I get it working
+[16:22:03] <adiabat> *once
+[16:22:13] <adiabat> on my machine it works fine
+[16:22:17] <kcalvinalvin> huh
+[16:22:31] <kcalvinalvin> odd
+[16:23:49] <adiabat> ohhhhh
+[16:23:52] <adiabat> psh stupid error
+[16:25:54] <adiabat> kcalvinalvin: have you tried testing it with a larger block set?
+[16:26:15] <adiabat> I ran it 2 times on testnet up to like 500K blocks and it looks like it works
+[16:26:16] <kcalvinalvin> as in closer to the tip?
+[16:26:26] <kcalvinalvin> ok I'll try the latest right now
+[16:26:34] <adiabat> Yesterday it would sometimes get that far, but sometimes not
+[16:26:43] <adiabat> I guess it was just the missing &
+[16:27:29] <adiabat> but also that seems like it can't be it, how could that only cause problems once in a million blocks...
+[16:28:11] <adiabat> but, it did seem to fix it, and tests pass, and running through testnet seems to work OK so...
+[16:28:21] <adiabat> guess I'll squash & merge
+[16:28:36] <adiabat> there might still be bugs, but that's the case with any big change
+[16:28:36] <kcalvinalvin> 5 minutes?
+[16:28:48] <kcalvinalvin> Am at ~200,000 on testnet
+[16:28:48] <adiabat> what about 5 minutes?
+[16:29:23] <kcalvinalvin> Ah I'm just testing it out. If we wait 5 mins we could see if it works past 500,000
+[16:29:27] <adiabat> sure
+[16:29:33] <adiabat> no rush
+[16:29:40] <adiabat> well I do want to merge it today at some point
+[16:29:49] <adiabat> then probably can't work on utreexo till next week
+[16:30:11] <adiabat> well maybe a little tomorrow
+[16:31:10] <kcalvinalvin> Yeah no today sounds great. I've started working on bringing more btcd code in
+[16:31:20] <kcalvinalvin> Would be less hassle to rebase now :)
+[16:31:24] <adiabat> yeah
+[16:31:33] <adiabat> on mine I have ~30% cpu for the server
+[16:31:40] <adiabat> which still seems higher than it should be
+[16:31:51] <kcalvinalvin> Around the same for me as well
+[16:31:59] <kcalvinalvin> 30% on all cores
+[16:32:20] <adiabat> ohhh it's still doing the deserialize oops
+[16:33:12] <kcalvinalvin> Also, should I just dump stuff on the rustreexo repo
+[16:33:27] <kcalvinalvin> deletions are hard and I think it'll take a while
+[16:33:33] <adiabat> ok yup down to 10% cpu
+[16:33:53] <adiabat> I bet it could get even lower but... that's fine
+[16:34:05] <kcalvinalvin> Maybe the ilbutreexo stuff should be on the dci repo as well...
+[16:35:11] <adiabat> hmm yeah once blocks are a bit larger and it's not seeking as much, server goes down to 3% CPU, client staying up at ~150%
+[16:36:05] <adiabat> so there's certainly room for parallel stuff on the client side as it's not bottlenecked by the server at all
+[16:36:43] <adiabat> the the latest commit if you want, it's got most of the silly not-actual-testing stuff taken out
+[16:37:11] <kcalvinalvin> Deserialize error from connection 127.0.0.1:8338 EOF
+[16:37:11] <kcalvinalvin> ublockQueue channel closed Block 56029 add 122363 del 53988 pol nl 68375 roots 8 he 122225 re 105691 ow 0 
+[16:37:11] <kcalvinalvin>  plus 0.00 total 1.76 
+[16:37:13] <kcalvinalvin> Pollard leaves: 68375
+[16:37:15] <kcalvinalvin> User exit signal received. Exiting...
+[16:37:17] <kcalvinalvin> Found 0 satoshis in 0 utxos
+[16:37:19] <kcalvinalvin> Done Writing
+[16:37:21] <kcalvinalvin> [I] calvin@bitcoin ~/b/g/u/g/s/g/m/u/c/utreexoclient>
+[16:37:35] <kcalvinalvin> this is on c666274a95dc9f8cc96259daf5c07b90722024b9
+[16:39:48] <kcalvinalvin> pushBlocks GetUDataBytesFromFile expect magic aaffaaff but read 00000008 h 56031 offset 14319505
+[16:39:57] <kcalvinalvin> so this is the real error
+[16:40:24] *** Quits: fjahr (sid374480@gateway/web/irccloud.com/x-mndsjluvnskfolcs) (Ping timeout: 240 seconds)
+[16:40:47] *** Quits: digi_james (sid281632@gateway/web/irccloud.com/x-naztjsjdxirpmkbb) (Ping timeout: 260 seconds)
+[16:41:14] *** Joins: fjahr (sid374480@gateway/web/irccloud.com/x-kcxsrwowfbyaekxq)
+[16:41:22] <kcalvinalvin> ah ok I think it's working when I resynced the server
+[16:41:38] <kcalvinalvin> you said it errors out sometimes if you resume right?
+[16:42:05] *** Joins: digi_james (sid281632@gateway/web/irccloud.com/x-hproigixxjvgxexh)
+[17:43:20] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[17:43:21] *** Joins: ghost43_ (~daer@gateway/tor-sasl/daer)
+[18:16:47] <adiabat> I've gotten errors with -cached
+[18:16:59] <adiabat> But it seems to work with on disk or -inram
+[18:19:58] <dergoegge> we can probably get rid of -cached now that we have the cow forest...
+[18:51:00] <adiabat> OK if it seems working enough I'll squash & merge
+[18:57:45] <dergoegge> i tested it a bit, seems to work
+[19:28:26] <adiabat> ok merging
+[22:35:36] *** Quits: Madars (~null@unaffiliated/madars) (Ping timeout: 272 seconds)
