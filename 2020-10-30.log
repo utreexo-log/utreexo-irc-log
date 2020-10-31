@@ -1,0 +1,10 @@
+[11:51:47] *** Joins: reallll (~belcher@unaffiliated/belcher)
+[11:53:52] *** reallll is now known as belcher
+[11:55:11] *** Quits: belcher_ (~belcher@unaffiliated/belcher) (Ping timeout: 268 seconds)
+[14:23:49] <kcalvinalvin> Yeah I'm consistently getting errors for the client if you pause the server and restart
+[14:23:59] <kcalvinalvin> I'll make an issue and look at it
+[16:58:06] *** Quits: ghost43_ (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[16:58:26] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[21:43:45] <adiabat> hm, yeah I didn't try restarting the client
+[21:44:19] <adiabat> I tested resrtarting build proofs a bunch but not client, can take a look
+[21:44:32] <adiabat> if it's consitent shouldn't be too hard to find
