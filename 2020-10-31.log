@@ -1,0 +1,19 @@
+[02:51:16] *** Quits: felixweis (sid154231@gateway/web/irccloud.com/x-obqpsjwlqqjjaomn) (Read error: Connection reset by peer)
+[02:52:12] *** Joins: felixweis (sid154231@gateway/web/irccloud.com/x-vitkynaxykoqgxgj)
+[04:05:06] *** Quits: rjected (~dan@pool-151-203-65-159.bstnma.fios.verizon.net) (Quit: ZNC 1.7.5+deb4 - https://znc.in)
+[04:06:56] *** Joins: rjected (~dan@pool-151-203-65-159.bstnma.fios.verizon.net)
+[04:31:39] *** Quits: gertjaap (sid322815@gateway/web/irccloud.com/x-injdscyjjaqgqemq) (Read error: Connection reset by peer)
+[04:31:55] *** Joins: gertjaap (sid322815@gateway/web/irccloud.com/x-klnoegfolmiudicc)
+[11:22:13] <kcalvinalvin> some profiling the client still tells me that the server isn't serving fast enough
+[11:22:26] <kcalvinalvin> Much much better though heh
+[11:51:54] *** Joins: belcher_ (~belcher@unaffiliated/belcher)
+[11:55:08] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 256 seconds)
+[13:07:25] <kcalvinalvin> I just ended up dumping whatever I had to the rustreexo repo
+[16:45:13] <adiabat> the server is still CPU limited, or disk limited?
+[16:45:34] <adiabat> if the server is limited by disk reads and sending it over the network, that's actually great
+[16:46:03] <adiabat> that means the bottleneck of the whole client / server chain is that we just can't get block and proof data off of the disk fast enough
+[16:46:27] <adiabat> there are definitely ways to improve that a bit
+[16:46:47] <adiabat> we're opening and closing the proof file every time we do a read instead of keeping it open, that's easy to fix
+[16:46:58] <adiabat> a little fancier would be to pre-fetch
+[19:30:44] <ja> adiabat: why is it bad to have one giant file? then you can mmap it and easily advice linux when you're likely to continue reading
+[20:55:31] *** belcher_ is now known as belcher
