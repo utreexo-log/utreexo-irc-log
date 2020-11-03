@@ -1,0 +1,20 @@
+[01:22:50] *** Quits: rjected (~dan@pool-151-203-65-159.bstnma.fios.verizon.net) (Ping timeout: 264 seconds)
+[04:52:11] <kcalvinalvin> Apparently btcd has a lot of support for plan9
+[04:52:19] <kcalvinalvin> interesting..
+[06:17:22] <kcalvinalvin> Hey tomorrow I wanna sorta do the tmux session thing
+[06:17:57] <kcalvinalvin> Everyone cool with that? Tadge do you think you'll be done voting quick?
+[11:51:11] *** Quits: belcher (~belcher@unaffiliated/belcher) (Read error: Connection reset by peer)
+[11:51:48] *** Joins: belcher (~belcher@unaffiliated/belcher)
+[11:54:27] <dergoegge> ok cool!
+[11:54:40] <dergoegge> i could also do another time if tadge is busy voting
+[14:33:57] <adiabat> hey - a tmux session sounds cool. can we go through btcd stuff to get a broad view of it, what connects to what, etc?
+[14:34:12] <adiabat> or can do that another time if you have a different plan for tomorrow
+[14:35:10] <adiabat> I should be online at 9am as normal, I'll go to the voting at 7am and I don't think there will be a long line, but hard to know for sure
+[14:35:43] <adiabat> also europe and north america are now both on "standard" time
+[14:36:33] <adiabat> (I think standard time is now only about 4 or 5 months of the year so somewhat non-standard :)
+[15:06:17] *** Quits: stevenroose (~steven@irc.roose.io) (Remote host closed the connection)
+[15:06:27] *** Joins: stevenroose (~steven@irc.roose.io)
+[16:06:55] <kcalvinalvin> hmm now 11pm for me. Good thing I noticed now heh
+[17:47:25] <dergoegge> while writing the c++ verification code i found a bug in the golang version...
+[17:47:29] <dergoegge> https://github.com/mit-dci/utreexo/pull/218 should fix it
+[17:47:38] <dergoegge> i will write some more verification tests this week
