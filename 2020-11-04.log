@@ -1,0 +1,20 @@
+[00:03:45] *** Quits: digi_james (sid281632@gateway/web/irccloud.com/x-hproigixxjvgxexh) (Ping timeout: 240 seconds)
+[00:05:18] *** Joins: digi_james (sid281632@gateway/web/irccloud.com/x-ktiktfplrpnflhdn)
+[08:06:54] <kcalvinalvin> hmm I'm looking to get rid of all the udata stuff and move everything to be included in the bridgenode package
+[08:08:00] <kcalvinalvin> Also maybe `LeafData` could be renamed to `sigValData` or something since LeafData doesn't imply that it's also used for sigvalidation
+[08:10:47] <kcalvinalvin> Where should BatchProof go? If we have ttls, the proofs sent to the peers would all differ
+[08:11:30] <kcalvinalvin> Receive separately from the msgblock?
+[08:13:24] <kcalvinalvin> LeafData is awkward too. Include that in the msgblock?
+[09:56:04] *** Quits: takinbo (~takinbo@unaffiliated/takinbo) (Ping timeout: 272 seconds)
+[09:58:26] *** Joins: takinbo (~takinbo@unaffiliated/takinbo)
+[11:52:25] *** Joins: belcher_ (~belcher@unaffiliated/belcher)
+[11:55:14] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 272 seconds)
+[11:57:04] *** belcher_ is now known as belcher
+[16:05:27] <adiabat> what does "sigVal" mean?
+[16:05:43] <adiabat> oh signature validation?  It's more than that though
+[16:06:41] <adiabat> you need it to compute the leaf hash, as well as to check the signature, and also check the amount, height, other things
+[16:07:19] <adiabat> I wouldn't focus on "sig" as that's just one part, and actually if we have the compact leafdata (or whatever to call it) it's not even needed to check signaures
+[16:07:26] <adiabat> in that case it's mostly the amount
+[16:07:43] <adiabat> agree that in general the names are not great
+[16:08:08] <adiabat> Ublock and Udata are... confusing.  Also the "u" I guess stands for utreexo but... eh
+[20:29:31] <ja> seems like massachussetts passed that right-to-repair bill :)
