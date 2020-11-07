@@ -1,0 +1,9 @@
+[03:02:34] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 246 seconds)
+[03:15:34] *** Joins: belcher (~belcher@unaffiliated/belcher)
+[03:53:13] *** Joins: belcher_ (~belcher@unaffiliated/belcher)
+[03:53:16] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 256 seconds)
+[09:16:50] <kcalvinalvin> adiabat dergoegge is issue 216 a thing for you guys?
+[12:01:01] <dergoegge> I will have a look. This happens when the server ia restarted?
+[14:14:27] <dergoegge> ok i am able to reproduce...
+[15:42:55] <dergoegge> found one bug but its still not working... i will get back to it later
+[19:31:48] *** belcher_ is now known as belcher
