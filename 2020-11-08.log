@@ -1,0 +1,33 @@
+[03:53:41] <kcalvinalvin> dergoegge nice
+[03:53:54] *** Joins: reallll (~belcher@unaffiliated/belcher)
+[03:55:54] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 256 seconds)
+[04:08:25] <kcalvinalvin> Hmm seems like the proofs still differ
+[04:08:36] <kcalvinalvin> I'll add automated test for what I'm doing
+[04:08:48] <kcalvinalvin> Should also help in the future :)
+[08:36:04] *** Quits: felixweis (sid154231@gateway/web/irccloud.com/x-yoznkhpkwdxatxsg) (Ping timeout: 240 seconds)
+[08:37:03] *** Quits: digi_james (sid281632@gateway/web/irccloud.com/x-ktiktfplrpnflhdn) (Ping timeout: 260 seconds)
+[08:37:06] *** Quits: valwal_ (sid334773@gateway/web/irccloud.com/x-ovtfecsoawfrexqq) (Ping timeout: 268 seconds)
+[08:37:34] *** Quits: jamesob (sid180710@gateway/web/irccloud.com/x-qmddwxzkygwjtpel) (Ping timeout: 244 seconds)
+[08:37:38] *** Quits: RubenSomsen (sid301948@gateway/web/irccloud.com/x-rhglvnghwhhrcoaz) (Ping timeout: 260 seconds)
+[08:37:45] *** Quits: gertjaap (sid322815@gateway/web/irccloud.com/x-klnoegfolmiudicc) (Ping timeout: 240 seconds)
+[08:37:50] *** Quits: fjahr (sid374480@gateway/web/irccloud.com/x-kcxsrwowfbyaekxq) (Ping timeout: 264 seconds)
+[08:37:57] *** Quits: fanquake (sid369002@gateway/web/irccloud.com/x-pugsgmagvfjoiqaa) (Ping timeout: 260 seconds)
+[08:38:19] *** Quits: dergoegge (sid453889@gateway/web/irccloud.com/x-lzgocuawerarugse) (Ping timeout: 272 seconds)
+[08:52:05] *** Joins: digi_james (sid281632@gateway/web/irccloud.com/x-jxyqlpnraydxvprs)
+[08:52:40] *** Joins: fanquake (sid369002@gateway/web/irccloud.com/x-cdfqabdvbagqttfh)
+[08:52:47] *** Joins: fjahr (sid374480@gateway/web/irccloud.com/x-idmozsqtyjsaymjn)
+[08:52:59] *** Joins: felixweis (sid154231@gateway/web/irccloud.com/x-curwonbkjuaxtcmu)
+[08:53:30] *** Joins: jamesob (sid180710@gateway/web/irccloud.com/x-ojtcscmkbfsicvqm)
+[08:53:48] *** Joins: valwal_ (sid334773@gateway/web/irccloud.com/x-bwsyfylxiksodbml)
+[08:54:02] *** Joins: dergoegge (sid453889@gateway/web/irccloud.com/x-pykcrvekksrxnpid)
+[08:54:26] *** Joins: gertjaap (sid322815@gateway/web/irccloud.com/x-izjrohibifcqvdgt)
+[09:01:41] *** Joins: RubenSomsen (sid301948@gateway/web/irccloud.com/x-xiafkyvtjtuehoop)
+[09:12:02] *** Quits: dergoegge (sid453889@gateway/web/irccloud.com/x-pykcrvekksrxnpid) (Ping timeout: 264 seconds)
+[09:12:13] *** Joins: dergoegge (sid453889@gateway/web/irccloud.com/x-aqetkmfnbzcrxxzk)
+[09:47:58] *** reallll is now known as belcher
+[13:20:47] <dergoegge> Ok now it should actually work... diff is happy
+[13:21:01] <dergoegge> Using diff is a lot better than just running the client and server with some restarts a bunch of times :D
+[18:59:44] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Ping timeout: 240 seconds)
+[19:01:07] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[22:38:22] *** Joins: mattdrollette (~mdrollett@cpe-70-123-125-237.tx.res.rr.com)
+[22:38:24] *** Quits: mdrollette (~mdrollett@cpe-70-123-125-237.tx.res.rr.com) (Ping timeout: 240 seconds)
