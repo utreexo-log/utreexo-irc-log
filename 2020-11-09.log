@@ -1,0 +1,15 @@
+[03:52:59] *** Joins: reallll (~belcher@unaffiliated/belcher)
+[03:56:10] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 246 seconds)
+[04:14:37] <kcalvinalvin> I threw on a commit that does the proof comparison on PR #215
+[04:15:10] <kcalvinalvin> dunno why we didn't do the whole config thing since that makes editing code so much faster/cleaner :)
+[04:32:50] <kcalvinalvin> hmm don't think we're generating enough blocks for the proof comparison to matter
+[04:37:31] <kcalvinalvin> nvm I was doing something wrong
+[06:54:23] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Ping timeout: 240 seconds)
+[06:54:38] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[10:05:57] *** reallll is now known as belcher
+[11:30:37] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Read error: Connection reset by peer)
+[11:30:38] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Write error: Connection reset by peer)
+[11:30:56] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[11:31:52] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[12:27:42] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[12:28:27] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
