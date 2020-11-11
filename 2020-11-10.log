@@ -1,0 +1,27 @@
+[00:23:05] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 240 seconds)
+[00:35:15] *** Joins: belcher (~belcher@unaffiliated/belcher)
+[03:53:36] *** Joins: reallll (~belcher@unaffiliated/belcher)
+[03:56:25] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 246 seconds)
+[07:42:41] <kcalvinalvin> I have an additional test ready that fetches the previous commit and compares it to the PR given. Proof format in storage is not gonna change dramatically often now so I think it's good
+[09:55:39] *** reallll is now known as belcher
+[10:06:04] *** Quits: stevenroose (~steven@irc.roose.io) (Quit: ZNC 1.7.4 - https://znc.in)
+[10:08:27] *** Joins: stevenroose (~steven@irc.roose.io)
+[10:10:17] *** Quits: stevenroose (~steven@irc.roose.io) (Client Quit)
+[10:13:12] *** Joins: stevenroose (~steven@irc.roose.io)
+[10:15:38] *** Quits: stevenroose (~steven@irc.roose.io) (Client Quit)
+[10:16:43] *** Joins: stevenroose (~steven@irc.roose.io)
+[10:24:42] *** Quits: stevenroose (~steven@irc.roose.io) (Quit: ZNC 1.7.4 - https://znc.in)
+[10:24:54] *** Joins: stevenroose (~steven@irc.roose.io)
+[10:25:01] *** Quits: valwal_ (sid334773@gateway/web/irccloud.com/x-bwsyfylxiksodbml) (Read error: Connection reset by peer)
+[10:27:36] *** Joins: valwal_ (sid334773@gateway/web/irccloud.com/x-qlebbpueqzhclgdu)
+[10:33:24] *** Quits: stevenroose (~steven@irc.roose.io) (Quit: ZNC 1.7.4 - https://znc.in)
+[10:33:34] *** Joins: stevenroose (~steven@irc.roose.io)
+[10:36:31] *** Quits: stevenroose (~steven@irc.roose.io) (Client Quit)
+[10:36:41] *** Joins: stevenroose (~steven@irc.roose.io)
+[11:03:23] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Ping timeout: 240 seconds)
+[11:06:47] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[13:43:47] <adiabat> hey all will be a couple min late to meeting today (in 15 min)
+[13:44:22] <adiabat> also I think we need to switch the meeting time starting in a week or two.  could do same time but a different day
+[14:45:22] <adiabat> test server is 34.105.121.136
+[16:51:14] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[16:52:03] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
