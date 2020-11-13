@@ -1,0 +1,42 @@
+[03:54:02] *** Joins: belcher_ (~belcher@unaffiliated/belcher)
+[03:56:46] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 272 seconds)
+[05:27:37] <kcalvinalvin> Could we have an intermittent meeting on how to implement messages for utreexo blocks?
+[05:27:51] <kcalvinalvin> If everyone has time this week
+[06:27:50] <kcalvinalvin> ja How are the cgo animations going? Looks like you pushed to the branch recently
+[09:00:05] *** Quits: icota[m] (icotamatri@gateway/shell/matrix.org/x-jfxechrxuoddrluf) (Quit: Idle for 30+ days)
+[12:02:18] *** belcher_ is now known as belcher
+[13:38:52] <dergoegge> kcalvinalvin: fine with me. i have time tomorrow. 
+[13:43:56] <adiabat> hey tomorrow = friday?  I could go on a call.  would also be nice to get a bitcoind person or two for their perspective
+[13:45:41] <kcalvinalvin> fanquake?
+[13:45:53] <kcalvinalvin> The usual 10am EST friday is good with me
+[14:48:56] <dergoegge> Yes friday. Usual time is also fine with me. Wasnt it 9am EST?
+[14:53:23] <kcalvinalvin> oh whoops. 9am it is then
+[15:16:57] <ja> kcalvinalvin: it is going ok albeit at a slow pace ;) my next idea was to make an algorithm to convert the forest indices used everywhere to van laarhoven lenses. then i can feed the indices emitted by e.g. remTrans into either the algorithm that actually swaps, or alternatively, one that just animates.
+[15:18:18] <ja> because if i have two lenses into a tree, i know how to swap those
+[15:19:14] <ja> (swap them graphically)
+[15:37:54] <ja> i would like to develop an effectful DSL that allows me to implement the tree manipulation algortihms once more with algebraic datastructures 
+[15:38:52] <ja> because my current implementation is just ported line by line from go. it is pure, but really imperative
+[15:39:37] <ja> you might say i am somehow making it harder by trying to do it functionally. but i feel like i will only really understand the algorithm once i understand the invariants!
+[15:41:33] <ja> it is luckily only imperative within each function. to make it work on ADTs i am still unsure to what degree i am prevented from porting function-by-function
+[15:44:10] <ja> so lets say i have a Collapse datatype, and i make some algorithm that seems to do what the go code is doing when swapping collapses. then i can run property testing on that, and then i have to decide how much is part of algorithm and how much is irrelevant. for example, in a ADT utreexo, remapping shouldn't be necessary, right?
+[15:46:28] <ja> but a Collapse for a go-utreexo is a pair of numeric indices. for an ADT utreexo, what would it be, a pair of lenses? i don't see why not
+[15:47:44] <ja> hmm, i should email Russell O'Connor, he is both interested in FP and in Bitcoin...
+[20:24:57] <adiabat> kcalvinalvin: hey sorry I just can't merge #225
+[20:25:11] <adiabat> it offends my sensibilities :)
+[20:25:37] <adiabat> heh I mean, it may well be faster, but that just means whatever I wrote before is horribly slow
+[20:25:57] <adiabat> so posted a comment with something that may be faster than both ways.  hopefully.
+[20:31:20] *** Joins: cfields (~cfields@unaffiliated/cfields)
+[21:17:41] <adiabat> also - I can do a call at 9am EST tomorrow but only for 30 min, I have another call at 9:30
+[21:17:55] <adiabat> but probably can figure out what to do in 30 min
+[21:18:10] <adiabat> could also call back in after 11 or on IRC etc
+[23:12:23] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Ping timeout: 240 seconds)
+[23:23:53] *** Quits: rjected[m] (rjectedmat@gateway/shell/matrix.org/x-roobkftcqalnmbls) (Ping timeout: 260 seconds)
+[23:24:43] *** Joins: rjected[m] (rjectedmat@gateway/shell/matrix.org/x-vyyjcqjxruwgmklv)
+[23:26:54] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[23:41:22] <adiabat> also -- just to make sure, for pollard proof ingestion
+[23:41:33] <adiabat> we're still hashing all the way up to roots?
+[23:42:14] <adiabat> I thought someone (not me) put in code so that it checks only up to existing hashes in the pollard
+[23:43:42] <adiabat> I guess not.  Well, should do that next then.  verifyBatchProof() is a bit of a mess....
+[23:44:09] <adiabat> making it a method on Pollard wouldn't help make it any simpler I guess.  but would make it a lot faster
+[23:45:56] <adiabat> also it's not threaded at all.  hm.  that's where the hashing really needs to be multi-thread, as csn speed is more important than bridge...
+[23:46:37] <adiabat> ok... verifyBatchProof().  THEN can start ttl.  they're related, can't really do TTL without changing the verify
