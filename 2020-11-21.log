@@ -1,0 +1,15 @@
+[03:54:34] *** Joins: belcher_ (~belcher@unaffiliated/belcher)
+[03:57:56] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 272 seconds)
+[07:54:19] <kcalvinalvin> hmmm you would have to first sync to the tip to start generating proofs right? (if you're a bridgenode)
+[10:51:10] *** Quits: ghost43_ (~daer@gateway/tor-sasl/daer) (Quit: Leaving)
+[10:51:27] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[12:33:07] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[12:33:54] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[12:44:37] *** Quits: gertjaap (sid322815@gateway/web/irccloud.com/x-izjrohibifcqvdgt) (Read error: Connection reset by peer)
+[12:44:48] *** Joins: gertjaap (sid322815@gateway/web/irccloud.com/x-pbimdnyfmuinqamw)
+[13:22:09] <dergoegge> In general or with the current codebase?
+[13:22:39] *** belcher_ is now known as belcher
+[16:55:58] <kcalvinalvin> dergoegge in general
+[16:56:40] <kcalvinalvin> I guess you can start generating proofs if you ignore the ttls
+[16:56:54] <kcalvinalvin> But then you'd have to re-do the ttls once you're at the tip
+[20:54:21] <dergoegge> maybe i dont understand what you mean but currently we just initialise the ttls for a block with zero in the flatfile and later go back and update them if we see the output being spend. thats what #206 was about. i dont see why this wouldnt work in btcd or bitcoind during IBD
