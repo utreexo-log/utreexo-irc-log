@@ -1,0 +1,29 @@
+[03:54:40] *** Joins: reallll (~belcher@unaffiliated/belcher)
+[03:57:49] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 264 seconds)
+[05:13:26] <kcalvinalvin> We talked about BIP30 implementation for Utreexo right?
+[05:13:42] <kcalvinalvin> Having trouble recalling..
+[08:55:30] *** reallll is now known as belcher
+[12:53:07] <adiabat> bip30...? making sure coinbase txs say what height they are?
+[12:53:58] <adiabat> I don't think utreexowould affect that, the node still knows what height blocks are and can check that the coinbase input says that
+[12:54:48] <adiabat> there's no "proof" as its coinbase, but there's still a validation step.  So I guess we have to make sure we don't skip it, as usually there will be both
+[16:08:28] <kcalvinalvin> It reads in btcd that there shouldn't be a new tx with an hash that matches one of the utxo's txhash
+[16:08:44] <kcalvinalvin> So it does a map read to see if there is a match among all the utxos
+[16:09:55] <kcalvinalvin> func (b *BlockChain) checkBIP0030 in blockchain/validate.go
+[16:10:09] <kcalvinalvin> Not relevant?
+[16:19:38] <kcalvinalvin> oh btw adiabat did you get started on the messages?
+[16:19:50] <kcalvinalvin> I think I have time to give it a go if you haven't
+[19:20:38] <adiabat> kcalvinalvin haven't done messages yet
+[19:20:49] <adiabat> will probably do matchknown then messages
+[19:21:11] <adiabat> "So it does a map read to see if there is a match among all the utxos" -- what what????
+[19:24:11] <adiabat> func (b *BlockChain) checkBIP0030() ... how about that
+[19:24:28] <adiabat> I assume bitcoind doesn't do this...
+[19:28:05] <adiabat> yeah so that's another thing we could do to improve btcd -- take this whole thing out
+[19:28:57] <adiabat> the *only* way to make a transaction with a colliding txid is the coinbase transaction.  or hash collision in which case, whatever, all bets are off
+[19:29:58] <adiabat> so there's no point in ever checking non-coinbase txs for colliding txids
+[19:31:01] <adiabat> also:
+[19:31:03] <adiabat> utxo := view.LookupEntry(outpoint)
+[19:31:49] <adiabat> if utxo != nil && !utxo.IsSpent() {
+[19:32:05] <adiabat> IsSpent()...? do the DB returns spent txos..?
+[19:34:34] <adiabat> hm.  OK I'm thinking of bip34, which... supercedes bip30?
+[19:35:25] <adiabat> so maybe the isBIP0030Node isn't true anymore because once bip34 is enfoced, you don't need bip30 anymore
+[19:35:51] <adiabat> and maybe the bip30 code is left in for like testing / testnet / pre-soft fork etc
