@@ -1,0 +1,12 @@
+[03:40:19] *** Joins: kallewoof (~quassel@240d:1a:759:6000:a7b1:451a:8874:e1ac)
+[03:55:01] *** Joins: reallll (~belcher@unaffiliated/belcher)
+[03:57:36] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 256 seconds)
+[06:25:25] <kcalvinalvin> adiabat ok I'll get started on messages
+[06:38:32] <kcalvinalvin> hmmm seems like bitcoind does something similar. src/validation.cpp, line 2045, on master (specifically commit 31c9987976af8ac5ad40091256ac41a2ccb078cd)
+[06:40:06] <kcalvinalvin> It does say the BIP30 checking is only done if BIP34 is not activated yet
+[08:03:50] *** reallll is now known as belcher
+[13:03:56] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 240 seconds)
+[13:15:08] *** Joins: belcher (~belcher@unaffiliated/belcher)
+[20:10:00] <adiabat> yeah the code is probably still there in both but never used since there's bip34
+[20:12:32] <adiabat> I guess with btcd it's sortof surprising since btcd came out after bip34 was activated
+[20:13:10] <adiabat> so it seems like there would never be any reason to use that code, since you could just rely on bip34 to ensure no duplicates
