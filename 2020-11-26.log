@@ -1,0 +1,9 @@
+[03:54:48] *** Joins: reallll (~belcher@unaffiliated/belcher)
+[03:58:29] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 260 seconds)
+[04:40:31] <kcalvinalvin> Ok there was an essay on BIP30 and BIP34 as comments in validation.cpp that I skipped. Starting from the BIP34 activation height, BIP30 isn't checked but is before then
+[04:40:48] <kcalvinalvin> Hmmm tricky
+[11:14:09] *** reallll is now known as belcher
+[11:34:55] *** Quits: rjected[m] (rjectedmat@gateway/shell/matrix.org/x-fqhyhvpomkxdivxa) (Quit: Bridge terminating on SIGTERM)
+[11:34:57] *** Quits: icota[m] (icotamatri@gateway/shell/matrix.org/x-usneaxcbtqzjekhe) (Quit: Bridge terminating on SIGTERM)
+[11:43:35] *** Joins: rjected[m] (rjectedmat@gateway/shell/matrix.org/x-vujroqqykhziptsw)
+[12:01:14] *** Joins: icota[m] (icotamatri@gateway/shell/matrix.org/x-krvymnjpngwletgk)
