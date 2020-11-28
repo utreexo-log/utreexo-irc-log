@@ -1,0 +1,8 @@
+[03:55:03] *** Joins: reallll (~belcher@unaffiliated/belcher)
+[03:57:49] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 264 seconds)
+[04:06:43] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Ping timeout: 240 seconds)
+[04:07:22] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[08:59:18] <kcalvinalvin> So I just ripped out the whole server part from btcd and made a listener that way
+[08:59:32] <kcalvinalvin> I got the handshake working :)
+[08:59:53] <kcalvinalvin> It'll also be easier to import it into btcd
+[12:45:55] *** reallll is now known as belcher
