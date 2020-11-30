@@ -1,0 +1,9 @@
+[03:55:03] *** Joins: reallll (~belcher@unaffiliated/belcher)
+[03:57:36] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 240 seconds)
+[05:13:52] *** Quits: reallll (~belcher@unaffiliated/belcher) (Ping timeout: 256 seconds)
+[05:14:21] *** Joins: belcher (~belcher@unaffiliated/belcher)
+[07:35:50] *** Joins: ghost43_ (~daer@gateway/tor-sasl/daer)
+[07:36:03] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Ping timeout: 240 seconds)
+[18:17:24] <ja> kcalvinalvin: trying to read your transformreadme.md, but i don't even know which leaves the example talks about deleting
+[18:18:10] <ja> it just starts out saying that when rowTrans is on row 02, 06 will be deleted. but surely the input to this whole process is a list of leaves to delete?
+[18:19:28] <ja> then at the end it says "add example tree deletion". what is tree deletion even? i thought only leaves are deleted?
