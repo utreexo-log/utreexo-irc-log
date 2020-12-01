@@ -1,0 +1,30 @@
+[01:28:12] *** Joins: reallll (~belcher@unaffiliated/belcher)
+[01:28:22] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 272 seconds)
+[02:59:12] <kcalvinalvin> ja hmm ok I'll take a look at it again. It's been ages since I wrote it so don't really recall
+[03:00:06] <ja> kcalvinalvin: thanks :) probably you have some intuition for it even though it has been a long time
+[03:00:13] <ja> the rendering on github is also broken for one of the examples
+[05:28:03] *** Quits: achow101 (~achow101@unaffiliated/achow101) (Quit: Bye)
+[05:28:14] *** Joins: achow101 (~achow101@unaffiliated/achow101)
+[05:31:01] *** Quits: achow101 (~achow101@unaffiliated/achow101) (Client Quit)
+[05:31:11] *** Joins: achow101 (~achow101@unaffiliated/achow101)
+[09:24:14] *** reallll is now known as belcher
+[14:02:56] <kcalvinalvin> meet.jit.si/utreexo if anyone cares to join
+[15:28:37] <dergoegge> btw. i checked out the BIP30 stuff in core and it seems as if they did turn of BIP30 checks after BIP34 activated: https://github.com/bitcoin/bitcoin/commit/06d81ad516f1d136da9f03ca2ae823211c0f6988
+[15:29:42] <dergoegge> but then they found that there are blocks before the BIP34 activation height that have indicated heights that are greater than the BIP34 height
+[15:29:56] <dergoegge> which led to: https://github.com/bitcoin/bitcoin/commit/5b8b387752e8c493a8e87795ae6ddb78b45b1a5d
+[15:30:11] <dergoegge> its pretty well documented
+[15:31:00] <dergoegge> so i guess on testnet BIP30 checks will turn on again soon
+[16:02:12] <kcalvinalvin> adiabat ok so I'll go on with the server code for now (just wanna get it actually working)
+[16:03:02] <kcalvinalvin> I'll try moving the code over to btcd, if it works out nicely, I'll make a PR like so. If not, I guess I'll keep it as the way PR #230 is now
+[16:05:01] <kcalvinalvin> dergoegge yeah haha a literal essay about BIP34 in the comments :p
+[16:07:37] <kcalvinalvin> hmm that TODO was made in 2018? Oh man..
+[16:19:51] <adiabat> I don't really get the bug with bip34; why is 1983702 a special block height?
+[16:20:16] <adiabat> ohhh oh wait I get it
+[16:21:00] <adiabat> whatever random data was in the first 4 bytes from pre-bip34 coinbases
+[16:21:25] <adiabat> hmm should have put some magic prefix in the beginning of bip34
+[16:24:24] <adiabat> hah what a mess.  But yeah there isn't really a way to do bip30 with utreexo, so unless there's a consensus rule fix, utreexo can only work for 25 years
+[16:25:20] <adiabat> I guess the consensus rule fix would have to be backwards compatible with bip34, so would need to have something like... keep the 4 byte height, and then require some magic bytes after it
+[16:26:35] <adiabat> hm probably a simpler way to fix all this from the beginning would have been to require the coinbase to have the previous block hash in it
+[16:27:01] <adiabat> could even put it there instead of the header to save space.  but then makes header validation a bit more annoying.  So could just have it in both places
+[16:27:32] <adiabat> oh well.  Probably will be fixed before 2045.
+[17:57:58] <ja> adiabat: wouldn't it make sense to put the meeting time in the topic of the channel?
