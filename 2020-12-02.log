@@ -1,0 +1,41 @@
+[01:27:15] *** Joins: reallll (~belcher@unaffiliated/belcher)
+[01:30:16] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 240 seconds)
+[03:20:48] <kcalvinalvin> dergoegge I left it on for around a week before I gave up
+[03:20:58] <kcalvinalvin> Sounds about right
+[07:18:05] <dergoegge> aaaaand it crashed... "too many open files"
+[07:20:17] <dergoegge> hm could that also be because of the network attached storage?
+[07:34:09] <dergoegge> probably not #233
+[12:00:48] *** reallll is now known as belcher
+[14:13:29] <kcalvinalvin> dergoegge oh boy
+[14:13:45] <kcalvinalvin> I'll look over the PR..
+[16:55:09] <adiabat> huh too many files ,,, is this with cow or the flat file?
+[16:55:30] <adiabat> ja: yes that would be a good idea!  hmm will look up how to do that
+[16:56:54] <dergoegge> adiabat: with cow. Some files dont get closed but should
+[16:57:18] <adiabat> ah ok.  Can try with the other cached or maybe even inram if there's enough ram
+[17:01:04] <adiabat> also I can't figure out how to change anything about this channel.  Trying to change the topic results in "Channel #utreexo is not registered."
+[17:01:24] <adiabat> trying to register it says "You must be a channel operator in #utreexo in order to register it."
+[17:04:16] <adiabat> trying to set myself as op also just says the channel isn't registered... 
+[17:04:23] <adiabat> I think I tried this a while ago and gave up
+[17:27:52] <ja> ah damn
+[17:29:04] <ja> adiabat: there is a whole guide on https://freenode.net/groupreg
+[17:29:18] <ja> i can try to follow these instructions, and then maybe freenode staff can message you to verify
+[17:29:30] <ja> adiabat: what do you think?
+[17:41:20] <ja> adiabat: i think, if the project is registered with freenode, they can associate this channel with it. then your NickServ auth gets connected to the group, and you can op yourself at any time, and set topic and bans and such
+[17:46:37] <ja> "Projects and organisations are entitled to own channels bearing their names. "
+[19:53:46] <adiabat> oh hm have to talk to people heh
+[19:54:13] <adiabat> aha freenode is a permissioned network :)
+[19:54:33] <adiabat> I guess I can email them
+[19:54:51] <ja> adiabat: i can do the project pitch for you, and then just ask staff to ask you if you wanna be responsible, and you can say yes
+[19:55:11] <ja> adiabat: i don't think you need email, the document lists a couple of people that can do it right here on IRC
+[19:55:24] <ja> like glguy, he is very friendly
+[20:07:59] <adiabat> ok if we point to the github repo that should be enough proof
+[20:11:52] <ja> adiabat: your email on github is not visible though, so i dunno if they'll be convinced that you are the same adiabat. and you are not a member of the mit-dci org on github either. but if you could show that your NickServ email is the same email as in the paper, maybe that would be sufficient. but you used your mit email there, and here you may be using awsomnet, i don't know
+[20:12:57] <ja> maybe neha narula can vouch for you, she is on irc too ?
+[21:52:55] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[21:53:13] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[22:06:46] <adiabat> I'm not on DCI on github...?
+[22:08:31] <adiabat> maybe it's not publicly visible?  But definitely see all the mit-dci private repos / have admin access to that...
+[22:08:50] <adiabat> I could commit something to the repo if they want proof
+[22:14:24] <ja> all right, good
+[22:14:54] <ja> it's just that you are not listed here https://github.com/orgs/mit-dci/people
+[22:29:13] <adiabat> strange!  I can change that in github myself I think 
