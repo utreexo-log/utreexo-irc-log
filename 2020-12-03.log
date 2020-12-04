@@ -1,0 +1,47 @@
+[01:27:03] *** Joins: reallll (~belcher@unaffiliated/belcher)
+[01:30:49] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 264 seconds)
+[04:12:11] <adiabat> ok I set my membership to public
+[04:13:08] <adiabat> lots of other people in the DCI github org are also private / hidden.  Maybe that's a secret though.  But some of them are even in this channel...
+[04:20:08] <ja> just noticed bridgenode/offsetfile_test.go seems to be using some outdated symbols like GetBitcoinDataDir, noting it here because i am on 4g and i don't wanna wait for github to load right now :P
+[13:04:40] *** reallll is now known as belcher
+[13:55:17] *** Joins: reallll (~belcher@unaffiliated/belcher)
+[13:55:47] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 265 seconds)
+[14:10:14] *** Quits: reallll (~belcher@unaffiliated/belcher) (Ping timeout: 272 seconds)
+[14:11:03] *** Joins: reallll (~belcher@unaffiliated/belcher)
+[15:14:25] <kcalvinalvin> ja Ah yeah that test was written but was never ran on the CI
+[15:33:40] *** reallll is now known as belcher
+[15:45:10] <kcalvinalvin> https://asciinema.org/a/7GaCeSQoO89fCKeUW4JmjbUBE
+[15:45:33] <kcalvinalvin> Some  more things to work out but it *is* actually syncing now :)
+[15:45:56] <kcalvinalvin> all the flat files and db is still present though
+[16:06:06] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 260 seconds)
+[16:07:18] *** Joins: belcher (~belcher@unaffiliated/belcher)
+[16:39:35] <ja> kcalvinalvin: what am i seeing here, a btcd based wallet fork can now sync using utreexo?
+[16:48:31] <dergoegge> kcalvinalvin: nice!
+[16:51:31] <dergoegge> ja: yes its a btcd CSN but its not quite "compact" since it still stores everything (utxo set and blocks). It validates using the accumulator though so if we now remove the leveldb utxo set and add pruning its actually compact
+[16:55:08] <adiabat> article about utreexo with a cool picture anyway https://medium.com/interdax/utreexo-compressing-fully-validating-bitcoin-nodes-4174d95e0626
+[16:55:46] <adiabat> hm they are pretty optimistic: "Developers will eventually incorporate it into Bitcoin Core" ... hope so hah
+[17:15:47] <dergoegge> is there any conceptual review on utreexo from some of the more active core devs? i guess there is no BIP and no reference PR so probably not
+[17:19:32] <ja> dergoegge: maybe Cory Fields has an opinion since he did that c++ thing
+[17:23:53] <ja> dergoegge: they spelt your surname Goggë :O people need to learn more german...
+[17:27:32] <dergoegge> lol, yeah its also always fun to hear it pronounced in english. guge? joje? george?
+[18:45:19] *** Quits: adiabat (~adiabat@63.209.32.102) (Ping timeout: 260 seconds)
+[19:17:04] *** Joins: adiabat (~adiabat@63.209.32.102)
+[19:52:47] *** Joins: nicolas_ (~nicolas@c-73-16-71-87.hsd1.ma.comcast.net)
+[19:52:56] <nicolas_> hello
+[20:19:12] <adiabat> nicolas_: hi!
+[20:21:12] <nicolas_> The docs on github says :"To try utreexo you do not need to run a server as we have a server set up for testing purposes which the client connects to by default". When i try to run the client, it tries to connect by default to localhost. (I compiled the client from source). What is the ip and port of the testing server?
+[20:22:10] <adiabat> right, the server is only hardcoded into the "release" version on github
+[20:22:29] <nicolas_> ah i see thanks
+[20:22:49] <adiabat> I think the current version of the code won't talk to that server anymore
+[20:23:21] <adiabat> it's 35.188.186.244.. hope it's still running :)
+[20:25:16] <nicolas_> it's running but there is a bug :(
+[20:25:20] <nicolas_> Deserialize error from connection 35.188.186.244:8338 readScript: transaction input signature script is larger than the max allowed size [count 5325260286192517119, max 33554432]
+[20:28:33] <adiabat> is that with a current build or the old release version?
+[20:28:53] <adiabat> current builds are talking a pretty different protocol so I'd expect something like that 
+[20:29:09] <adiabat> we could put out a new release & update that server I guess
+[20:29:37] <adiabat> I think it's a bunch faster now, might be interesting to compare
+[20:30:33] <nicolas_> I am running the latest code on master commit 1a03a98e9424108d4a22f15dd6f581b8b906009d
+[20:31:07] <nicolas_> I guess the server might be outdated...
+[20:32:30] *** Quits: nicolas_ (~nicolas@c-73-16-71-87.hsd1.ma.comcast.net) (Quit: nicolas_)
+[20:33:03] *** Joins: nicolas_ (~nicolas@c-73-16-71-87.hsd1.ma.comcast.net)
+[21:05:56] <dergoegge> Yeah a lot has changed since the demo release. You can check out the release tag and build from that. That should work with the server.
