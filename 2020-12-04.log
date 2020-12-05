@@ -1,0 +1,25 @@
+[00:56:57] *** Quits: valwal_ (sid334773@gateway/web/irccloud.com/x-qlebbpueqzhclgdu) (Ping timeout: 244 seconds)
+[00:58:32] *** Joins: valwal_ (sid334773@gateway/web/irccloud.com/x-xpdkkmqnrtcjkded)
+[01:19:30] <kcalvinalvin> ja it's a btcd fork of csn syncing through our server that's modified to talk btcd stuff
+[01:19:59] <kcalvinalvin> the best block that you see is through the btcd rpc talking to the csn
+[02:05:09] *** Quits: nicolas_ (~nicolas@c-73-16-71-87.hsd1.ma.comcast.net) (Quit: nicolas_)
+[02:05:27] *** Joins: nicolas_ (~nicolas@c-73-16-71-87.hsd1.ma.comcast.net)
+[02:05:28] *** nicolas_ is now known as nicolas
+[02:50:32] *** Quits: nicolas (~nicolas@c-73-16-71-87.hsd1.ma.comcast.net) (Quit: nicolas)
+[02:50:54] *** Joins: nicolas (~nicolas@c-73-16-71-87.hsd1.ma.comcast.net)
+[02:55:55] *** Quits: nicolas (~nicolas@c-73-16-71-87.hsd1.ma.comcast.net) (Quit: nicolas)
+[02:56:11] *** Joins: nicolas (~nicolas@c-73-16-71-87.hsd1.ma.comcast.net)
+[02:56:15] *** Quits: nicolas (~nicolas@c-73-16-71-87.hsd1.ma.comcast.net) (Remote host closed the connection)
+[07:40:04] <kcalvinalvin> adiabat so right now, the changed repos are btcd and btcutil
+[07:40:21] <kcalvinalvin> I think it'd be better if there were repos for those
+[12:50:11] <kcalvinalvin> hmmm what are the chances that the btcd guys accept a PR for the csn if I clean it up
+[14:59:40] <dergoegge> right now? i think pretty low, there are no bridge nodes and without pruning its not really use full.
+[15:02:30] <dergoegge> genproofs failed on the test server again. i tried inram this time. there is no error message it literally just says "Killed".
+[15:03:35] <dergoegge> ugh it did not write the cpu profile to disk
+[15:04:00] <dergoegge> i will try again on latest master with cow
+[15:04:45] <dergoegge> i am guessing it ran out of memory this time. but its only at height 370k and the server has 16GB hmm...
+[15:52:04] <adiabat> dergoegge: huh... maybe a memory leak...? 16GB seems like it should be enough
+[16:05:51] *** Joins: reallll (~belcher@unaffiliated/belcher)
+[16:09:30] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 272 seconds)
+[16:30:38] *** reallll is now known as belcher
+[23:57:23] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Ping timeout: 240 seconds)
