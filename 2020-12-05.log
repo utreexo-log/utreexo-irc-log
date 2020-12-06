@@ -1,0 +1,17 @@
+[00:03:52] <ja> dergoegge: left a comment about a lacking defer
+[00:08:23] <ja> adiabat: how did you come up with the node numbering scheme and the remTrans2 algorithm?  i am still trying to grasp how it works
+[00:09:25] <ja> the requirement must have been: if you have a forest, and some forest indexes, you should be able to develop remTrans2 :P but surely you developed the numbering scheme in parallel with the algorithm
+[00:09:48] <ja> so is it conceivable to have another numbering scheme, that would an analogue remTrans2?
+[00:10:00] <ja> *that would allow
+[00:11:12] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[00:12:29] <ja> i keep working through your example from printout.txt line 21, and we talked about deleting leaves 4-9. but what does 4-9 really mean? one reformulation could be "all the leaves that are under node 25 or node 20"
+[00:13:42] <ja> another reformulation would be [tree 0, right branch], [tree 1, left branch]
+[13:42:41] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[13:43:00] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[16:00:04] *** Quits: rjected[m] (rjectedmat@gateway/shell/matrix.org/x-vujroqqykhziptsw) (Quit: Idle for 30+ days)
+[16:08:55] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 246 seconds)
+[20:15:07] *** Joins: belcher (~belcher@unaffiliated/belcher)
+[20:36:59] *** Quits: icota[m] (icotamatri@gateway/shell/matrix.org/x-krvymnjpngwletgk) (Ping timeout: 246 seconds)
+[21:04:37] *** Joins: icota[m] (icotamatri@gateway/shell/matrix.org/x-kuzwqzbpfmsdlpxj)
+[23:44:16] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 246 seconds)
+[23:54:43] *** Joins: belcher (~belcher@unaffiliated/belcher)
