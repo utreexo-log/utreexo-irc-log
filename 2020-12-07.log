@@ -1,0 +1,99 @@
+[00:19:50] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[00:20:06] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[01:30:42] <adiabat> ja: numbering scheme: I tried other ways like having the top be 0 and incrementing as you go down and that probably works too...
+[01:30:49] <adiabat> but I think the binary tricks make the most sense with the current numbering scheme.  It's nice because the path from the root to the leaf is the same as the binary representation of the leaf index
+[01:30:54] <adiabat> as for how I came up with remtrans2 (really it's the same algo as remtrans1, just organizing the code), well... a lot of pieces of paper with boxes, arrows, circles, 1s and 0s... :)
+[01:30:58] <adiabat> Actually it was a lot of scribbling on paper but there are some things I went through to get to it.  
+[01:31:32] <adiabat> First I was looking at sparse merkle trees.  Which could probably work for something like utreexo, but seemed quite inefficient, and didn't have good ways to optimize it
+[01:32:34] <adiabat> so I started modifying the way it worked, but pretty quickly looked at it and said "ok all I'm trying to do with this sparse merkle tree is make it less and less sparse.  So... just use a merkle tree"
+[01:33:33] <adiabat> then I had a version similar to now but without deletion.  I think I've written about that, instead it used tombstone hashes, so when you delete a leaf you replace it with ffffff.. or something that doesn't look like a hash
+[01:34:22] <adiabat> that actually works OK, and I now think it could in fact be *better* because it could let you use 16 byte hashes instead of 32...
+[01:34:44] <adiabat> but that had overhead of all the tombstones, which could be overwritten / rediscovered 
+[01:35:07] <adiabat> (the easy way is to define the parent hash function to say parent(ffff, ffff) = ffff
+[01:35:44] <adiabat> but anyway it had a bunch of overhead and was ugly, and I don't think people will like to use 16 byte hashes either way
+[01:36:17] <adiabat> I then had something very close to now where it was all one tree, but kept a proof for the right-most leaf
+[01:37:39] <adiabat> which is actually equivalent, but I didn't get that.  I talked to Sophia Yakoubov and she explained her paper, and then it made sense
+[01:38:19] <adiabat> from there I just did it on paper a lot on random sets of leaves and random deletions
+[01:38:51] <adiabat> and was like, OK no matter what happens, I'm always able to re-arrage hashes with the stuff I know to delete and rebuild
+[01:39:43] <adiabat> so then it was just a matter of writing down what I was doing on paper in computer form.
+[01:40:43] <adiabat> because if you have the partial populated trees and say "ok delete this and rebuild trees using only the known hashes"
+[01:41:26] <adiabat> like if you have little cards and stuff like a game, it's not that hard, you never get stuck.  But often there are a bunch of different ways you can do it
+[01:42:32] <adiabat> anyway so I had the numbering scheme first.  Probably the code to print out the ascii trees was the most useful code because I just printed out hundreds of them
+[01:43:09] <adiabat> I'm pretty sure the numbering scheme could be changed and the algorithms and stuff would mostly be the same
+[01:43:49] <adiabat> you could have every tree in the forest start at 0, I think I tried that.  It works too but I thought it was more confusing
+[01:44:50] <adiabat> some people have 0-1, then 2 above those, then 3, 4 on the bottom to the right of 0, 1  
+[01:45:38] <adiabat> I'm sure that could work too but seems confusing to me.  But I totally understand the numbering in utreexo now being confusing, because of remap
+[01:46:09] <adiabat> remap is quite ugly; nothing is actually moving logically but in ram / on disk lots of things move around
+[01:52:19] <adiabat> so yeah the numbering is somewhat arbitrary but I it's OK.  I'm open to other numbering schemes though if there's one that's clearly better
+[01:53:08] <adiabat> might be a pain to change everything now, but if there's a better way could be worth it.  I only looked at 1 or 2 other ways and quickly dropped them as I didn't like em
+[02:15:37] <ja> adiabat: i mainly asked the question because i wanted to understand remTrans2, but now i realize that remTrans2 does something that can be described independently:
+[02:16:16] <ja> given a forest of imperfect binary trees, it shuffles the sub-trees around to make a forest of perfect binary trees
+[02:17:58] <ja> i know that remTrans2 calls extractTwins, but that is just because you need to find out where the branch cut-off actually is, this is what makes the tree imperfect
+[02:21:59] <ja> another issue that marries that problem to the way it is stored: if we take that example remTrans2([4..9],15,4)=[[(14,4)],[(22,20)],[(26,25)],[]]), it will swap 14 with 4? but why? if the tree wasn't stored in an array, it wouldn't make sense. 14 is to be kept, and nextNumLeaves is also odd, so an algorithm that didn't care about storage position wouldn't need to touch it
+[02:33:12] <adiabat> I'd say it a little differently, as remtrans needs to know the deletions
+[02:33:50] <adiabat> and because of those deletions, you implicitly know which hashes are populated -- a proof up from every deletion to that tree's root
+[02:34:01] <ja> but giving a list of leaves to delete is equivalent to cutting off branches off a perfect tree, no?
+[02:34:25] <adiabat> it is, but you make assumptions about what's there and isn't there
+[02:34:43] <adiabat> if you knew every hash in the forest, there are better ways to do it.
+[02:35:03] <adiabat> but we can't assume full knowledge. (forest has it but pollard doesn't)
+[02:35:32] <adiabat> by "there' and "isn't there" I mean which locations are known and which aren't to a single node
+[02:36:19] <adiabat> a deletion and an includion proof are tied together, so we know any time there's a deletion we have the whole proof for that leaf
+[02:36:32] <adiabat> and we need that proof; if it's not there remtrans won't work
+[02:36:56] <adiabat> (usually we have way more populated hashes than we need because of all the overlap but...)
+[02:37:34] <ja> hmm, is the proof an input to remtrans?
+[02:37:41] <ja> or is it more like an invariant that remtrans maintains?
+[02:38:01] <adiabat> it's not an input directly, but remtrans assumes proofs for everything in the dels []int64
+[02:38:54] <adiabat> the pollard.IngestBatchProof() populates first
+[02:39:06] <ja> right, but i am pondering if remtrans is binary tree packing problem that has been solved outside utreexo before
+[02:39:39] <adiabat> it might be... I don't know of any but it doesn't seem that weird or unique...
+[02:39:47] <ja> if there was an algortihm that could pack arbitrary trees into differently-sized forests, yielding a result in the same format as remtrans, would that work, or is there some invariant i havn't understood?
+[02:39:58] <adiabat> maybe it's a bit unique in that you only have access to elements going up from the deletions
+[02:40:22] <ja> if pollard only calls remTrans2 with specific imputs, that doesn't mean that there is an invariant to maintain...
+[02:40:28] <adiabat> I think the "hard" part of the packing is the limitation of which hashes are accessible
+[02:41:23] <adiabat> if all you need to do is delete leaves and pack back into perfect trees it's not too hard, you just move things to the left, bubble or whatever
+[02:41:40] <adiabat> the tricky constraint is that you can only move things to places where the sibling is known
+[02:42:32] <adiabat> for example
+[02:42:46] <adiabat> if you had a tree of 4 elements, 0 1 2 3 
+[02:42:51] <adiabat> and 0 was deleted
+[02:43:07] <adiabat> it'd be nice to just move everything left one, so you'd end up with 1 2 3
+[02:43:17] <adiabat> and 1,2 would have a parent, and 3 would be on it's own
+[02:43:45] <adiabat> but you can't do that because you don't know what 2 or 3 are, you only know the parent of 2 and 3, which is part of the proof for 0
+[02:49:41] <ja> oooh ok, so remTrans2 respects that
+[02:49:57] <ja> if it didn't how would we find out?
+[02:50:12] <adiabat> yes.  I guess that's not really mentioned in the code comments
+[02:50:33] <adiabat> that aspect is ... spread out over several functions / places
+[02:51:10] <adiabat> in that you must call IngestBatchProof before calling Modify, and the batchproof locations have to exactly match the deletions for Modify
+[02:52:01] <adiabat> actually kind of hitting the code I'm working on now... this aspect is not great right now because you have to call the library functions in the right way / order with the right thigns
+[02:52:15] <adiabat> it would be better if it was all one call somehow
+[02:53:51] <ja> all right, thanks for the explanation, i am happy i know one more invariant about remTrans2
+[02:55:20] <ja> i will try to define my own version
+[02:55:51] <ja> should be easy to see how it does in comparison by seeing how many swaps and hashes it generates
+[02:59:29] <adiabat> ok cool yeah
+[02:59:36] <adiabat> there may well be a better way to do it
+[03:00:05] <adiabat> yeah I think there is... I don't think it would be that much better though
+[03:01:14] <adiabat> like current remtrans I guess is not too far from optimal.  Maybe 10% or 20% improvement could happen
+[03:01:41] <adiabat> but this is just a guess
+[03:02:42] <adiabat> there used to be a bool "sibSwap" which would arrange siblings to a more sequential order
+[03:02:52] <adiabat> so example, in the 0 1 2 3 leaf set
+[03:03:19] <adiabat> hm no wait doesn't apply there
+[03:03:32] <adiabat> instead if the leaves were 0 1 2 3 4 with 4 as it's own tree
+[03:03:51] <adiabat> and you deleted 0
+[03:03:58] <adiabat> now you'd end up with 4 1 2 3
+[03:04:24] <adiabat> the "sibSwap" bool would change remTrans so instead you'd get 1 4 2 3
+[03:05:12] <adiabat> which is also doable, just swap siblings 4 and 1
+[03:05:35] <adiabat> 1 4 2 3 is ... less out of order than 4 1 2 3
+[03:05:50] <adiabat> I don't know if that actually helps
+[03:06:19] <adiabat> feels like it might help a little?  but I never tested it, took it out while trying to get everything to work
+[03:06:51] <adiabat> anyway that's a possible variant / improvement to remTrans.  There are probably others...
+[07:42:48] <kcalvinalvin> I'd like to do the tmux session thingy for today's meeting if that's ok with everyone
+[07:43:07] <kcalvinalvin> Wanna talk about how to go forward with the implementation now that something is working
+[09:21:09] <dergoegge> sounds fine with me (there is a small chance that i won't be able to make it to the meeting today)
+[13:20:54] <adiabat> tmux sounds good
+[16:06:05] *** Joins: belcher_ (~belcher@unaffiliated/belcher)
+[16:09:05] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 240 seconds)
+[16:13:30] *** belcher_ is now known as belcher
+[16:45:21] *** Joins: belcher_ (~belcher@unaffiliated/belcher)
+[16:47:59] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 272 seconds)
+[16:55:16] *** belcher_ is now known as belcher
+[22:02:48] *** Quits: dergoegge (sid453889@gateway/web/irccloud.com/x-aqetkmfnbzcrxxzk) (*.net *.split)
+[22:30:13] *** Joins: dergoegge (sid453889@gateway/web/irccloud.com/x-cpuxjdlyceersvau)
