@@ -1,0 +1,15 @@
+[03:30:42] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 258 seconds)
+[03:35:02] *** Joins: belcher (~belcher@unaffiliated/belcher)
+[04:59:37] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 264 seconds)
+[04:59:50] *** Joins: belcher (~belcher@unaffiliated/belcher)
+[11:56:04] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[11:56:22] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[12:43:03] <kcalvinalvin> I tested our release client on a Samsung S9+ with termux
+[12:44:05] <kcalvinalvin> It's around 60% the speed of the Ryzen 3600 desktop 
+[12:44:29] <kcalvinalvin> It might be fun to do a second release and show a demo on it with a phone :)
+[14:06:27] <adiabat> That's cool... and also shows that it could be much faster if it's not really using the cores of a fast desktop cpu...
+[18:46:23] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[22:24:27] *** Quits: belcher (~belcher@unaffiliated/belcher) (Read error: Connection reset by peer)
+[22:35:37] *** Joins: belcher (~belcher@unaffiliated/belcher)
+[23:46:55] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 246 seconds)
+[23:48:04] *** Joins: belcher (~belcher@unaffiliated/belcher)
