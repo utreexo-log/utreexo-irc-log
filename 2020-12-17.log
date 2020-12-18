@@ -1,0 +1,16 @@
+[01:24:53] *** Quits: gertjaap (sid322815@gateway/web/irccloud.com/x-thecwwyaxsyuguax) (*.net *.split)
+[01:24:56] *** Quits: valwal_ (sid334773@gateway/web/irccloud.com/x-xpdkkmqnrtcjkded) (*.net *.split)
+[01:24:57] *** Quits: achow101 (~achow101@unaffiliated/achow101) (*.net *.split)
+[01:25:00] *** Quits: RubenSomsen (sid301948@gateway/web/irccloud.com/x-xiafkyvtjtuehoop) (*.net *.split)
+[01:25:00] *** Quits: takinbo (~takinbo@unaffiliated/takinbo) (*.net *.split)
+[01:30:11] *** Joins: gertjaap (sid322815@gateway/web/irccloud.com/x-thecwwyaxsyuguax)
+[01:30:11] *** Joins: valwal_ (sid334773@gateway/web/irccloud.com/x-xpdkkmqnrtcjkded)
+[01:30:11] *** Joins: achow101 (~achow101@unaffiliated/achow101)
+[01:30:11] *** Joins: RubenSomsen (sid301948@gateway/web/irccloud.com/x-xiafkyvtjtuehoop)
+[01:30:11] *** Joins: takinbo (~takinbo@unaffiliated/takinbo)
+[14:41:17] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[15:57:32] *** Joins: belcher_ (~belcher@unaffiliated/belcher)
+[16:01:25] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 264 seconds)
+[17:37:29] *** belcher_ is now known as belcher
+[18:32:09] <dergoegge> i profiled on the test server for #229. turns out its not worth it to parallelize the hashing. there is a lot more hashing on mainnet but its still a very small % of the entire thing.
+[21:08:17] <adiabat> huh... I guess that's bad in that it means it's slow, but good in that in means there should be plenty of speedups left
