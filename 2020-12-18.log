@@ -1,0 +1,88 @@
+[02:32:03] <adiabat> how do you get around the rjected import bug?
+[02:32:10] <adiabat> github.com/rjected/btcd@v0.0.0-20200718165331-907190b086ba: invalid version: unknown revision 907190b086ba
+[02:32:21] <adiabat> I think kcalvinalvin was talking about that... not sure how to fix
+[03:03:21] <adiabat> hm also if you put the wrong network in utreexoserver it just halts
+[04:56:36] <kcalvinalvin> adiabat you just point to the btcd repo since the one function we need is in there now
+[04:56:38] <kcalvinalvin> So no more go.mod thingy
+[04:56:47] <kcalvinalvin> where you replace github.com/btcsuite/btcd
+[05:40:03] <kcalvinalvin> I fixed the go.mods on github.com/mit-dci/utcd
+[05:40:15] <kcalvinalvin> branch utreexo-integration
+[05:40:18] <kcalvinalvin> now it should just build
+[10:53:23] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Ping timeout: 240 seconds)
+[11:00:42] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[15:57:33] *** Joins: belcher_ (~belcher@unaffiliated/belcher)
+[16:00:51] *** Quits: belcher (~belcher@unaffiliated/belcher) (Ping timeout: 268 seconds)
+[16:01:28] *** belcher_ is now known as belcher
+[16:58:02] <adiabat> hm ok.  Should utreexo stuff point to utcd?
+[16:58:13] <adiabat> anyway works if I just remove that line in go.mod
+[18:12:09] <kcalvinalvin> adiabat maybe? If there's a need in the future
+[19:22:07] <dergoegge> the meetup was interesting. TLDR: smaller proofs but slower? calvin might have a better tldr i think he understood the thing a bit better
+[19:23:29] <adiabat> oh shoot I missed the meetup...
+[19:23:37] <adiabat> I'm in calls today a lot, maybe couldn't go
+[19:23:41] <adiabat> do they have a paper to read?
+[19:25:16] <dergoegge> not yet it seems
+[19:25:38] <adiabat> yeah overlapping call I'm still stuck in... oh well
+[19:25:51] <adiabat> would have been good to ask questions.  maybe can get them on IRC
+[19:26:21] <dergoegge> damn it we should have asked for them to come on here...
+[19:27:09] <adiabat> so the slower is more cpu / hashing I guess?
+[19:27:51] <adiabat> could be a good tradeoff as apparently the code doesn't spend any time hashing... or at least not long enough that 2 cores would help :)
+[19:28:40] <dergoegge> he said generating the proofs took several days longer... 
+[19:30:04] <dergoegge> boltonb2@illinois.edu thats his email, we could ask him to come to one of the meetings
+[19:30:22] <adiabat> hm could be an implementation thing. but yeah that's slow
+[19:30:44] <adiabat> although, genproofs taking longer and ibd faster is a good tradeoff since genproofs only has to happen once
+[19:47:23] <adiabat> OK thinking out lound (on IRC) I don't know what their paper is, but if you limit yourself to only previous blocks, there are serious proof size reductions possible
+[19:53:30] <adiabat> like, since the whole thing is after the fact, you could sort additions in an optimal way so that leaves cluster together
+[19:55:05] <adiabat> to minimize proof size.  Like use TTL data to cluster leaf additions.  Right now leaf addition just happens in the block order
+[19:55:41] <adiabat> which is super naive.  Even without TTL data you could sort it in different ways.  Like...
+[19:57:03] <adiabat> utxos created by long lived utxos might tend to live longer
+[19:57:24] <adiabat> like if a tx spends 2 blocks old utxos, maybe the utxos it creates won't live long
+[19:57:51] <adiabat> that would be doable with only past data.
+[19:58:27] <adiabat> with future data could do much more without any heuristic, just cluster based on spend time.
+[19:58:57] <adiabat> So... this is probably *not* what's in their paper but... if the goal is "reduce proof size" I have lots of ideas too :)
+[20:02:35] <adiabat> The problem is as blocks come out, you gain information which allows you to reduce the proof size of that block, but in order to do so you need to change things that happened a long time ago
+[20:03:46] <adiabat> what would be really great is a way to modify old stuff retroactively...
+[20:11:46] <adiabat> it gets complicated though, but I think there are ways to do it.  I guess the first question is how much the proof size goes down
+[20:12:17] <adiabat> if it's complicated and proof size only goes down 10 or 20% then not worth it.  But if it's like 80% reduction then... yeah
+[20:12:40] <adiabat> OK I should work on the PR stuff but that *is* a fun idea that would be testable now
+[20:12:57] <adiabat> do 1 run of genproofs, make proofs & TTL data, measure proof size
+[20:14:06] <adiabat> then do a 2nd run, where you have TTL data for all the new utxo every block.  Instead of adding leaves in the same order that utxos appear in the blocks,
+[20:14:33] <adiabat> add them in TTL order, so the ones that disappear in the same block get clustered together at insertion time
+[20:15:06] <adiabat> then measure the size of that 2nd run's proofs.
+[20:15:22] <adiabat> That's actually only a few dozen lines probably.  Something to think about anyway
+[22:59:17] <adiabat> actually there's even more flexibility
+[22:59:39] <adiabat> (hm not sure this is the best place to write this, maybe should make a doc in the repo or something but ... )
+[23:01:01] <adiabat> right now the Modify() call is straightforward - delete leaves, compact the trees down to eliminate the gaps, then add new leaves on the right
+[23:01:50] <adiabat> but you could have the remove & add steps mixed.  So you're not limited to putting new leaves just on the right
+[23:02:14] <adiabat> the new leaves could go to any spot opened up by the deletions
+[23:02:58] <adiabat> not just the deletion spots directly, but even places "near" that, revealed by the proofs
+[23:05:07] <adiabat> for example - printout.txt smallest tree (8 leaves) :
+[23:05:26] <adiabat> you delete 1 leaf, 02, and add 4 new ones
+[23:05:57] <adiabat> you can make the new ones into a 4-tree, and the proof for 02 has 13 in it.
+[23:07:00] <adiabat> so you can put the new 4-tree in position 12 or 13, and 00, 01 and 03 end up on the right
+[23:07:45] <adiabat> if the forest keeps TTL data associated with leaves (which wouldn't be hard to do) you have a lot of freedom to move things around
+[23:08:18] <adiabat> in many cases you would be able to move all the leaves for a block's inputs all together into a big subtree just in time for those leaves to be deleted
+[23:08:39] <adiabat> in which case the proof would be tiny, just a few hashes for the whole block
+[23:09:28] <adiabat> that's probably worth it, or would be worth it, as the additional genproofs work only needs to happen once, and after that everyone benefits from it
+[23:10:25] <adiabat> the problem is it's non-causal; you don't know which leaves to group together until they all get deleted (in the block)
+[23:11:28] <adiabat> and once that happens it's too late; the leaves weren't in the right place
+[23:12:12] <adiabat> on one hand, this is similar to TTL data.  TTL only works after the fact, for historic IBD, and doesn't work once you're synced up
+[23:12:58] <adiabat> on the other hand, TTL is just a caching optimization and has no effect on the consensus critical arrangement of leaves.  If you ignore TTL data everything will still work
+[23:14:01] <adiabat> but arranging leaves so that they all end up next to each other in time to be removed is something everyone would need to do, and can only do for historic data...
+[23:14:10] <adiabat> also it's not something that can be continually updated
+[23:14:37] <adiabat> for TTL data, say we start and the blockchain is 1000 blocks long, and we use TTL data going up to 1000
+[23:14:48] <adiabat> then time passes, there are 1300 blocks
+[23:15:20] <adiabat> we keep adding TTL data into the flat files every time a block arrives, and incrementally help new nodes connecting
+[23:15:51] <adiabat> nothing changes about block 1200 data because of block 1300
+[23:16:09] <adiabat> arranging things for optimal deletion proofs doesn't work that way though..
+[23:16:29] <adiabat> you can make perfect (or very close) proofs up to block 1000
+[23:17:06] <adiabat> but then if you want to extend that so that block 1200 also gets a perfect proof, you need to change the proofs for block 900
+[23:17:42] <adiabat> feels like there's no way around that.  So it's great for old data IBD, but then you only get 1 shot
+[23:18:52] <adiabat> you could do something really ugly, like every 1000 blocks have the bridge nodes recompute the optimal swapping, and then give a re-arrange proof
+[23:19:50] <adiabat> like hey everyone, it's block 5000, move all these things around for no apparent reason.  I'll give you the proofs so you know it's legit and just swaps, no adds or deletes
+[23:20:33] <adiabat> and then everyone does that, and now all the old proofs changed completely, and proofs for 4000-5000 are now optimal
+[23:20:41] <adiabat> that's so ugly though
+[23:21:26] <adiabat> It's interesting to think about long term though.  It does seem like you can probably get very small proof sizes if you really want to
+[23:22:02] <adiabat> I'm also assuming the bridge nodes have enough flexibility in where to place things, which I think is likely.  
+[23:22:41] <adiabat> Also even if they didn't, it wouldn't be that crazy to include an "extra proof" where something is proven just so a new leaf can be swapped to that position to make later proofs smaller
+[23:22:49] <adiabat> guessing you wouldn't need many of those
+[23:23:03] <adiabat> anyway I'm pretty sure this stuff has *nothing* to do with that paper :)
