@@ -1,0 +1,28 @@
+[00:48:44] <adiabat> there's also a tradeoff in this optimization
+[00:49:34] <adiabat> the better (closer grouped together, smaller proof) you make the proof for one block, the less freedom you have to improve later blocks.
+[00:49:37] <adiabat> for example, say there are 255 leaves (8 trees).  We've got all the leaves perfectly grouped together, they take up  the entire 64-tree
+[00:49:40] <adiabat> so the proof for that block is... nothing.  0 byte proof, 0 hashes.  Which is very cool.
+[00:49:44] <adiabat> but that also means we learn nothing about leaves or anything below the roots, so we can't move anything around.
+[00:49:47] <adiabat> we can only arrange the newly inserted leaves into different places
+[00:49:52] <adiabat> there is still a good amount of freedom there.  We have the ordering, but we can also shuffle around the existing trees.
+[00:49:55] <adiabat> in this example, say there are 64 more leaves to be added.  So we end up back at 255 with 8 trees.
+[00:50:01] <adiabat> We can collapse first and put the new leaves on the right, in whatever order we want.  
+[00:50:05] <adiabat> Or we can put them in the recently vacated 64-tree.
+[00:50:10] <adiabat> Or really anywhere in between.  Take 32 long-ttl leaves, group them with the 32-tree, filling the 64-tree.  Then the rest go on the right.
+[00:50:13] <adiabat> Hm.  So even in the extreme case where there's *no* proof, you still have a lot of freedom to spread hashes around.  
+[00:50:17] <adiabat> Not total freedom though; the 128-tree is off limits.
+[00:50:21] <adiabat> 255 is the best-case though, as there are lots of trees & the accumulator state is large
+[00:50:26] <adiabat> if it's 256 (the other extreme) the proof just becomes 2 hashes long (to the 64 tree) and then you only know a 64-tree and a 128-tree.  Pretty much stuck putting everything on the right.
+[00:50:35] <adiabat> Usually we're somewhere in between though.  Also the number of deletions isn't going to be a power of 2.
+[00:50:38] <adiabat> So the proofs will have more hashes because there will be several subtrees.  But not too many.
+[00:50:41] <adiabat> But yeah that's the tradeoff; the smaller the proofs the less freedom you have to arrange things in the right way to make future proofs small.
+[00:50:43] <adiabat> Sounds hard to optimize.  Maybe a worse proof for block n can allow a better proof for block n+247.  
+[00:50:47] <adiabat> Anyway if we really want to get proof sizes down, there's tons of stuff to try... 
+[00:50:49] <adiabat> but probably should get what we have working first :)
+[01:08:06] *** Parts: belcher (~belcher@unaffiliated/belcher) ("Leaving")
+[11:01:36] <dergoegge> so from what i understood they reduce proof sizes by using the pareto distribution of the utxo life times and the idea is: keep the utxos sorted by creation time at all times, so that utxos that are more likely to be spend in the next block are grouped together in the smaller trees.
+[11:02:04] <dergoegge> so similar to what you are talking about 
+[11:02:24] <dergoegge>  he did not explain the deletion and addition in detail but he did say that they are using a different data structure called a "trie"
+[23:25:59] *** Quits: kcalvinalvin (~kcalvinal@ec2-52-79-199-97.ap-northeast-2.compute.amazonaws.com) (ZNC 1.7.4 - https://znc.in)
+[23:26:44] *** Joins: kcalvinalvin (~kcalvinal@ec2-52-79-199-97.ap-northeast-2.compute.amazonaws.com)
+[23:27:28] *** Server sets mode: +ns 
