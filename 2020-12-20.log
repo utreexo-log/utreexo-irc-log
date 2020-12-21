@@ -1,0 +1,23 @@
+[01:09:23] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Ping timeout: 240 seconds)
+[01:16:59] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[01:59:59] <ja> dergoegge: what is the context? this is the boltonb2 guy using tries for which application?
+[05:35:13] <kcalvinalvin> ja Yeah the guy wrote a paper and some code and gave a presentation at a meetup on zoom which Niklas and I joined
+[05:36:20] <kcalvinalvin> His idea is to keep the leaves never out of order
+[05:37:22] <kcalvinalvin> So just in-place forest basically
+[05:38:33] <kcalvinalvin> I've yet to digest the essay Tadge wrote above
+[05:39:57] <ja> kcalvinalvin: but is his application bitcoin? or something else?
+[05:40:07] <kcalvinalvin> bitcoin
+[05:40:25] <kcalvinalvin> But in general he didn't seem particularly focused on Bitcoin
+[05:40:50] <ja> hmm, and did he say if the paper will be out?
+[05:40:56] <kcalvinalvin> He called it "stateless clients" which irks me to no end
+[05:41:02] <kcalvinalvin> So I guess he likes Ethereum
+[05:41:22] <kcalvinalvin> Not sure. He didn't say
+[05:44:15] <ja> stateless heh, i don't know what it would mean in this context, isn't it all about maintaining state :O utxos are state
+[18:15:20] *** Quits: rjected (~weechat-h@natp-128-119-202-13.wireless.umass.edu) (Quit: WeeChat 3.0)
+[18:18:20] *** Joins: rjected (~weechat-h@natp-128-119-202-13.wireless.umass.edu)
+[18:27:26] *** Quits: rjected (~weechat-h@natp-128-119-202-13.wireless.umass.edu) (Quit: WeeChat 3.0)
+[18:28:55] *** Joins: rjected (~weechat-h@natp-128-119-202-13.wireless.umass.edu)
+[23:29:31] <adiabat> Hm do you think "stateless clients" is a pun, because there's less state...?
+[23:30:07] <adiabat> maybe not.  Agree I don't like that name because they definitely have state, just smaller, but certainly not 0
+[23:31:07] <adiabat> yeah sorry for the.. rant / essay?  I can write it up or make slides or something for the call tomorrow if that would be interesting
+[23:31:49] <adiabat> I don't want to go off track though, there's plenty to do just getting things working.  Can optimize speed / size ones things are more built out
