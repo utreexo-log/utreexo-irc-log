@@ -1,0 +1,46 @@
+[00:46:14] *** Quits: fjahr (sid374480@gateway/web/irccloud.com/x-kgzulwjjzuyevisv) (Ping timeout: 264 seconds)
+[00:47:30] *** Joins: fjahr (sid374480@gateway/web/irccloud.com/x-rtehnbkvgybyoxca)
+[00:57:39] *** Quits: adiabat (~adiabat@63.209.32.102) (*.net *.split)
+[00:57:39] *** Quits: cfields (~cfields@unaffiliated/cfields) (*.net *.split)
+[00:57:39] *** Quits: ja (janus@anubis.0x90.dk) (*.net *.split)
+[01:17:53] *** Joins: adiabat (~adiabat@63.209.32.102)
+[01:17:53] *** Joins: cfields (~cfields@unaffiliated/cfields)
+[01:17:53] *** Joins: ja (janus@anubis.0x90.dk)
+[05:34:42] <kcalvinalvin> adiabat a write up would be great
+[05:34:59] <kcalvinalvin> Am currently implementing proof storage in btcd
+[05:35:53] <kcalvinalvin> The client *is* working in utcd at the moment. It's kinda sad because pprof shows that the client is basically sitting and waiting for the server 90% of the time
+[05:36:27] <kcalvinalvin> Like I ran for a minute and the client only spent 4 seconds of actual work. Rest is just waiting
+[14:05:16] <adiabat> Hey all, call now at meet.jit.si/utreexo
+[16:43:30] <kcalvinalvin> One goal in general: We should write stuff more
+[16:44:01] <kcalvinalvin> I feel like there's such a disconnect between us and everyone else on Utreexo because we don't talk about it as much as other projects
+[16:44:57] <kcalvinalvin> Like does anyone know we're doing this ttl thing
+[17:31:44] <dergoegge> I agree. What would be a good first thing to write about? Usecases? Caching? Proof sizes?
+[17:32:14] <dergoegge> Or were you thinking more of technicals docs specific to the go implementation?
+[17:34:03] <dergoegge> We could also ask people, what they would be interested in?
+[17:37:22] <ja> something even more important than the go implementation would be the data types involved in the network protocol ;)
+[17:38:01] <ja> i think it would be useful with a list of steps with links to code explaining how the forest is built on the server, and kept up to date, and what it contains
+[17:38:33] <ja> then it can be explained how the client synchronizes state
+[17:39:18] <ja> when the client synchronizes, that walkthrough can refer to concepts introduced when the building of the forest was explained
+[18:14:24] <adiabat> utreexo mailing list..?
+[18:14:48] <adiabat> maybe not, but.. hmm, message board or something...
+[18:15:08] <adiabat> or just write explanation / docs in github
+[18:18:26] <ja> adiabat: there are now 'discussions' on github, did you see?
+[18:19:23] <ja> but i think in-tree docs are also fine, especially since it allows people to easily submit inline comments
+[18:24:52] <kcalvinalvin> github gists?
+[18:29:39] <ja> kcalvinalvin: i don't see the point of that because it wouldn't be clear if they are supposed to be updated or not, and they are separate trees, but why? would be a mess to clone everything
+[18:30:35] <ja> discussions covered here https://github.blog/2020-05-06-new-from-satellite-2020-github-codespaces-github-discussions-securing-code-in-private-repositories-and-more/#discussions
+[19:37:10] <adiabat> Hmm the discussions thing isn't here yet though
+[19:37:16] <adiabat> "Available in beta for public repositories soon"
+[20:15:37] <ja> adiabat: but the post is from may, i think you may have to enable it manually like described here: https://docs.github.com/en/free-pro-team@latest/github/administering-a-repository/enabling-or-disabling-github-discussions-for-a-repository#enabling-or-disabling-discussions-for-your-repository
+[20:16:14] <ja> "People with admin permissions to a repository can enable discussions for the repository"
+[20:58:00] <adiabat> hmm will try it
+[21:00:09] <adiabat> ok... wonder if there is an export ability for these things...
+[21:05:20] <ja> i don't think one can rely on that, but there good alternate OSS 'forges' now like Gitlab or Sourcehut...
+[21:05:44] <ja> i see the discussions are enabled now, I will try to think of some good questions
+[21:07:09] <ja> i could repost my previous questions and simply post links to the irc logs with your answers, is that a good idea?
+[21:45:37] <adiabat> Yeah we can try using it for questions that are longer lasting I guess
+[21:46:05] <adiabat> seems simlar to issues but I guess issued are for problems or bugs, and once the bug is fixed we get rid of the issue
+[21:48:44] <adiabat> So questions about how it works or how it should work can be in the discussions tab
+[22:03:47] <ja> yes, that is my understanding as well. kinda of like a more specific/technical bitcoin.stackexchange
+[22:06:28] <ja> except it can contain actual discussion which stackexchange discourages
+[23:21:38] *** Quits: valwal_ (sid334773@gateway/web/irccloud.com/x-xpdkkmqnrtcjkded) (Ping timeout: 260 seconds)
