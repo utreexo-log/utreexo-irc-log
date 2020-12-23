@@ -1,0 +1,23 @@
+[01:29:34] <adiabat> yeah let's try it.  I can write a bit about IBD size reductions.  Also a good place for questions about how it works / what to do
+[04:31:52] <kcalvinalvin> I made a new discussion
+[04:32:05] <kcalvinalvin> Plenty of things to talk about heh
+[10:30:35] *** Joins: valwal_ (sid334773@gateway/web/irccloud.com/x-kcpafitmewgluevi)
+[16:53:07] *** Joins: ghost43_ (~daer@gateway/tor-sasl/daer)
+[16:54:03] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Ping timeout: 240 seconds)
+[16:58:05] <dergoegge> adiabat: do you know if there has ever been a PR/BIP to core that proposed using utxo life times to do "better" caching?
+[16:58:36] <dergoegge> could speed up IBD quite a bit at least for pruned nodes
+[16:59:18] <ja> dergoegge: did you see this document : https://bitcoincore.org/en/2017/03/13/performance-optimizations-1/
+[17:00:52] <ja> i don't think it mentions that, but it does mention ultraprune which is a bit related
+[17:01:16] <kcalvinalvin> Ah yes hehe ultraprune which ended up being a fork because berkleydb sucks
+[17:01:59] <kcalvinalvin> I don't think anyone has ever suggested ttl like caching
+[17:02:05] <kcalvinalvin> Well ok Tadge did
+[17:04:13] <dergoegge> yea i wonder if that would be a controversial proposal?
+[17:04:51] <kcalvinalvin> I remember earlier this year Tadge mentioning that John Newberry liked the idea
+[17:09:52] <ja> kcalvinalvin: i think it would be useful for outsiders if the Jitsi link were also in your github discussions answer. do you think that makes sense?
+[17:10:16] <dergoegge> i am a bit tempted to try and implement it we need ttls in core at some point anyway.
+[17:10:37] <kcalvinalvin> dergoegge heh I'm working on ttls with btcd right now
+[17:11:55] <kcalvinalvin> ja right about that. I think we were trying to purposefully only show it on irc since you really can't have a call with a lot of people
+[17:13:02] <kcalvinalvin> It's meet.jit.si/utreexo
+[17:15:26] <dergoegge> could also put it in the readme. i doubt that a lot of people would show up all at once...
+[17:17:32] <kcalvinalvin> I'm sort of indifferent about it tbh. But I'd assume someone that wants to join in on these calls would also be in irc
+[22:42:56] <dergoegge> discussions is nice. they should add that reply feature to PRs and issues as well
