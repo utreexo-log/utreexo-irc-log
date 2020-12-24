@@ -1,0 +1,13 @@
+[00:14:55] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[00:15:43] *** Quits: ghost43_ (~daer@gateway/tor-sasl/daer) (Ping timeout: 240 seconds)
+[04:40:34] <kcalvinalvin> hmm ok we're keeping an index of only the spendable and not have block spend stxos for the ttls
+[04:41:22] <kcalvinalvin> *same block spends
+[04:41:31] <kcalvinalvin> Should document that too
+[16:19:32] <adiabat> Hey - I've talked to a couple people about using TTL data for levelDB caching
+[16:19:54] <adiabat> some people think it's an insteresting idea, but others were like "seems complicated, probably not worth it"
+[16:20:22] <adiabat> people who have been working on the levelDB stuff have basically said, we've tried all sorts of things to make it faster
+[16:20:57] <adiabat> but in the end just going with the defaults works best for all the different computers / scenarios
+[16:42:03] <kcalvinalvin> Just a thought that I had but if we get better grouping of txos that have similar ttls, cowForest would get a significant performance boost
+[16:42:50] <kcalvinalvin> Since a subtree wouldn't even need to be fetched if all the leaves don't get spent
+[16:44:19] <kcalvinalvin> Or fetched less since a subtree with many leaves that have a ttl of 300,000 would still need to be fetched often if there are couple of leaves that have ttls of around 100
+[21:59:01] *** Quits: mdrollette (~mdrollett@cpe-70-123-125-237.tx.res.rr.com) (Quit: bye)
