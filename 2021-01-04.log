@@ -1,0 +1,14 @@
+[04:31:55] <adiabat> hmmm maybe not.  I'm also getting rid of sending the redundant target hashes which is a bit more complex
+[04:32:27] <adiabat> that and hashing only to intersection with populated is... in retrospect maybe not the best as it's two semi overlapping things at once
+[04:32:48] <adiabat> I think I can get compact serialization & omitting target hashes for now 
+[05:11:21] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[05:11:40] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[06:36:07] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Quit: Leaving)
+[06:36:21] *** Joins: ghost43_ (~daer@gateway/tor-sasl/daer)
+[13:53:32] <dergoegge> i will be a couple minutes late
+[14:01:39] <adiabat> no problem; just me on right now
+[14:11:35] <adiabat> kcalvinalvin: we lost you
+[16:46:38] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[16:53:54] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[22:57:03] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Ping timeout: 240 seconds)
+[22:58:45] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
