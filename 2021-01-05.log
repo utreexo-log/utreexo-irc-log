@@ -1,0 +1,10 @@
+[06:09:05] <kcalvinalvin> I haven't automated the process yet (maybe I'll get it done this week?) but I have the utcd forest pprof up on utcd.kcalvinalvin.com
+[06:09:44] <kcalvinalvin> I'm a bad sysadmin so it might be down occasionally
+[06:09:49] <kcalvinalvin> But it's up now!
+[07:08:36] *** Quits: ghost43_ (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[07:08:54] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[17:08:03] <dergoegge> adiabat: can you add the "good first issue" label to #243?
+[17:10:55] <dergoegge> also #181 and #191 can be closed.
+[19:48:58] <adiabat> OK marked & closed
+[19:49:34] <adiabat> there are a couple others I think are close-able but not sure I should close them or if there are still questions, eg #236
+[20:03:07] <dergoegge> some of the issues could be discussions instead
