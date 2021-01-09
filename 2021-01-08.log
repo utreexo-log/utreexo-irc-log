@@ -1,0 +1,46 @@
+[01:43:26] <ja> adiabat: i think i succeeded in making a non-deterministic algorithm of which remtrans2 is an instance.  i think my algotihm removes elements in a way it is allowed to
+[01:44:17] <ja> but if we take e.g. the 4-leaf tree, and delete leaves 0 and 2, leaf 3 will end up at position 0 and leaf 1 says put
+[01:44:43] <ja> but it might as well be other other way around, since there are proofs for both those leaves
+[01:47:07] <ja> i was thinking it could be something about whether a node was swapped an odd or even number of times. but in relation to what?
+[17:04:57] <adiabat> ja: what do you mean by non-deterministic?  Is there a source of randomness?
+[17:05:38] <adiabat> there are definitely other variants of the remove transform that can work; there's lots of freedom and the current transform is pretty much the simplest
+[17:06:19] <ja> adiabat: i just mean that my algorithm generates a list of forests, while remtrans implies just one forest. but the remtrans forest is always in my list of forests
+[17:06:26] <adiabat> one variation which I had but took out a while (but should try again) is "SibSwap", which swaps siblings when both are known and left > right
+[17:06:36] <adiabat> ah OK yes that makes sense
+[17:06:54] <adiabat> there are many other algorithms that can work with the incoming data we have
+[17:07:05] <adiabat> and some of them are likely much better in terms of proof sizes
+[17:07:12] <adiabat> well, probably not "much"
+[17:07:38] <ja> but i want to make it equal to remtrans, i am just having a hard time figuring out how remtrans actually works, since my algorithm is totally different
+[17:07:55] <adiabat> I don't know though, if there's actual different algorithms that are significantly smaller / faster it would certainly be worth switching
+[17:08:16] <ja> so many i should actually just plot all those different options
+[17:08:22] <ja> but how to develop a sensible benchmark?
+[17:09:08] <adiabat> yeah that's the hard part, the benchmark would really be against observed mainnet data
+[17:09:39] <adiabat> since it's using the heuristics of new UTXOs are often spent quicky, etc
+[17:09:47] <ja> my algorithm is just copying over perfect subtrees with no proofs until there are no more left, and then the remaining leaves can be copied over. but as shown in my example above, if i just take those leaves in order, it won't work, they need swizzling
+[17:10:28] <adiabat> though it's modular enough now that if you replace remtrans2 with some other variat that works, then do a mainnet IBD, it should work
+[17:11:11] <adiabat> yeah for example right now in remtrans, the first thing it does is extractTwins
+[17:11:24] <adiabat> which skips over all "twin" deletions
+[17:11:56] <adiabat> but you could move things into those spots in that they're all proven and available for hashes to swap into
+[17:12:51] <adiabat> skipping over twins (& flagging the parent) is the simplest way to go, but there's lots of other things you could do
+[17:13:41] <ja> but why only twins? why not quads? the point is just to find large perfect subtrees, no?
+[17:14:02] <adiabat> well if you run extractTwins it'll also get rid of runs of 4, 6, 8 etc
+[17:14:36] <adiabat> and then the latter functions rely on the fact that all deletions are next to a non-deleted but known hash
+[17:15:21] <adiabat> hm actually maybe it would still work if you just took out extractTwins()
+[17:15:32] <adiabat> in makeSwaps the main line is 
+[17:15:34] <adiabat> rowSwaps[i] = arrow{from: dels[1] ^ 1, to: dels[0]}
+[17:16:07] <adiabat> if dels[0] is the sibling of dels[0] it will just swap them, which does nothing
+[17:16:19] <adiabat> er
+[17:16:40] <adiabat> dels[0] the sibling of dels[1], which means dels[1]^1 == dels[0]
+[17:16:55] <adiabat> so you get an arrow{ dels[0], dels[0] }
+[17:17:31] <adiabat> so maybe you can just comment out extractTwins and it still works, just with a bunch of swaps that do nothing
+[17:22:22] <ja> hmm, so that would mean dels for makeSwaps would always be empty?
+[17:23:04] <ja> ah no, it would just remain the same
+[17:25:06] <ja> so when you say it would have a bunch of swaps that do nothing, you mean, the forest would be equivalent? or merely that it would still conform to the swapping rules (can't swap rehash nodes with no proof for them)?
+[17:30:17] <adiabat> I think it would end up with the same forest
+[17:31:36] <adiabat> so just removing extractTwins() alone might not change anything
+[17:31:58] <adiabat> but if you remove extractTwins(), you could change makeSwaps() 
+[17:32:46] <adiabat> for example, making it so that the first non-twin deletion sibling moves to the first deletion
+[17:32:57] <adiabat> even if that first deletion is a twin
+[17:33:45] <adiabat> that would result in a different forest, but would still work in that it would all be hashable
+[17:37:19] <ja> interesting, i will experiement
+[18:16:12] <adiabat> sure let me know if there's anything I can explain better.  it is kindof confusing... still not the best docs
