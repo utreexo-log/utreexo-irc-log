@@ -1,0 +1,14 @@
+[01:56:18] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[01:56:38] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[04:51:44] <kcalvinalvin> Ok I benchmarked btcd with the IsUnspendable in the utreexo repo.
+[04:51:59] <kcalvinalvin> It's *slightly* faster
+[04:54:25] <kcalvinalvin> I both ran them for 2 hours and profiled them. The one with the utreexo repo's IsUnspendable got to ~293,000 and btcd master got to ~292,000
+[09:23:24] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Ping timeout: 240 seconds)
+[10:16:53] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[11:20:43] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Ping timeout: 240 seconds)
+[11:22:28] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[16:08:10] <dergoegge> Hm thats pretty minimal. I assume this is on mainnet? Maybe there is a bigger difference for the blocks 300k-600k since they are mostly full
+[17:04:59] <kcalvinalvin> yeah this was on mainnet
+[17:06:04] <kcalvinalvin> Maybe? But in general, the time taken up by IsUnspendable is small according to pprof so I don't think it'd make a huge difference
+[17:36:07] *** Quits: rjected (~weechat-h@natp-128-119-202-13.wireless.umass.edu) (Quit: WeeChat 3.0)
+[17:37:37] *** Joins: rjected (~weechat-h@natp-128-119-202-13.wireless.umass.edu)
