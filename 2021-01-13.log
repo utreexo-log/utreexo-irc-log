@@ -1,0 +1,23 @@
+[03:17:22] *** Quits: achow101 (~achow101@unaffiliated/achow101) (Quit: Bye)
+[03:18:48] *** Joins: achow101 (~achow101@unaffiliated/achow101)
+[03:20:51] *** Quits: achow101 (~achow101@unaffiliated/achow101) (Client Quit)
+[03:21:01] *** Joins: achow101 (~achow101@unaffiliated/achow101)
+[08:06:32] <kcalvinalvin> dergoegge adiabat wanna do a midweek call? We can set up our mini utreexo network
+[08:06:51] <kcalvinalvin> Also, csn is ridiculously fast...
+[10:41:19] <dergoegge> Sure i have time today (after 10am EST) or tomorrow (all day)
+[16:13:09] <adiabat> I can join a call other than 2-3:30 EST
+[17:19:53] <kcalvinalvin> tomorrow is good. I'll have time to fix a bug
+[17:21:15] <kcalvinalvin> Say.... 9am or 10am EST?
+[17:21:21] <kcalvinalvin> So around the usual time
+[17:47:55] <adiabat> thursday 9am edt?  OK.  Or 10am, either works for me
+[18:24:26] <dergoegge> Both times work for me as well
+[18:32:21] <kcalvinalvin> I like 10am
+[18:32:22] <kcalvinalvin> :)
+[18:40:04] <adiabat> ok 10am tomorrow works
+[18:43:10] <dergoegge> 👍
+[22:13:09] <adiabat> potential UROP (undergrad researcher) who might be interested in working on utreexo tried compiling / running it
+[22:13:48] <adiabat> got csnclient.go:28 "panic: EOF" on startup when she tried to run utreexoclient.  
+[22:14:32] <adiabat> this is on macOS so I bet it's some file permissions or file open / close thing.  Anyway I put some slightly better errors in but would be cool to have someone try it on a different OS
+[22:18:49] <adiabat> also I don't know if anyone has tried it on windows... would be good to try there as well
+[22:19:31] <adiabat> since most people don't run linux, and if the first thing they try to do is git clone or go get and then it doesn't work, might lose interest
+[22:26:01] <dergoegge> Ok i will try to reproduce on my mac tomorrow morning.
