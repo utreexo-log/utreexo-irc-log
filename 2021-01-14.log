@@ -1,0 +1,14 @@
+[09:17:45] <dergoegge> hm works on my machine :D tried mainnet and testnet with local bridge
+[10:42:03] <kcalvinalvin> ok I'm still fairly excited to show what I got with csn but there are also some problems still need to be worked out :/
+[18:40:57] <kcalvinalvin> ok the segwit bug was a dumb mistake by me
+[18:41:07] <kcalvinalvin> I was just encoding it was a non segwit block in the server
+[18:41:11] <kcalvinalvin> doh
+[19:29:24] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Ping timeout: 240 seconds)
+[19:33:03] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[19:46:25] <kcalvinalvin> looking at github.com/decred/dcrd with the dumb parseScript thing
+[19:46:28] <kcalvinalvin> https://github.com/decred/dcrd/commit/9e8bfd2493e41317e744f131eb4980f47298665a#diff-23a41486d8ee69a4a08e31214e00ee809de4891f316ca9b6d2587095bc800f10
+[19:46:46] <kcalvinalvin> Looks like they have a whole series of commits fixing it up
+[20:08:13] *** Joins: ghost43_ (~daer@gateway/tor-sasl/daer)
+[20:08:18] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Quit: Leaving)
+[21:30:43] *** Quits: felixweis (sid154231@gateway/web/irccloud.com/x-ammtqmswwvkhmxzx) (Ping timeout: 260 seconds)
+[21:31:02] *** Joins: felixweis (sid154231@gateway/web/irccloud.com/x-mdptrwlrtlphtxkd)
