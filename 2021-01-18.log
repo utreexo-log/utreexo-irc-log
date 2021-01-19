@@ -1,0 +1,28 @@
+[00:13:43] *** Quits: rjected (~weechat-h@natp-128-119-202-13.wireless.umass.edu) (Quit: WeeChat 3.0)
+[00:15:14] *** Joins: rjected (~weechat-h@natp-128-119-202-13.wireless.umass.edu)
+[00:45:24] *** Quits: adiabat (~adiabat@63.209.32.102) (Ping timeout: 260 seconds)
+[00:45:54] *** Joins: adiabat (~adiabat@63.209.32.102)
+[12:56:30] *** Quits: rjected (~weechat-h@natp-128-119-202-13.wireless.umass.edu) (*.net *.split)
+[12:59:10] *** Joins: rjected (~weechat-h@natp-128-119-202-13.wireless.umass.edu)
+[13:06:08] <adiabat> hey want to skip today's meeting and do one later in the week?  I haven't done much since the last call a few days ago, and it's a holiday in the USA today
+[13:06:20] <adiabat> so another call like wed/ thurs would work
+[13:06:44] *** Quits: icota[m] (icotamatri@gateway/shell/matrix.org/x-dgnmutgdubocbohk) (Ping timeout: 240 seconds)
+[13:24:04] <dergoegge> Only wednesday would work for me
+[13:25:05] <adiabat> ok; can also do later in the day; claire is in California .... but then that conflicts with calvin I guess
+[13:27:26] <dergoegge> I could also do friday. Or later today but yea thats not great for calvin
+[13:29:41] <dergoegge> Im also fine with skipping today, havent done much since the last call
+[13:39:34] <kcalvinalvin> I've done a bit heh. I can do a short one or later in the week
+[13:59:25] *** Joins: icota[m] (icotamatri@gateway/shell/matrix.org/x-iopmavcdjfxpsgts)
+[14:01:01] <adiabat> we could talk now if you want
+[14:01:07] <adiabat> maybe shorter as I don't have anything
+[14:01:42] <kcalvinalvin> ok I'll get on jitsi
+[17:21:09] <kcalvinalvin> I have it now so that CSNs ignore all nodes that aren't bridgenodes
+[17:21:32] <kcalvinalvin> We still want bridgenodes to be connected to non utreexo nodes right? Still needs to keep up with the chain
+[17:21:53] <kcalvinalvin> Like, all the normal node functionality is still there as well
+[17:56:42] <dergoegge> bridges should and can do everything normal full nodes do. i think for now its ok if the csns only connect to bridges (for the demo at least)
+[18:39:55] <adiabat> yeah for now bridgenodes can connect around.  Wondering if they should advertise being a bridge node or not
+[18:40:06] <adiabat> maybe they should only respond "I'm a bridge" if a CSN asks
+[18:40:26] <adiabat> and if they connect out, they just say they're a regular node
+[18:40:58] <adiabat> so the CSN will be the one connecting to nodes, asking if they're bridge (or rather, utreexo compatible) and then disconnecting if they're not
+[18:41:22] <adiabat> right now I guess CSN will just connect to a signle bridge
+[18:41:53] <adiabat> evnetually CSNs could connect to each other, and won't be able to know who's a bridge and who's a CSN I guess.  That's a ways off though
