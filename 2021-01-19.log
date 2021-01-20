@@ -1,0 +1,26 @@
+[00:15:33] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[00:16:20] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[12:10:32] <kcalvinalvin> like csns that propagate latest blocks?
+[12:30:06] <dergoegge> testnet IBD with the btcd csn took ~3h, i will run normal btcd to compare
+[12:31:39] <dergoegge> bitcoin core took ~30min
+[12:36:16] <kcalvinalvin> What commit was this on?
+[12:40:13] <dergoegge> 323dfb8c8cf2396d9d11a415c7d153bad2dca385
+[12:46:19] <kcalvinalvin> bitcoind has assumevalid up to block 1,864,000 and btcd-csn will check for signatures starting from block 1,300,007
+[12:46:40] <kcalvinalvin> may also help :)
+[12:47:42] <kcalvinalvin> sorta bad with btcd since the "non-signature-checking" bits are done as checkpoints and not the assumevalid thing bitcoind does
+[12:58:46] <kcalvinalvin> I guess in general the csn can keep up with bitcoind up until you start checking signatures
+[12:58:52] <kcalvinalvin> Then the csn slows down a lot
+[13:02:59] <dergoegge> i will run bitcoind with -assumevalid=1300007 next that should be fair
+[14:01:33] <dergoegge> (csn to 1300007: ~1h, normal btcd: ~1.5h)
+[14:03:11] <dergoegge> i should say the machine i am doing this on is pretty fast. maybe i should do this on my 2015 macbook instead.
+[14:28:10] <kcalvinalvin> ok so 1h vs 1.5h is still a good boost in speed
+[14:28:46] <kcalvinalvin> the numbers shouldn't be that much off unless you're on a hdd
+[14:28:51] <kcalvinalvin> then csn would be a lot faster
+[14:29:24] <kcalvinalvin> *unless the macbook is running on an hdd
+[14:30:17] <dergoegge> true, it has a ssd but i could try with an external hdd
+[14:31:07] <kcalvinalvin> that could be an interesting test
+[14:31:18] <kcalvinalvin> I would like to see the numbers :)
+[18:35:53] *** Quits: ja (janus@anubis.0x90.dk) (Quit: leaving)
+[19:04:00] *** Joins: ja (janus@anubis.0x90.dk)
+[20:16:22] <dergoegge> Normal btcd took ~4h
+[20:16:33] <dergoegge> Now trying on my mac...
