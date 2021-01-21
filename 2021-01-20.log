@@ -1,0 +1,9 @@
+[02:18:46] *** Quits: gnusha (~gnusha@unaffiliated/kanzure/bot/gnusha) (Quit: leaving)
+[02:19:01] *** Joins: gnusha (~gnusha@unaffiliated/kanzure/bot/gnusha)
+[10:09:58] <dergoegge> on my mac: csn to 1300007: 3h, btcd: 5h
+[10:10:18] <dergoegge> not as crazy as i expected but still significant.
+[10:11:41] <dergoegge> testnet is probably not the best choice for these comparisons
+[10:15:17] <kcalvinalvin> I'll start syncing mainnet with the bridgenode
+[10:16:01] <kcalvinalvin> I mean, 2 hours is pretty good I'd say for not fixing all the other problems btcd has :)
+[10:16:42] <kcalvinalvin> Parallel sync is... hard... Particularly because of network stuff
+[10:17:04] <kcalvinalvin> At least we don't have the problem of needed multiple dbs
