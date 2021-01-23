@@ -1,0 +1,34 @@
+[00:21:51] *** Quits: rjected (~weechat-h@natp-128-119-202-13.wireless.umass.edu) (Quit: WeeChat 3.0)
+[00:41:37] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (*.net *.split)
+[00:41:37] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (*.net *.split)
+[00:59:09] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[00:59:37] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[04:17:51] *** Joins: jag (ce74f314@d206-116-243-20.bchsia.telus.net)
+[04:18:14] *** jag is now known as Guest72124
+[04:18:18] *** Quits: Guest72124 (ce74f314@d206-116-243-20.bchsia.telus.net) (Client Quit)
+[04:19:08] *** Joins: zanuck1 (ce74f314@d206-116-243-20.bchsia.telus.net)
+[04:20:10] <zanuck1> I would like to add utreexo to a bitcoin fork, how do I go about starting?
+[04:21:42] <zanuck1> I was thinking of just adding it to the actual core
+[04:38:42] <ja> zanuck1: i don't know if altcoins are on-topic for this channel but since the current codebase is based on btcd, maybe look at how ltcd works first, then port those onto utcd
+[04:39:06] *** Quits: zanuck1 (ce74f314@d206-116-243-20.bchsia.telus.net) (Quit: Connection closed)
+[05:13:45] *** Joins: zanuck1 (ce74f314@d206-116-243-20.bchsia.telus.net)
+[05:18:37] <zanuck1> @ja is it implemented for ltcd?
+[05:52:38] *** Quits: zanuck1 (ce74f314@d206-116-243-20.bchsia.telus.net) (Quit: Ping timeout (120 seconds))
+[06:44:27] *** Joins: zanuck1 (ce74f314@d206-116-243-20.bchsia.telus.net)
+[06:44:40] *** Quits: zanuck1 (ce74f314@d206-116-243-20.bchsia.telus.net) (Client Quit)
+[06:57:39] <kcalvinalvin> bridgenode used up ~690GB up to block 550,000ish and crashed because it used up all my storage :/
+[06:58:05] <kcalvinalvin> adiabat do you have 2tb servers for google cloud? heh
+[09:22:02] *** Quits: icota[m] (icotamatri@gateway/shell/matrix.org/x-itxkddlrjoovovxc) (Ping timeout: 268 seconds)
+[10:09:11] *** Joins: icota[m] (icotamatri@gateway/shell/matrix.org/x-xyuivwvawmhjtlhg)
+[14:20:00] <adiabat> kcalvinalvin: I think I can allocate more disk on the servers.  Maybe it needs to be a new server, will look
+[14:20:22] <adiabat> but yeah guessing roughly 2X the storage of a normal full node
+[14:33:51] <adiabat> OK I increased the utcd disk size and bridge disk size
+[14:34:59] <adiabat> though in both cases the disks were mostly empty; did you delete the proofs after I guess?
+[16:11:01] <kcalvinalvin> adiabat dergoegge I've finished the new txscript package without the dumb gc in branch utreexo-saveworkonparsescript-1
+[16:11:17] <kcalvinalvin> All the tests are passing now :) Might be a good time to benchmark
+[16:11:48] <kcalvinalvin> adiabat Yeah should probably recommend 2tb disk if anyone wants to try running their own
+[18:15:58] <adiabat> 1TB should do it right? currently 350GB for mainnet, plus another 350GB for proofs, to about 700GB all in
+[18:16:31] <adiabat> hmm.  There are definitely a whole bunch of ways to reduce that 350GB of proofs, but... probably not worth it. 2X is a good overhead factor
+[19:55:08] <kcalvinalvin> 1tb of free space should do it
+[19:55:49] <kcalvinalvin> usually people have other stuff as well on their 1tb disk so...
+[20:23:07] <dergoegge> Cool! Will do some benchmarking. Is the bridge already running?
