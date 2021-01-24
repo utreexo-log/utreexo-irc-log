@@ -1,0 +1,12 @@
+[03:26:47] *** Joins: rjected (~weechat-h@natp-128-119-202-24.wireless.umass.edu)
+[08:38:21] <kcalvinalvin> I can't connect to the testnet google servers
+[09:10:12] *** Quits: icota[m] (icotamatri@gateway/shell/matrix.org/x-xyuivwvawmhjtlhg) (Ping timeout: 260 seconds)
+[09:21:16] <kcalvinalvin> With mainnet I don't think the gc matters as much. I'm syncing mainnet bridgenode and disk writes are killing the performance I think
+[09:21:27] <kcalvinalvin> Probably killing my ssd
+[09:37:04] *** Joins: icota[m] (icotamatri@gateway/shell/matrix.org/x-fejzzcivcdrlcohg)
+[09:56:21] *** Quits: icota[m] (icotamatri@gateway/shell/matrix.org/x-fejzzcivcdrlcohg) (Ping timeout: 258 seconds)
+[10:20:24] *** Joins: icota[m] (icotamatri@gateway/shell/matrix.org/x-siusbsmcggrluxrz)
+[12:21:13] <kcalvinalvin> ok there still seems to be some minor segwit related bugs with the with txscript package
+[12:21:18] <kcalvinalvin> Am fixing those bugs now
+[14:04:56] <kcalvinalvin> ok fixed
+[14:23:16] <kcalvinalvin> ok well there's another bug
