@@ -1,0 +1,25 @@
+[00:17:08] *** Quits: fjahr (sid374480@gateway/web/irccloud.com/x-phdtnhvmryaozhhn) (Ping timeout: 272 seconds)
+[00:18:05] *** Joins: fjahr (sid374480@gateway/web/irccloud.com/x-hnkxvlxetyetlbcs)
+[00:18:06] *** Joins: digi_james_ (sid281632@gateway/web/irccloud.com/x-mcgalubmefqoyzre)
+[00:18:23] *** Quits: digi_james (sid281632@gateway/web/irccloud.com/x-iabobrmevqgurhyk) (Ping timeout: 272 seconds)
+[00:18:24] *** digi_james_ is now known as digi_james
+[03:33:09] <adiabat> hey all - I can't do a call tomorrow morning so no 9am call
+[03:34:04] <adiabat> Claire is joining as a UROP and is in pacific time for now so ... yeah there's no time that works for everyone, but maybe we can do 10 or 11 am EST to start?
+[03:35:14] <adiabat> I think she will be in boston in a month or so, at which point we can go back to 9am EST; that isn't too late for the other side of the pacific
+[05:35:15] <kcalvinalvin> hmmm so what time are you good adiabat
+[05:35:25] <kcalvinalvin> have some stuff I'd like to talk about
+[13:51:51] <adiabat> can we schedule a 10 or 11 am tomorrow?  also I'll ask claire.  And try to get her on IRC.  Hm maybe I could set up an IRC client on one of the google cloud servers...
+[13:56:34] <dergoegge> both 10 or 11 would work for me
+[14:01:10] <kcalvinalvin> yeah 10 or 11 works
+[14:42:23] <kcalvinalvin> hmm there's a point where proof data overtakes block data in mainnet
+[14:43:06] <kcalvinalvin> I'm on block ~570,000 and proof is 319G while block is 259G
+[18:51:56] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (*.net *.split)
+[18:51:56] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (*.net *.split)
+[20:07:53] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[20:11:13] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[21:36:38] *** Quits: valwal_ (sid334773@gateway/web/irccloud.com/x-mrtijxnbhfqxcrfs) (Ping timeout: 260 seconds)
+[21:38:18] *** Joins: valwal_ (sid334773@gateway/web/irccloud.com/x-xkqcmddsoqhojjwd)
+[22:47:45] *** Quits: adiabat (~adiabat@63.209.32.102) (Remote host closed the connection)
+[22:49:30] *** Joins: adiabat (~adiabat@63.209.32.102)
+[23:00:13] *** Quits: adiabat (~adiabat@63.209.32.102) (Remote host closed the connection)
+[23:05:40] *** Joins: adiabat (~adiabat@63.209.32.102)
