@@ -1,0 +1,56 @@
+[04:20:49] *** Quits: icota[m] (icotamatri@gateway/shell/matrix.org/x-edwxmfygcknzvzdm) (Ping timeout: 265 seconds)
+[04:50:30] *** Joins: icota[m] (icotamatri@gateway/shell/matrix.org/x-bdxdltdflppwpgom)
+[05:01:00] *** Quits: icota[m] (icotamatri@gateway/shell/matrix.org/x-bdxdltdflppwpgom) (Ping timeout: 246 seconds)
+[06:04:57] *** Joins: icota[m] (icotamatri@gateway/shell/matrix.org/x-yooawcqxgpkjerld)
+[15:02:47] <kcalvinalvin> dergoegge hey we're on meet.jit.si/utreexo
+[15:04:29] <dergoegge> Sorry i will be on in 15min
+[15:04:35] <kcalvinalvin> ok no problem
+[16:07:11] <kcalvinalvin> on testnet, csn is currently 255MB
+[16:07:12] <kcalvinalvin> I'
+[16:07:18] <kcalvinalvin> ll see if I can slim that down
+[16:15:54] <adiabat> That's not too big.  How big is it without utreexo?
+[16:17:35] *** Joins: cb__ (uid484481@gateway/web/irccloud.com/x-kqblaaqalcamvweq)
+[16:21:09] <kcalvinalvin> I don't know exactly but around ~36G
+[16:21:18] <kcalvinalvin> also pruning isn't there with btcd (even though it's trivial to put it in)
+[16:33:03] <adiabat> with pruning what would it be?  Like how big is the chaninstate db vs the blocks folder
+[16:33:15] <adiabat> though maybe it's hard to distinguish those 2 in btcd
+[16:37:51] *** Quits: felixweis (sid154231@gateway/web/irccloud.com/x-mdptrwlrtlphtxkd) (Ping timeout: 264 seconds)
+[16:37:53] *** Quits: dergoegge (sid453889@gateway/web/irccloud.com/x-uboeuicxeymktnyo) (Ping timeout: 260 seconds)
+[16:37:53] *** Quits: digi_james (sid281632@gateway/web/irccloud.com/x-mcgalubmefqoyzre) (Ping timeout: 265 seconds)
+[16:37:55] *** Quits: valwal_ (sid334773@gateway/web/irccloud.com/x-xkqcmddsoqhojjwd) (Ping timeout: 272 seconds)
+[16:37:59] *** Quits: gertjaap (sid322815@gateway/web/irccloud.com/x-thecwwyaxsyuguax) (Read error: Connection reset by peer)
+[16:38:02] *** Quits: cb__ (uid484481@gateway/web/irccloud.com/x-kqblaaqalcamvweq) (Read error: Connection reset by peer)
+[16:38:11] *** Quits: fanquake (sid369002@gateway/web/irccloud.com/x-cdfqabdvbagqttfh) (Read error: Connection reset by peer)
+[16:38:11] *** Quits: jamesob (sid180710@gateway/web/irccloud.com/x-kdconuypcvgzahop) (Read error: Connection reset by peer)
+[16:38:13] *** Quits: RubenSomsen (sid301948@gateway/web/irccloud.com/x-xiafkyvtjtuehoop) (Read error: Connection reset by peer)
+[16:38:14] *** Quits: fjahr (sid374480@gateway/web/irccloud.com/x-wkigcsbdradvztsy) (Read error: Connection reset by peer)
+[16:39:30] *** Joins: gertjaap (sid322815@gateway/web/irccloud.com/x-pqjbykpayiaqqiap)
+[16:40:48] *** Joins: fanquake (sid369002@gateway/web/irccloud.com/x-rnluuhvzhkzsagov)
+[16:40:52] *** Joins: digi_james (sid281632@gateway/web/irccloud.com/x-mgsawihcfayicthp)
+[16:42:11] *** Joins: cb__ (uid484481@gateway/web/irccloud.com/x-nkkwtyizbijsqiuo)
+[16:42:23] *** Joins: jamesob (sid180710@gateway/web/irccloud.com/x-vtfhagsmwrtlovku)
+[16:42:28] *** Joins: dergoegge (sid453889@gateway/web/irccloud.com/x-vpggjtvyxjofpnen)
+[16:44:00] *** Joins: fjahr (sid374480@gateway/web/irccloud.com/x-rcvxpwznmxtiozvi)
+[16:44:03] *** Joins: RubenSomsen (sid301948@gateway/web/irccloud.com/x-ukeiamoftqdxfbvz)
+[16:45:44] *** Joins: felixweis (sid154231@gateway/web/irccloud.com/x-smefinmvkaltzcwo)
+[16:45:49] *** Joins: valwal_ (sid334773@gateway/web/irccloud.com/x-hzzvfdtdjawztrby)
+[17:21:41] *** Quits: cb__ (uid484481@gateway/web/irccloud.com/x-nkkwtyizbijsqiuo) (Read error: Connection reset by peer)
+[17:28:57] *** Joins: cb__ (uid484481@gateway/web/irccloud.com/x-vijdrnknuwgdjdhf)
+[18:00:23] *** Quits: fanquake (sid369002@gateway/web/irccloud.com/x-rnluuhvzhkzsagov) (Read error: Connection reset by peer)
+[18:00:39] *** Joins: fanquake (sid369002@gateway/web/irccloud.com/x-emqikykffnffnaen)
+[18:13:54] *** Quits: fanquake (sid369002@gateway/web/irccloud.com/x-emqikykffnffnaen) (Read error: Connection reset by peer)
+[18:17:28] <kcalvinalvin> adiabat everything besides the actual block files are in the same db so it's hard to tell
+[18:18:21] *** Joins: fanquake (sid369002@gateway/web/irccloud.com/x-tpngwnepfkvmuutv)
+[18:25:28] *** Quits: fanquake (sid369002@gateway/web/irccloud.com/x-tpngwnepfkvmuutv) (Read error: Connection reset by peer)
+[18:33:22] *** Joins: fanquake (sid369002@gateway/web/irccloud.com/x-yrhdislyvqwfxdcf)
+[18:54:19] *** Quits: fanquake (sid369002@gateway/web/irccloud.com/x-yrhdislyvqwfxdcf) (Read error: Connection reset by peer)
+[19:14:40] *** Joins: fanquake (sid369002@gateway/web/irccloud.com/x-vaiqnaaqwdstxqrg)
+[21:41:27] *** Quits: rjected (~weechat-h@natp-128-119-202-24.wireless.umass.edu) (Ping timeout: 264 seconds)
+[21:42:58] *** Joins: rjected (~weechat-h@natp-128-119-202-24.wireless.umass.edu)
+[21:50:24] *** Quits: icota[m] (icotamatri@gateway/shell/matrix.org/x-yooawcqxgpkjerld) (Ping timeout: 246 seconds)
+[21:53:36] <dergoegge> Testnet headers should be around 152MB (80*1900000)
+[21:53:47] <dergoegge> Is there a height to blockhash index?
+[21:54:57] <dergoegge> That could be another 60MB(32*1900000)
+[23:14:25] *** Joins: icota[m] (icotamatri@gateway/shell/matrix.org/x-nykqmfpmhprnvrcp)
+[23:23:50] *** Quits: icota[m] (icotamatri@gateway/shell/matrix.org/x-nykqmfpmhprnvrcp) (Quit: Bridge terminating on SIGTERM)
+[23:35:43] *** Joins: icota[m] (icotamatri@gateway/shell/matrix.org/x-ecmdusibinvigata)
