@@ -1,0 +1,33 @@
+[00:38:10] *** Joins: mattdrollette (~mdrollett@cpe-70-123-125-237.tx.res.rr.com)
+[00:38:36] *** Quits: mdrollette (~mdrollett@cpe-70-123-125-237.tx.res.rr.com) (Ping timeout: 240 seconds)
+[02:21:41] *** Quits: mattdrollette (~mdrollett@cpe-70-123-125-237.tx.res.rr.com) (Ping timeout: 256 seconds)
+[02:21:41] *** Quits: fanquake (sid369002@gateway/web/irccloud.com/x-vaiqnaaqwdstxqrg) (Ping timeout: 256 seconds)
+[02:21:47] *** Joins: fanquake_ (sid369002@gateway/web/irccloud.com/x-hooxevzeyzepxlxz)
+[02:21:58] *** Joins: mdrollette (~mdrollett@cpe-70-123-125-237.tx.res.rr.com)
+[03:59:37] <adiabat> the height to blockhash isn't stored anywhere.  I think it's generated on startup and kept in ram
+[03:59:49] <adiabat> (just read the headers)
+[04:00:36] <adiabat> also... yeah there are a lot of testnet blocks.  We can also cut down header size, as it doesn't need to be 80 bytes
+[04:00:46] <adiabat> prevHash can be eliminated, it's totally redundant
+[04:01:14] <adiabat> "bits" is also redundant, only needs to be there once every 2016 blocks, etc
+[04:01:24] <adiabat> I think you can get headers down by almost half
+[04:02:02] <adiabat> I know other bitcoin people have talked about this but nobody's bothered because headers are dwarfed by everything else.
+[04:02:19] <adiabat> but in our case, keeping headers around would be the biggest part
+[05:00:32] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[05:02:19] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[07:57:19] *** Joins: ghost43_ (~daer@gateway/tor-sasl/daer)
+[07:59:03] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Ping timeout: 268 seconds)
+[09:14:14] <kcalvinalvin> there's also some btcd stuff that I can't easily get rid of
+[09:14:23] <kcalvinalvin> Eh... have to just be fine for now
+[09:14:35] <kcalvinalvin> And say that there's more that we can slim up
+[14:29:26] *** Quits: rjected (~weechat-h@natp-128-119-202-24.wireless.umass.edu) (Ping timeout: 264 seconds)
+[15:03:31] *** Joins: rjected (~weechat-h@natp-128-119-202-7.wireless.umass.edu)
+[16:27:04] <kcalvinalvin> adiabat on btcd, since it uses checkpoints and not assumevalid, it skips some of the checks that bitcoind would otherwise do
+[16:27:17] <kcalvinalvin> Should I set it so that it does them? (This is trivial to change)
+[16:37:41] *** Quits: fanquake_ (sid369002@gateway/web/irccloud.com/x-hooxevzeyzepxlxz) (Read error: Connection reset by peer)
+[16:38:05] *** Joins: fanquake_ (sid369002@gateway/web/irccloud.com/x-pllzngnlrrqggqyd)
+[19:44:50] *** Quits: ghost43_ (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[19:45:07] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[21:13:49] <adiabat> wait btcd is still checkpoints, not assumevalid?  does it have more recent checkpoints than bitcoind?
+[23:37:15] *** Joins: felixweis_ (sid154231@gateway/web/irccloud.com/x-xnoihktppjcorqez)
+[23:38:09] *** Quits: felixweis (sid154231@gateway/web/irccloud.com/x-smefinmvkaltzcwo) (Ping timeout: 260 seconds)
+[23:38:17] *** felixweis_ is now known as felixweis
