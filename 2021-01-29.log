@@ -1,0 +1,25 @@
+[01:11:09] *** Quits: icota[m] (icotamatri@gateway/shell/matrix.org/x-ecmdusibinvigata) (*.net *.split)
+[01:12:52] *** Joins: icota[m] (icotamatri@gateway/shell/matrix.org/x-ecmdusibinvigata)
+[01:16:45] *** Quits: icota[m] (icotamatri@gateway/shell/matrix.org/x-ecmdusibinvigata) (Ping timeout: 240 seconds)
+[01:49:30] *** Joins: icota[m] (icotamatri@gateway/shell/matrix.org/x-gtzarhhklecblxod)
+[02:04:14] *** Quits: icota[m] (icotamatri@gateway/shell/matrix.org/x-gtzarhhklecblxod) (Ping timeout: 268 seconds)
+[02:48:57] *** Joins: icota[m] (icotamatri@gateway/shell/matrix.org/x-bfheykxakgkjxtny)
+[07:15:17] <kcalvinalvin> adiabat no the checkpoints are not updated
+[07:15:33] <kcalvinalvin> But you can add (just one line) so it's no biggie
+[07:15:49] <kcalvinalvin> Yes btcd is still checkpoints
+[08:31:20] *** Quits: fanquake_ (sid369002@gateway/web/irccloud.com/x-pllzngnlrrqggqyd) ()
+[08:31:44] *** Joins: fanquake_ (sid369002@gateway/web/irccloud.com/x-fabjqugvqpcyhsnz)
+[10:51:52] *** Quits: rjected (~weechat-h@natp-128-119-202-7.wireless.umass.edu) (Ping timeout: 260 seconds)
+[10:56:11] *** Joins: rjected (~weechat-h@natp-128-119-202-4.wireless.umass.edu)
+[11:07:12] *** Quits: rjected (~weechat-h@natp-128-119-202-4.wireless.umass.edu) (Ping timeout: 272 seconds)
+[11:08:30] *** Joins: rjected (~weechat-h@natp-128-119-202-21.wireless.umass.edu)
+[13:03:26] *** Quits: icota[m] (icotamatri@gateway/shell/matrix.org/x-bfheykxakgkjxtny) (Ping timeout: 240 seconds)
+[13:31:30] *** Joins: icota[m] (icotamatri@gateway/shell/matrix.org/x-zhdvovsiciwherpz)
+[13:48:59] *** Quits: icota[m] (icotamatri@gateway/shell/matrix.org/x-zhdvovsiciwherpz) (Ping timeout: 258 seconds)
+[14:14:15] *** Joins: icota[m] (icotamatri@gateway/shell/matrix.org/x-jsbomptofizmremi)
+[14:42:05] *** Joins: pigeons (~pigeons@androzani.sysevolve.com)
+[14:42:28] *** pigeons is now known as Guest30520
+[14:57:05] *** Guest30520 is now known as pigeons
+[16:36:04] <adiabat> well that's another reason btcd would be much slower.  no assumevalid...
+[18:18:06] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Ping timeout: 268 seconds)
+[18:19:25] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
