@@ -1,0 +1,10 @@
+[03:42:10] *** Joins: rjected_ (~weechat-h@natp-128-119-202-40.wireless.umass.edu)
+[03:44:34] *** Quits: rjected (~weechat-h@natp-128-119-202-40.wireless.umass.edu) (Ping timeout: 256 seconds)
+[06:44:44] *** Quits: fjahr (sid374480@gateway/web/irccloud.com/x-rcvxpwznmxtiozvi) (Ping timeout: 260 seconds)
+[06:44:44] *** Quits: jamesob (sid180710@gateway/web/irccloud.com/x-vtfhagsmwrtlovku) (Ping timeout: 260 seconds)
+[06:44:56] *** Joins: jamesob (sid180710@gateway/web/irccloud.com/x-hvdlyabjxjlicyob)
+[06:45:01] *** Joins: fjahr (sid374480@gateway/web/irccloud.com/x-dqspzugbuztizvad)
+[08:35:54] <adiabat> Hey - Can't do a call tomorrow morning, maybe wednesday again this week.  still need to find a stable time..
+[20:00:27] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[23:15:33] <ja> what does it mean that utcd 'uses' the utreexo accumulator? that it offers proofs, or that it consumes them? or both?
+[23:15:54] <ja> (just my immediate reaction upon reading the release notes for 0.2)
