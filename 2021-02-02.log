@@ -1,0 +1,18 @@
+[02:04:03] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Ping timeout: 268 seconds)
+[02:04:41] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Ping timeout: 268 seconds)
+[02:16:40] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[06:15:37] *** Quits: achow101 (~achow101@unaffiliated/achow101) (Quit: Bye)
+[06:17:06] *** Joins: achow101 (~achow101@unaffiliated/achow101)
+[08:53:18] *** Quits: fanquake_ (sid369002@gateway/web/irccloud.com/x-fabjqugvqpcyhsnz) (Changing host)
+[08:53:18] *** Joins: fanquake_ (sid369002@unaffiliated/fanquake)
+[08:53:18] *** Quits: fanquake_ (sid369002@unaffiliated/fanquake) (Changing host)
+[08:53:18] *** Joins: fanquake_ (sid369002@gateway/web/irccloud.com/x-fabjqugvqpcyhsnz)
+[08:53:56] *** fanquake_ is now known as fanquake
+[14:26:09] *** Joins: drolmer (~drolmer@unaffiliated/drolmer)
+[14:27:52] <drolmer> is there any point in trying to run both the server and client for mainnet?
+[14:33:10] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[17:04:29] *** Quits: cfields (~cfields@unaffiliated/cfields) (Ping timeout: 260 seconds)
+[17:08:10] *** Joins: gchain (gustafmatr@gateway/shell/matrix.org/x-chlrdiivsmhtukjh)
+[17:11:50] *** Joins: cfields (~cfields@unaffiliated/cfields)
+[17:44:56] *** Joins: sunon (duncandean@gateway/shell/matrix.org/x-cecqrpubbhbrvdpk)
+[18:29:09] <dergoegge> ja it does both :)
