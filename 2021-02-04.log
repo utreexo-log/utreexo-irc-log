@@ -1,0 +1,12 @@
+[06:01:25] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[06:01:51] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[06:05:22] <kcalvinalvin> Ok so I'm taking a step back and looking at the utreexo repo (in like forever)
+[06:06:03] <kcalvinalvin> And we don't have a memory leak. It's just that when the block read happens (reading off the blk.dat), there's a ton of memory allocations
+[06:06:43] <kcalvinalvin> And those don't get collected right away, so they take up approximately 5GB around height ~433,000
+[06:07:15] <kcalvinalvin> If I set the gc to collect often, memory usage stays around 7GB for ramForest for height ~433,000
+[06:07:34] <kcalvinalvin> about 4.7GB for forest, about 3GB for posmap
+[06:11:25] <kcalvinalvin> Also, we need to get rid of dbWorker. Pprof tells me it allocated 1485GBs on a test I ran for like 15 minutes
+[12:18:42] *** Joins: ghost43_ (~daer@gateway/tor-sasl/daer)
+[12:19:56] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Ping timeout: 268 seconds)
+[21:42:57] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Ping timeout: 268 seconds)
+[21:44:18] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
