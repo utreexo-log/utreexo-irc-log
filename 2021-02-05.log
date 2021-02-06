@@ -1,0 +1,30 @@
+[00:40:05] *** Quits: rjected_ (~weechat-h@natp-128-119-202-40.wireless.umass.edu) (Ping timeout: 240 seconds)
+[00:42:22] *** Joins: rjected_ (~weechat-h@natp-128-119-202-40.wireless.umass.edu)
+[03:52:28] *** Quits: rjected_ (~weechat-h@natp-128-119-202-40.wireless.umass.edu) (Ping timeout: 276 seconds)
+[03:53:57] *** Joins: rjected_ (~weechat-h@natp-128-119-202-40.wireless.umass.edu)
+[04:19:12] *** Quits: rjected_ (~weechat-h@natp-128-119-202-40.wireless.umass.edu) (Read error: Connection timed out)
+[04:19:37] *** Joins: rjected_ (~weechat-h@natp-128-119-202-40.wireless.umass.edu)
+[04:29:54] <adiabat> how do we get rid of dbworker?
+[04:31:03] <adiabat> like, it's dumb because it's only storing this tuny 4 byte value, but if we don't have it...
+[04:31:20] <adiabat> then we'd have to search through every tx in the block every time we want to write a ttl
+[04:33:44] <adiabat> 3GB for posmap is ... bad but ... oh I *do* have another way to do it more efficiently
+[04:34:07] <adiabat> but... that's some whole other fun thing to code which... yeah maybe better not to get into now
+[04:35:04] <adiabat> maybe dbWorker can be more efficient if we have a cache in front of it...?
+[04:35:38] <adiabat> it seems a little crazy since the whole point of the dbWorker is ultimately to get TTL values to cache better
+[04:36:22] <adiabat> but we could keep a 10 block or so map of outpoint : positionInBlock
+[04:36:44] <adiabat> and then only write to the DB the entries that are still around after 10 blocks and flush them from the map then
+[04:37:00] <adiabat> (if they haven't been removed from the map by getting spent first)
+[04:37:23] <adiabat> would cut down db writes by half or so, and doesn't take much ram
+[04:37:46] <adiabat> of course, this server isn't really as important because the btcd stuff will be what everyone uses
+[07:27:37] <kcalvinalvin> adiabat We should also start talking about long term goals (at least for this year)
+[07:28:15] <kcalvinalvin> I'm thinking we should start focusing more on the actual library more and port those to C++ (and maybe Rust)
+[07:29:13] <kcalvinalvin> I have a lot of doubts about btcd merge happening in a reasonable time-frame
+[07:29:32] <kcalvinalvin> In contrast, Bitcoin Core and rust-bitcoin are at least active
+[07:50:06] *** Quits: ghost43_ (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[07:50:26] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[08:26:41] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[08:27:03] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[22:00:51] *** Quits: rjected_ (~weechat-h@natp-128-119-202-40.wireless.umass.edu) (Ping timeout: 246 seconds)
+[23:31:28] *** Joins: UsmannK (1805ae26@c-24-5-174-38.hsd1.ca.comcast.net)
+[23:38:56] *** Quits: UsmannK (1805ae26@c-24-5-174-38.hsd1.ca.comcast.net) (Quit: Ping timeout (120 seconds))
+[23:46:32] *** Joins: rjected (~weechat-h@natp-128-119-202-42.wireless.umass.edu)
