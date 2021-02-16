@@ -1,0 +1,6 @@
+[04:58:20] *** Quits: valwal_ (sid334773@gateway/web/irccloud.com/x-hzzvfdtdjawztrby) (Ping timeout: 265 seconds)
+[04:58:46] *** Joins: valwal_ (sid334773@gateway/web/irccloud.com/x-qvpxoxhtuwlhafap)
+[14:06:51] <adiabat> ok call in 54 min (used to be 9am but more recently was 10, and I think 10 will be "sustainable")
+[14:07:29] <dergoegge> 👌
+[17:12:35] <kcalvinalvin> Pushed some more PRs. Have a few more that I'll get to tomorrow
+[19:32:21] <adiabat> cool I will merge PR #252 and then get the flat file TTL working on top of that
