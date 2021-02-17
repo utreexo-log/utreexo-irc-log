@@ -1,0 +1,12 @@
+[12:36:56] *** Quits: rjected (~weechat-h@natp-128-119-202-10.wireless.umass.edu) (Ping timeout: 240 seconds)
+[12:39:13] *** Joins: rjected (~weechat-h@natp-128-119-202-10.wireless.umass.edu)
+[16:18:22] <kcalvinalvin> ok sibSwap is a bit tricky
+[16:18:38] <kcalvinalvin> Gave it a go but isn't a couple line change :/
+[17:02:35] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[17:03:08] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[17:12:19] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[17:12:41] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[22:38:44] <adiabat> yeah it interacts with undo... can ignore undo for now
+[22:39:17] *** Joins: ghost43_ (~daer@gateway/tor-sasl/daer)
+[22:39:47] <adiabat> also touches a bunch of other things... it *feels* like it should be simple, and it kind of is, but it touches various places
+[22:39:56] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Ping timeout: 268 seconds)
