@@ -1,0 +1,9 @@
+[15:23:16] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[15:25:52] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[15:26:15] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[15:27:33] *** Quits: ghost43_ (~daer@gateway/tor-sasl/daer) (Ping timeout: 268 seconds)
+[16:15:36] <kcalvinalvin> adiabat I made a new comment on PR #250 yesterday
+[16:15:54] <kcalvinalvin> Letting you know in case you haven't seen it yet :)
+[16:48:56] *** Quits: mdrollette (~mdrollett@cpe-70-123-125-237.tx.res.rr.com) (Quit: bye)
+[17:24:10] <kcalvinalvin> I have one more PR to submit that changes a bit of how cowforest works
+[17:26:06] <kcalvinalvin> I'll push it later since here's one function that depends on PR #254. Besides that it doesn't touch anything else outside of forestdata and forestdata_test.
