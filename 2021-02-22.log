@@ -1,0 +1,18 @@
+[00:40:30] *** Joins: rshar (44304623@c-68-48-70-35.hsd1.mi.comcast.net)
+[00:41:36] *** Quits: rshar (44304623@c-68-48-70-35.hsd1.mi.comcast.net) (Client Quit)
+[11:05:03] *** Joins: ghost43_ (~daer@gateway/tor-sasl/daer)
+[11:05:12] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[17:03:29] <dergoegge> adiabat: you said you will get rid of ProofPositions? i have started to look at hash to known for the c++ lib and i think that function is useful there. its also used for creating proofs.
+[17:03:41] <dergoegge> just curious if you remove it what you will use instead
+[21:04:16] *** Joins: mdrollette (~mdrollett@cpe-70-123-125-237.tx.res.rr.com)
+[22:07:27] <adiabat> dergoegge: the new function I had taking the place of ProofPositions was proofNodes
+[22:08:05] <adiabat> the idea is instead of returning the positions (uint64) of everything in the proof up to the roots, it instead returns pointers to the nodes themselves
+[22:08:32] <adiabat> also it's a method on the pollard so it knows how far up to go, and doesn't keep going up to the roots if hashes are already there
+[22:09:14] <adiabat> so in the extreme case where everything is cached, it will just go through the leaves, returning leaf nodes
+[22:09:41] <adiabat> then it will check that they match the leaves being proven.  So the whole thing stays on the bottom row and never moves up
+[22:10:57] <adiabat> if you run it on a fully unpopulated pollard, then it should do the same as ProofPositions (except pointers instead of positions that then have tobe grabPos'd
+[22:11:31] <adiabat> .. then the hard / tricky part which I haven't gotten is what to do with extra proof hashes.  There are a bunch of options...
+[22:12:02] <adiabat> I think I will start with just server & client both using the same caching so they know each others state
+[22:12:11] <adiabat> which isn't very flexible but I can maybe start that way
+[22:17:21] *** Quits: adiabat (~adiabat@63.209.32.102) (Ping timeout: 264 seconds)
+[22:19:28] *** Joins: adiabat (~adiabat@63.209.32.102)
