@@ -1,0 +1,13 @@
+[03:03:27] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[03:03:39] *** Joins: ghost43_ (~daer@gateway/tor-sasl/daer)
+[07:30:21] <kcalvinalvin> doing locality plotting
+[07:30:26] <kcalvinalvin> Doesn't look good...
+[07:30:58] <kcalvinalvin> My laptop is too slow to do higher up blocks but the very right of the forest is getting accessed a lot
+[13:36:31] <dergoegge> maybe it makes sense to plot the positions as targetpos/numLeaves? then the distributions for the older blocks dont vanish as you plot more blocks
+[13:37:44] <dergoegge> the gaps also seem interesting
+[13:39:26] <dergoegge> block 150k was around ~2011, maybe more recent blocks have better locality?
+[14:43:47] <adiabat> "the very right of the forest is getting accessed a lot           
+[14:43:58] <adiabat> kcalvinalvin: but that sounds good!
+[14:44:36] <adiabat> we want all the access on the right, that's where the trees are shortest & cluster together...
+[18:31:33] *** Quits: ghost43_ (~daer@gateway/tor-sasl/daer) (Quit: Leaving)
+[18:31:49] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
