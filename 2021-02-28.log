@@ -1,0 +1,38 @@
+[04:05:46] <adiabat_> I posted more on leaf clustering
+[04:05:48] <adiabat_> https://github.com/mit-dci/utreexo/discussions/245#discussioncomment-414118
+[04:06:22] <adiabat_> I think it's actually very practical.  Just we don't know how much benefit it gives, but if it's a significant benefit it's totally possible.
+[04:06:58] <adiabat_> kind of complicated so should save for later, but... not much worse than the complexity we've got up to now
+[04:07:18] <adiabat_> hm why'd I get a _ on my name.  maybe should reboot :)
+[04:28:15] <kcalvinalvin> hmmm so keep two trees and have the client go back to the current tree
+[04:29:48] <kcalvinalvin> You'd have to rely more on bridgenodes for this right?
+[04:30:33] <adiabat_> no, 1 bridgenode can do it all
+[04:30:43] <adiabat_> it's more work for the bridgenode though
+[04:31:00] <adiabat_> but actually the proofs for the bridgenode to store would end up smaller
+[04:31:13] <adiabat_> but a bunch more time for the bridgenode to generate the proofs
+[04:31:38] <adiabat_> that seems like a good tradeoff because if you have some setup where it takes the bridgenode 10X as long but the proofs are 1/2 the size
+[04:32:04] <adiabat_> then we can make it so bridgenodes sync from each other and don't have to do the 10X work, just one of them does it to start and shares it with the rest
+[04:32:19] <adiabat_> basically a bridgenode IBDing from other bridgenodes
+[04:32:48] <kcalvinalvin> hmmm ok. I am a bit against more expensive bridgenodes because the proofgen is a big slowdown with ibd now (with the utxo set caching)
+[04:32:50] <adiabat_> in fact I think there's no difference in what goes over the network between a csn syncing and a new bridgenode syncing
+[04:33:25] <adiabat_> but it doesn't have to be more expensive, they just don't do it, they get it from somewhere else
+[04:33:53] <adiabat_> I think that's sortof the same as IBD now. You can't *generate* the blocks, you've got to get them from someone else
+[04:34:10] <kcalvinalvin> Ok I get the general picture. Does make implementation a bit more complicated
+[04:34:22] <adiabat_> yeah.  that's the thing, it is more moving parts
+[04:34:32] <adiabat_> so if the benefit is not that big it's not worth it
+[04:34:49] <adiabat_> but... who knows, maybe it's a huge benefit and proof size goes down 90% or something
+[04:34:59] <adiabat_> hard to guess without looking into it more
+[04:35:03] <kcalvinalvin> Yeah I guess it's worth a try
+[04:35:27] <adiabat_> hopefully we can figure out what kind of benefit it gives without doing much implementation work
+[04:35:49] <kcalvinalvin> memttldb had a bug so it kept crashing the bridgenode. Still generating the csv for leaf locality
+[04:36:08] <kcalvinalvin> I'm thinking up to block 640,000 is enough?
+[04:36:16] <kcalvinalvin> It's at 580,000 right now
+[04:36:17] <adiabat_> for testing yeah sure
+[06:49:42] <kcalvinalvin> With the utxoCache, testnet takes around 1h30m for bridgenode. Very useable I think.
+[06:51:33] <kcalvinalvin> oh wait, I'm running off the accumulator before getRootsForwards so it should be even faster than 1h30m
+[10:05:21] *** Quits: rjected (~weechat-h@natp-128-119-202-10.wireless.umass.edu) (Quit: WeeChat 3.0.1)
+[14:25:15] *** Quits: pigeons (~pigeons@androzani.sysevolve.com) (*.net *.split)
+[14:25:23] *** Joins: pigeons (~pigeons@androzani.sysevolve.com)
+[14:25:47] *** pigeons is now known as Guest47624
+[20:33:34] *** Joins: rjected (~weechat-h@natp-128-119-202-6.wireless.umass.edu)
+[22:11:38] *** Joins: ghost43_ (~daer@gateway/tor-sasl/daer)
+[22:13:01] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Ping timeout: 268 seconds)
