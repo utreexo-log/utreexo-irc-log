@@ -1,0 +1,81 @@
+[16:33:37] <adiabat_> yeah the log scale color plots are cool
+[16:34:02] <adiabat_> can see a lot more...
+[16:34:28] <adiabat_> I would maybe change the yellow to red or something, as it blends in with the white background so it's a bit hard to see the yellow edge
+[16:35:12] <adiabat_> this also shows some really weird things
+[16:35:37] <adiabat_> the vertical bands that fade as they go downwards... what could cause that?
+[16:36:35] <adiabat_> the 600K image shows them really well, but they're in every image
+[16:37:36] <adiabat_> there's a clear one around leaf position 6M, around height 648K or so
+[16:38:29] <adiabat_> but yeah they're all over the place.  A bright line in a region, and then it fades back down to background noise over thousands of blocks
+[16:38:54] <adiabat_> I have a guess as to what these are: high row swaps
+[16:39:36] <kcalvinalvin> Yeah the colors are sorta hard :(. You have to pick from one of these https://matplotlib.org/stable/tutorials/colors/colormaps.html. I can re-do the plot to the color you think is good
+[16:39:56] <adiabat_> where a swap happens up at height 15 or so, moving a bunch of new leaves from the yellow region deep into the blue region
+[16:40:24] <adiabat_> and those UTXOs are new, and so they keep getting spent at a high rate, so you get the band as they get spent / die off
+[16:42:05] <adiabat_> also like around height 633K, there's a bunch of really thin bands that show up in the 1.6 - 2.2M leaf region
+[16:42:14] <adiabat_> wait no that's 16M to 22M
+[16:42:42] <adiabat_> I guess that happens when someone spends really old UTXOs.  It creates a gap way back to the left, and something's gotta fill that gap
+[16:43:11] <adiabat_> and whatever you try to fill it with, it's going to be "hotter" than the old stuff around it
+[16:43:42] <adiabat_> and then that keeps happening; 300K block old UTXO get spent, makes a gap, fill in the gap with a new utxo
+[16:44:01] <adiabat_> new utxo gets spent 3 blocks later, same gap opens up, fill it in with a new utxo
+[16:44:31] <adiabat_> repeat until eventually someone puts a utxo there that they will sit on (hodl)
+[16:44:51] <kcalvinalvin> Also one other thing that I noticed. Some of the horizontal greens match up with the utxo spending pattern visualized here https://utxo.live/triangle/. The problem with utreexo stuff is that almost all of the forest gets changed (instead of maybe to like the middle)
+[16:45:53] <kcalvinalvin> oooh hmm yeah the vertical stuff makes sense
+[16:46:30] <adiabat_> yeah there are bands like at height 510K, 542-549K, etc
+[16:46:40] <kcalvinalvin> I guess in that sense the locality isn't so bad for cowforest caching? Since the same range will get accessed
+[16:46:47] <adiabat_> those are times when we know there was a lot of consolidation
+[16:47:04] <kcalvinalvin> For proofs I think they hurt
+[16:47:19] <adiabat_> right, there doesn't seem to be any way around that though
+[16:47:38] <adiabat_> people spending old stuff is going to be harder than spending new stuff
+[16:48:01] <kcalvinalvin> If people hodl more we can ibd faster
+[16:48:04] <kcalvinalvin> HODL
+[16:48:05] <adiabat_> these are super cool charts though, should sell them to like blockchain analytics traders or something
+[16:48:36] <adiabat_> yeah the vertical bands do seem... sub optimal
+[16:48:56] <adiabat_> as they're persistent and way in the middle...
+[16:49:20] <adiabat_> also it doesn't always happen.  the large horizontal bands don't really fade out, they just cut off
+[16:49:24] <kcalvinalvin> those empty vertical bands are great
+[16:49:43] <adiabat_> empty?  oh like in the ancient blocks?
+[16:50:06] <kcalvinalvin> like up til block 300,000 you have that empty veritcal band
+[16:50:10] <adiabat_> it just looks bigger because the scale is 100X smaller in the old charts
+[16:50:17] <kcalvinalvin> ahhh
+[16:50:34] <adiabat_> someone made a couple thousand spam txs back before op_return was a thing I guess
+[16:50:41] <adiabat_> and those utxos are still there forever...
+[16:51:07] <adiabat_> probably not worth it but we could see what those are and if they're unspendable could alter the isUnspendable() call to ignore them
+[16:51:25] <kcalvinalvin> What if they're spendable
+[16:51:34] <adiabat_> well then have to leave them :)
+[16:51:42] <adiabat_> very likely lost by now
+[16:52:19] <kcalvinalvin> Overall, I guess the locality isn't bad
+[16:52:25] <kcalvinalvin> Some stuff to fix
+[16:52:26] <adiabat_> first 100K blocks is easy, not much going on
+[16:52:42] <adiabat_> yeah there are things that are not perfect but... I don't know how you'd fix them
+[16:52:51] <kcalvinalvin> first 100k blocks take like 10 seconds to verify heh
+[16:53:03] <adiabat_> vertical banding does seem like maybe there some way to improve... hmmm
+[16:53:09] <adiabat_> swapSibs might help?
+[16:53:39] <kcalvinalvin> We should prioritize stuff. Hashtoknown first, swapSibs second
+[16:53:49] <adiabat_> yeah
+[16:53:49] <kcalvinalvin> And I get the parallel stuff working
+[16:54:08] <kcalvinalvin> Undo... is and odd one
+[16:54:16] <adiabat_> undo is annoying
+[16:54:31] <kcalvinalvin> How would undo work into the current utreexoserver stuff
+[16:54:43] <kcalvinalvin> I can see how it'd fit in for utcd
+[16:54:55] <kcalvinalvin> But... utreexoserver?
+[16:55:41] <adiabat_> yeah it doesn't, the server can't reorg
+[16:55:53] <adiabat_> it doesn't see new stuff come in anyway so
+[16:56:41] <adiabat_> we could manually tell it to reorg
+[16:56:46] <kcalvinalvin> For testing I can see how we'd fit it in
+[16:57:12] <adiabat_> yeah a bit part of undo is getting the right testing setup for it
+[16:57:30] <adiabat_> because previously I'd like, get it to work, and have some little test, but then nothing ever actually used it
+[16:57:38] <adiabat_> so then it would stop working and wouldn't realize
+[17:01:10] <kcalvinalvin> Some extensive bitcoin regtest would have to do
+[17:01:10] <adiabat_> hmmm. looking at these histograms more
+[17:01:18] <adiabat_> maybe TTL is not even worth it?
+[17:01:27] <kcalvinalvin> And also test with testnet3
+[17:01:28] <adiabat_> just take the right edge, that's pretty much everything
+[17:01:53] <kcalvinalvin> what do you mean
+[17:01:59] <adiabat_> I guess TTL values will tell you about the vertical bands so you'll cache those regions
+[17:02:15] <adiabat_> like the point of TTL is to tell you where the yellow stuff will be
+[17:02:28] <adiabat_> but.. it's always on the right edge, so you don't need it to tell you anything
+[17:02:46] <adiabat_> I guess TTL / clairvoyant helps with the vertical bands though
+[17:03:10] <adiabat_> if we could get rid of all the vertical bands, then TTL data wouldn't be needed
+[17:03:55] <adiabat_> but I don't think you ever really can.  but yeah to the extent that the histogram is a totally smooth yellow edge, you don't need TTL / any fancy caching
+[17:04:51] <kcalvinalvin> That'd simplify the code
+[17:06:47] <kcalvinalvin> hmmmm. So does that mean you got the clairvoyant stuff right the first time?
+[18:22:32] <adiabat_> probably not, but it might be fairly close either way
