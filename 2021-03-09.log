@@ -1,0 +1,45 @@
+[03:54:11] *** Joins: pigeons_ (~pigeons@androzani.sysevolve.com)
+[03:59:25] *** Quits: pigeons (~pigeons@androzani.sysevolve.com) (*.net *.split)
+[03:59:25] *** Quits: adiabat_ (~adiabat@63.209.32.102) (*.net *.split)
+[04:00:49] *** Joins: adiabat_ (~adiabat@63.209.32.102)
+[06:00:42] *** Quits: rjected (~weechat-h@natp-128-119-202-34.wireless.umass.edu) (Quit: WeeChat 3.0.1)
+[07:46:19] <kcalvinalvin> oh right, the memttldb stuff is finished
+[07:46:44] <kcalvinalvin> I should've talked about this during the call but the actual ttldb on disk is smaller with memttldb. 
+[07:47:23] <kcalvinalvin> Am wondering why this is. I am doing the caching thing where if you spend it while it's in the cache, you never save it to disk
+[07:47:54] <kcalvinalvin> But yeah, the ttldb is more like 4GB-6GB instead of 60GB it was with the ttldb we have now
+[12:52:10] *** Joins: rjected (~weechat-h@natp-128-119-202-13.wireless.umass.edu)
+[13:15:08] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (Remote host closed the connection)
+[13:15:33] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[17:40:54] *** Joins: UsmannK (1805ae26@c-24-5-174-38.hsd1.ca.comcast.net)
+[17:41:09] <adiabat_> kcalvinalvin: ok, ttldb will be gone very soon.  the flatterttl branch almost works.  Just some waitgroup stuff
+[17:41:28] <kcalvinalvin> is it fast
+[17:53:02] *** Quits: UsmannK (1805ae26@c-24-5-174-38.hsd1.ca.comcast.net) (Quit: Ping timeout (120 seconds))
+[17:55:56] *** Joins: UsmannK (1805ae26@c-24-5-174-38.hsd1.ca.comcast.net)
+[18:01:27] *** Quits: UsmannK (1805ae26@c-24-5-174-38.hsd1.ca.comcast.net) (Quit: Ping timeout (120 seconds))
+[18:02:38] *** Joins: UsmannK (1805ae26@c-24-5-174-38.hsd1.ca.comcast.net)
+[18:02:56] <UsmannK> noob question: I noticed the utreexo README says "To try utreexo you do not need to run a server as we have a server set up for testing purposes which the client connects to by default. If you want to run your own server you can, see instructions below."
+[18:03:05] <UsmannK> The client however connects to localhost by default
+[18:03:27] <UsmannK> I noticed a comment in config.go that mentions 35.188.186.244, is that the server mentioned?
+[18:04:15] <UsmannK> And if I'm to fix this, should I make a PR against the readme (remove that line) or config.go (change the default)?
+[18:04:57] <UsmannK> specifically csn/config.go, sorry
+[18:14:35] *** Joins: usmannkhan (~usmannkha@c-24-5-174-38.hsd1.ca.comcast.net)
+[18:14:40] *** Quits: UsmannK (1805ae26@c-24-5-174-38.hsd1.ca.comcast.net) (Quit: Connection closed)
+[18:33:17] <usmannkhan> (opened a GH issue instead)
+[18:35:44] <ja> usmannkhan: the readme note is probably a relic from the 1.0 release
+[18:35:59] <ja> usmannkhan: maybe the 1.0 release will work with that server, i dunno which version it runs now
+[18:36:17] <ja> or whatever the demo release was called, maybe it wasn't 1.0
+[18:36:30] <usmannkhan> hm ok, so to get started should I run my own testnet server?
+[18:41:59] *** Joins: jab_ (1805ae26@c-24-5-174-38.hsd1.ca.comcast.net)
+[18:45:50] *** Quits: jab_ (1805ae26@c-24-5-174-38.hsd1.ca.comcast.net) (Client Quit)
+[19:00:04] <adiabat_> usmannkhan: you can get the older release binary from github, which should still be able to connect to the server, or build your own data set
+[19:00:26] <adiabat_> you can use testnet or run a regtest bitcoin node and mine a few blocks with that
+[19:00:55] <adiabat_> (I mostly use regtest for coding / testing as its small/fast)
+[19:01:21] <adiabat_> for the large data sets and testing we do look at mainnet though, but that's 600+ GB
+[19:19:11] <usmannkhan> That makes sense, thanks! I want to try building from source so I'll give the testnet a shot
+[20:13:02] <adiabat_> usmannkhan: testnet should work OK; also if you don't want to sync up everything, you can quit out of bitcoind partway through IBD
+[20:13:25] <adiabat_> it *should* be able to deal with a partially filled in blocks folder OK
+[21:49:25] <usmannkhan> oh hm ok, is regtest better? I only thought I'd go with testnet because I am unfamiliar with regtest :)
+[22:11:23] <adiabat_> regtest is like a make-your-own-testnet
+[22:12:01] <adiabat_> there is no global regtest network, but if you say "regtest=1" in bitcoin.conf, you can mine lots of blocks yourself
+[22:12:19] <adiabat_> and make transactions yourself and it will build the data files that the utreexo software uses
+[23:13:59] <usmannkhan> Makes sense, will give it a shot
