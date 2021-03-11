@@ -1,0 +1,16 @@
+[05:08:01] *** Joins: kamren (~kamren@5.250.131.28)
+[05:08:38] <kamren> Hi guys, can use utreexo with Bitcoin Cash?
+[06:23:26] *** Quits: kamren (~kamren@5.250.131.28) (Ping timeout: 260 seconds)
+[06:23:55] *** Joins: kamren (~kamren@94.141.235.28)
+[07:35:50] *** Quits: kamren (~kamren@94.141.235.28) (Ping timeout: 265 seconds)
+[07:37:21] *** Joins: kamren (~kamren@5.250.131.28)
+[09:07:33] *** Quits: kamren (~kamren@5.250.131.28) (Ping timeout: 260 seconds)
+[10:36:28] *** Quits: gchain (gustafmatr@gateway/shell/matrix.org/x-vdsgojwlsxuhgmpy) (Quit: Bridge terminating on SIGTERM)
+[10:36:30] *** Quits: sunon (duncandean@gateway/shell/matrix.org/x-zirkfeasgfkitoda) (Quit: Bridge terminating on SIGTERM)
+[10:46:36] *** Joins: gchain (gustafmatr@gateway/shell/matrix.org/x-utkzukjhxvguctuc)
+[11:05:45] *** Joins: sunon (duncandean@gateway/shell/matrix.org/x-tkqtsilxicbkgccv)
+[14:25:21] <adiabat_> kamren: sure, it should work on pretty much any utxo based codebase
+[19:42:43] *** Quits: adiabat_ (~adiabat@63.209.32.102) (*.net *.split)
+[19:49:01] *** Joins: adiabat_ (~adiabat@63.209.32.102)
+[23:10:27] *** Quits: valwal_ (sid334773@gateway/web/irccloud.com/x-ulxywzaegjotuyuq) ()
+[23:10:57] *** Joins: valwal_ (sid334773@gateway/web/irccloud.com/x-afzpjvgfuispbzys)
