@@ -1,0 +1,74 @@
+[03:44:15] <adiabat_> Hm clocks changed in the US.  I can do the utreexo call at the same time as last week in KST / CET.  Or an hour earlier, whichever works for people
+[05:29:57] <kcalvinalvin> Darn time
+[05:30:14] <kcalvinalvin> I'm ok with both as well
+[05:43:57] *** Quits: rjected (~weechat-h@natp-128-119-202-254.wireless.umass.edu) (Quit: WeeChat 3.0.1)
+[07:40:52] <dergoegge> Both work for me
+[11:53:52] *** Joins: rjected (~weechat-h@natp-128-119-202-15.wireless.umass.edu)
+[11:57:19] <kcalvinalvin> ok cool then same time
+[14:15:25] <adiabat_> yeah will keep same time
+[14:15:33] <adiabat_> maybe switch when other countries switch
+[14:15:45] <adiabat_> wait CET switches but KST doesn't?  anyway
+[15:00:18] <kcalvinalvin> yeah KST never changes
+[15:00:23] <kcalvinalvin> Just like JST
+[15:56:42] <ja> when the S stannds for Standard, it doesn't change, but when the S stands for Summer, as in British Summer Time, it does :O
+[15:57:37] <ja> but then again, it doesn't , because BST is only applicable for half the year, so technically the Summer time itself doesn't change
+[17:02:54] <adiabat_> yeah in the US the "standard" time is active about 1/3rd of the year...
+[18:08:00] *** Quits: sunon (duncandean@gateway/shell/matrix.org/x-tkqtsilxicbkgccv) (Ping timeout: 241 seconds)
+[18:08:10] *** Quits: gchain (gustafmatr@gateway/shell/matrix.org/x-utkzukjhxvguctuc) (Ping timeout: 247 seconds)
+[18:36:03] *** Joins: gchain (gustafmatr@gateway/shell/matrix.org/x-regukkmmqhmknzvr)
+[18:55:02] *** Joins: sunon (duncandean@gateway/shell/matrix.org/x-jajcltoyjaryivor)
+[19:12:29] *** Quits: rjected (~weechat-h@natp-128-119-202-15.wireless.umass.edu) (Ping timeout: 256 seconds)
+[19:14:31] *** Joins: rjected (~weechat-h@natp-128-119-202-15.wireless.umass.edu)
+[20:24:05] *** Quits: pigeons (~pigeons@androzani.sysevolve.com) (Ping timeout: 256 seconds)
+[20:24:11] *** Joins: pigeons (~pigeons@androzani.sysevolve.com)
+[20:24:47] *** pigeons is now known as Guest30742
+[20:56:46] *** Quits: drolmer (~drolmer@unaffiliated/drolmer) (*.net *.split)
+[20:56:47] *** Quits: gchain (gustafmatr@gateway/shell/matrix.org/x-regukkmmqhmknzvr) (*.net *.split)
+[20:56:47] *** Quits: Guest30742 (~pigeons@androzani.sysevolve.com) (*.net *.split)
+[20:56:47] *** Quits: cfields (~cfields@unaffiliated/cfields) (*.net *.split)
+[20:56:47] *** Quits: lukechampine (~lukechamp@li640-31.members.linode.com) (*.net *.split)
+[20:56:47] *** Quits: adiabat_ (~adiabat@63.209.32.102) (*.net *.split)
+[20:56:48] *** Quits: jamesob (sid180710@gateway/web/irccloud.com/x-dtaufpvopijylqfh) (*.net *.split)
+[20:56:48] *** Quits: kallewoof (~quassel@240d:1a:759:6000:a7b1:451a:8874:e1ac) (*.net *.split)
+[20:56:48] *** Quits: jb55 (~jb55@gateway/tor-sasl/jb55) (*.net *.split)
+[20:56:48] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (*.net *.split)
+[20:56:49] *** Quits: rjected (~weechat-h@natp-128-119-202-15.wireless.umass.edu) (*.net *.split)
+[20:56:49] *** Quits: mdrollette (~mdrollett@cpe-70-123-125-237.tx.res.rr.com) (*.net *.split)
+[20:56:49] *** Quits: kanzure (~kanzure@unaffiliated/kanzure) (*.net *.split)
+[20:56:49] *** Quits: stevenro- (~steven@irc.roose.io) (*.net *.split)
+[20:56:49] *** Quits: ja (janus@anubis.0x90.dk) (*.net *.split)
+[20:56:50] *** Quits: gertjaap (sid322815@gateway/web/irccloud.com/x-pybssrpjyjvmjcpm) (*.net *.split)
+[20:56:50] *** Quits: dergoegge (sid453889@gateway/web/irccloud.com/x-vpggjtvyxjofpnen) (*.net *.split)
+[20:56:50] *** Quits: sunon (duncandean@gateway/shell/matrix.org/x-jajcltoyjaryivor) (*.net *.split)
+[20:56:50] *** Quits: felixweis (sid154231@gateway/web/irccloud.com/x-evpcjxrvwezwuhkm) (*.net *.split)
+[20:56:50] *** Quits: achow101 (~achow101@unaffiliated/achow101) (*.net *.split)
+[20:56:50] *** Quits: digi_james (sid281632@gateway/web/irccloud.com/x-ifvdkmiyjursbrnd) (*.net *.split)
+[20:56:50] *** Quits: takinbo (~takinbo@unaffiliated/takinbo) (*.net *.split)
+[20:56:50] *** Quits: fanquake (sid369002@gateway/web/irccloud.com/x-asrnjecwrkowwvfh) (*.net *.split)
+[20:56:50] *** Quits: fjahr (sid374480@gateway/web/irccloud.com/x-piyhmzkmzjdkkqyq) (*.net *.split)
+[20:56:50] *** Quits: RubenSomsen (sid301948@gateway/web/irccloud.com/x-ukeiamoftqdxfbvz) (*.net *.split)
+[21:33:26] *** Joins: Guest30742 (~pigeons@androzani.sysevolve.com)
+[21:33:26] *** Joins: rjected (~weechat-h@natp-128-119-202-15.wireless.umass.edu)
+[21:33:26] *** Joins: sunon (duncandean@gateway/shell/matrix.org/x-jajcltoyjaryivor)
+[21:33:26] *** Joins: gchain (gustafmatr@gateway/shell/matrix.org/x-regukkmmqhmknzvr)
+[21:33:26] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[21:33:26] *** Joins: mdrollette (~mdrollett@cpe-70-123-125-237.tx.res.rr.com)
+[21:33:26] *** Joins: kanzure (~kanzure@unaffiliated/kanzure)
+[21:33:26] *** Joins: cfields (~cfields@unaffiliated/cfields)
+[21:33:26] *** Joins: lukechampine (~lukechamp@li640-31.members.linode.com)
+[21:33:26] *** Joins: adiabat_ (~adiabat@63.209.32.102)
+[21:33:26] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[21:33:26] *** Joins: kallewoof (~quassel@240d:1a:759:6000:a7b1:451a:8874:e1ac)
+[21:33:26] *** Joins: jamesob (sid180710@gateway/web/irccloud.com/x-dtaufpvopijylqfh)
+[21:33:28] *** Joins: felixweis (sid154231@gateway/web/irccloud.com/x-evpcjxrvwezwuhkm)
+[21:33:28] *** Joins: digi_james (sid281632@gateway/web/irccloud.com/x-ifvdkmiyjursbrnd)
+[21:33:28] *** Joins: achow101 (~achow101@unaffiliated/achow101)
+[21:33:28] *** Joins: drolmer (~drolmer@unaffiliated/drolmer)
+[21:33:28] *** Joins: takinbo (~takinbo@unaffiliated/takinbo)
+[21:33:28] *** Joins: fanquake (sid369002@gateway/web/irccloud.com/x-asrnjecwrkowwvfh)
+[21:33:28] *** Joins: stevenro- (~steven@irc.roose.io)
+[21:33:28] *** Joins: fjahr (sid374480@gateway/web/irccloud.com/x-piyhmzkmzjdkkqyq)
+[21:33:28] *** Joins: ja (janus@anubis.0x90.dk)
+[21:33:28] *** Joins: dergoegge (sid453889@gateway/web/irccloud.com/x-vpggjtvyxjofpnen)
+[21:33:28] *** Joins: gertjaap (sid322815@gateway/web/irccloud.com/x-pybssrpjyjvmjcpm)
+[21:33:28] *** Joins: RubenSomsen (sid301948@gateway/web/irccloud.com/x-ukeiamoftqdxfbvz)
