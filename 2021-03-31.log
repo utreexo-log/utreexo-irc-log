@@ -1,0 +1,20 @@
+[06:51:31] *** Quits: rjected (~weechat-h@natp-128-119-202-9.wireless.umass.edu) (Ping timeout: 268 seconds)
+[14:04:38] *** Joins: nick_freeman (~nick_free@port-92-194-196-98.dynamic.as20676.net)
+[14:05:03] <nick_freeman> hi guys!
+[14:07:35] <nick_freeman> in utreexo a light client could buy its inclusion proofs from a bridge node by adding an output for the bridge to its TX such that the bridge has an incentive to add the missing inclusion proofs and broadcast the TX
+[14:09:36] <nick_freeman> is that right? 
+[14:10:35] <nick_freeman> the issue is that a fair price for the inclusion proofs is probably too low to justify a onchain UTXO
+[14:21:49] *** Guest49704 is now known as pigeons
+[15:06:05] *** Quits: nick_freeman (~nick_free@port-92-194-196-98.dynamic.as20676.net) ()
+[16:00:06] <adiabat_> nick_freeman: maybe in theory but I don't think paying for proofs is practical
+[16:00:41] <adiabat_> there's paying for your own proofs for your own UTXOs for everyone else to verify, which could make sense
+[16:01:07] <adiabat_> but then there's all the people who don't use utreexo at all and maybe never will, and they don't have proofs or care about them, so will never pay
+[16:01:45] <adiabat_> and if you're running a utreexo node, you need proofs for all *those* transaction inputs
+[16:02:27] <adiabat_> and there's way more of those, and they're anonymous and nobody's paying
+[16:03:18] <adiabat_> I guess it's technically a soft fork if you say: "all new transactions need utreexo proofs" and then maybe you could outsource / pay for your proofs
+[16:04:42] <adiabat_> but a new soft fork in bitcoin which makes bitcoin transactions cost more..?  Good luck getting that in...
+[16:05:18] <adiabat_> so our focus is making the proofs smaller / faster / cheaper, so it's easy to run a bridge node on a regular computer
+[16:05:52] <adiabat_> it's relies a little bit on altriusm but same as current archive nodes serving old blocks, and there seem to be plenty of those
+[17:18:21] *** Joins: rjected (~weechat-h@natp-128-119-202-19.wireless.umass.edu)
+[19:02:55] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[19:03:15] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
