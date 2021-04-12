@@ -1,0 +1,5 @@
+[12:41:47] <kcalvinalvin> did some simple testing with mainnet. 80% of the time is spent on populate()
+[12:42:01] <kcalvinalvin> But if we have the leaves cached it's not doing much right??
+[12:42:33] <kcalvinalvin> Looking into making this faster...
+[17:41:53] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[17:42:39] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
