@@ -1,0 +1,7 @@
+[03:14:27] *** Quits: rjected (~weechat-h@natp-128-119-202-254.wireless.umass.edu) (Quit: WeeChat 3.1)
+[15:03:02] <jamesob> Forgot to mention, if you guys think of any particular questions or things you think would be good for me to work on do let me know. Otherwise I'll just start looking at the code when I can and maybe write some tests for the C++ stuff
+[15:57:18] <dergoegge> if you have any questions concerning the C++ version you can ping me, happy to explain stuff.
+[15:57:33] <dergoegge> it could definitely use some more tests :D
+[16:02:38] <dergoegge> there are probably also a bunch of C++ specific things that could be improved. (e.g.: i am using c-style casting which could replaced with static/dynmaic_cast)
+[16:09:18] <jamesob> sounds good!
+[17:24:21] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
