@@ -1,0 +1,6 @@
+[15:30:17] <adiabat_> Oh... yeah I wanted to put the meeting times in the IRC channel banner but never could get that
+[15:30:31] <adiabat_> you have to register the channel which seemed a pretty involved process
+[15:30:59] <adiabat_> also: not so great update on the hastoknown branch: hashing to known is not enough
+[15:31:59] <adiabat_> There are cases when if you stop after reaching known hashes, the proof can be invalid & mess up your accumulator, or you can be missing needed hashes for transform, etc
+[15:32:21] <adiabat_> so ... need to get a better definition / detection of when / where to stop
+[16:24:12] <kcalvinalvin> adiabat_ Is the latest code up on github? I could look at it
