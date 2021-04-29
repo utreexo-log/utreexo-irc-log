@@ -1,0 +1,26 @@
+[05:16:31] <kcalvinalvin> adiabat I tried out the reclair code for mainnet up to block 379600. It takes forever though (12+hours)
+[05:17:08] <kcalvinalvin> Looks like it's single threaded in the actual clairvoyant scheduling generation
+[07:57:58] <kcalvinalvin> https://github.com/mit-dci/utreexo/issues/263
+[07:58:25] <kcalvinalvin> So we've been putting in the target hashes so it makes sense to lift the 1<<16 limit
+[09:23:13] *** Quits: stevenroose (~steven@irc.roose.io) (Ping timeout: 252 seconds)
+[09:24:36] *** Joins: stevenroose (~steven@irc.roose.io)
+[13:36:39] <adiabat_> What do you mean by "putting in the target hashes"?
+[13:37:29] <adiabat_> "targets" should be the UTXOs that are getting spent in the block, and the positions of the corresponding leaves
+[13:39:30] <adiabat_> On github, when you say "we're adding extra data besides the proofs so it's possible to be greater than 1<<16", I don't see it
+[13:40:45] <adiabat_> If we are, that's a bug and we shouldn't be.  But in lines 176-183, len(sortedTargets) == len(bp.Targets), right?
+[14:40:33] <kcalvinalvin> adiabat_: https://github.com/mit-dci/utreexo/issues/263#issuecomment-828225486
+[14:40:44] <kcalvinalvin> 187-189
+[18:24:23] *** Joins: jb55 (~jb55@gateway/tor-sasl/jb55)
+[18:56:44] <adiabat_> There are 2 checks, numTargets and numHashes
+[18:57:35] <adiabat_> the numHashes check is probably wrong, but the issue & code here relates to numTargets
+[18:58:18] <adiabat_> or were we only getting errors with numHashes?  Because yeah I can see how numHashes could go over 65K in some cases
+[19:45:17] <kcalvinalvin> We were only getting numHashes
+[19:46:01] <kcalvinalvin> Sorry :( I was meaning "numHashes" when I was saying "numTargets"
+[19:46:48] <kcalvinalvin> (I do this too often don't I)
+[20:00:12] <adiabat_> ah OK yeah numTargets shouldn't be limited... or like a million or something as a sanity check
+[20:00:17] <adiabat_> I can fix that now
+[20:00:23] <adiabat_> er
+[20:00:25] <adiabat_> argh
+[20:00:31] <adiabat_> numHASHES shouldn't be limited
+[20:00:53] <adiabat_> numTargets should still be limited; if there are more than 32K targets something is wrong
+[20:01:13] <adiabat_> but a few hundred thousand hashes seems possible in some cases
