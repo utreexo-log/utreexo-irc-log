@@ -1,0 +1,9 @@
+[06:05:16] <kcalvinalvin> https://github.com/mit-dci/utreexo/pull/267 Would like to talk about this a bunch for monday's meeting
+[06:06:52] <kcalvinalvin> Am now leaning towards "hash only unknown" and not "hash to known" since the new populate is fast.
+[13:21:05] *** Quits: ghost43 (~daer@gateway/tor-sasl/daer) (Remote host closed the connection)
+[13:21:28] *** Joins: ghost43 (~daer@gateway/tor-sasl/daer)
+[14:03:02] <kcalvinalvin> I'm on meet.jit.si/utreexo
+[15:11:36] *** Quits: rjected (~weechat-h@natp-128-119-202-117.wireless.umass.edu) (Quit: WeeChat 3.1)
+[16:09:34] <kcalvinalvin> adiabat I've cleaned up PR 267. Good to look at
+[16:09:38] <kcalvinalvin> now
+[23:42:44] *** Joins: nick_freeman (~nick_free@port-92-194-241-219.dynamic.as20676.net)
