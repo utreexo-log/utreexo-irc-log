@@ -1,0 +1,4 @@
+[19:21:09] *** Joins: fogof (4bb25f31@cpe-75-178-95-49.ec.res.rr.com)
+[19:26:16] <fogof> Hello, it was only recently brought to my attention that there was some discussion of our paper https://eprint.iacr.org/2021/340 in your repositories chat. I've been in this chatroom a few times before; I had meant to come back once our paper was published but I guess it slipped my mind. I replied in the repo discussion section
+[19:26:17] <fogof> https://github.com/mit-dci/utreexo/discussions/249#discussioncomment-745430 about a possible hybrid idea that would reduce the disk usage of UTREEXO. I'm happy to discuss that or any questions about the paper if any of you have looked at it.
+[21:30:09] *** Quits: fogof (4bb25f31@cpe-75-178-95-49.ec.res.rr.com) (Quit: Connection closed)
